@@ -7,7 +7,7 @@ import net.rknabe.marioparty.StageChanger;
 public class Game2Controller {
     @FXML
     protected Button backToMenu;
-
+    // TEST
     @FXML
     protected void backToMenuClick() {
         StageChanger.setScene(0);
