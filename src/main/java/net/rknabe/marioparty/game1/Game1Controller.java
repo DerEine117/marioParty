@@ -1,7 +1,8 @@
-package net.rknabe.marioparty;
+package net.rknabe.marioparty.game1;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import net.rknabe.marioparty.StageChanger;
 
 public class Game1Controller {
     @FXML
