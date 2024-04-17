@@ -1,15 +1,7 @@
 package net.rknabe.marioparty.game4;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import net.rknabe.marioparty.StageChanger;
+import net.rknabe.marioparty.GameController;
 
-public class Game4Controller {
-    @FXML
-    protected Button backToMenu;
+public class Game4Controller extends GameController {
 
-    @FXML
-    protected void backToMenuClick() {
-        StageChanger.setScene(0);
-    }
 }
