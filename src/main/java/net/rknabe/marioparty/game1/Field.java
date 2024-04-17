@@ -2,8 +2,13 @@ package net.rknabe.marioparty.game1;
 
 public class Field {
     private FieldState state;
-    public Field() {
+    private int row;
+    private int col;
+
+    public Field(int row, int col) {
         this.state = FieldState.EMPTY;
+        this.row = row;
+        this.col = col;
     }
 
     public FieldState getState() {
@@ -11,7 +16,7 @@ public class Field {
     }
 
     public void setState(FieldState fieldState) {
-        this.state = state;
+        this.state = fieldState;
     }
 
     public String drawField() {
@@ -29,5 +34,21 @@ public class Field {
                 return "error";
             }
         }
+    }
+
+    public boolean isFree() {
+        if (this.state == FieldState.EMPTY) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 }
