@@ -11,5 +11,6 @@ public class Game1Controller {
     @FXML
     protected void backToMenuClick() {
         StageChanger.setScene(0);
+        System.out.println("Roberts branch test");
     }
 }
