@@ -5,13 +5,8 @@ public class Board {
 
     // Constructor
     public Board() {
-        board = new Field[3][3];
-        // Initialize the board with default empty fields
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                board[i][j] = new Field(i,j);
-            }
-        }
+        // new empty board on game itit
+        createEmptyBoard();
     }
 
     public Field getClickedField(double x, double y) {
@@ -36,10 +31,27 @@ public class Board {
         for (int i = 0; i < 3; i++) {
             System.out.print((i+1) + " - ");
             for (int j = 0; j < 3; j++) {
-                System.out.print(board[j][j].drawField() + " | ");
+                System.out.print(board[i][j].drawField() + " | ");
             }
             System.out.print("\n");
         }
     }
 
+    public void clear() {
+        createEmptyBoard();
+    }
+
+    public Field[][] toArray() {
+        return board;
+    }
+
+    private void createEmptyBoard() {
+        this.board = new Field[3][3];
+        // Initialize the board with default empty fields
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                board[i][j] = new Field(i,j);
+            }
+        }
+    }
 }

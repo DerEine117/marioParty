@@ -68,7 +68,7 @@ public class Drawer {
     }
 
 
-    public void drawMove(Field field) {
+    public void drawMove(Field field, char playerAB) {
         double cellWidth = WIDTH / (double) CELLS;
         double cellHeight = HEIGHT / (double) CELLS;
 
@@ -78,10 +78,25 @@ public class Drawer {
 
         // Hier kannst du das Feld zeichnen
         // Beispiel: graphicsContext.fillOval(x - 10, y - 10, 20, 20);
-        graphicsContext.setFill(Color.rgb(255, 0, 0, 0.5));
-        graphicsContext.fillOval(x, y, cellWidth / 2, cellHeight / 2);
+        //graphicsContext.setFill(Color.rgb(255, 0, 0, 0.5));
+        //graphicsContext.fillOval(x, y, cellWidth / 2, cellHeight / 2);
+
+        //read image and set field to not free
+        Image playerFieldImage;
+        if (playerAB == 'A') {
+            playerFieldImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerA.png"), 45, 45, true, false);
+            field.setState(FieldState.A);
+        } else {
+            playerFieldImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerB.png"), 45, 45, true, false);
+            field.setState(FieldState.B);
+        }
+        graphicsContext.drawImage(playerFieldImage, x-15, y-15);
 
         // set field to not free
-        field.setState(FieldState.X);
+
+    }
+
+    public void resetCanvas() {
+        graphicsContext.clearRect(0, 0, WIDTH, HEIGHT);
     }
 }

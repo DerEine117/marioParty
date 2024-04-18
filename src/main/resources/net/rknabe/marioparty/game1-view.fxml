@@ -3,6 +3,7 @@
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="rootPane" prefHeight="522.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game1.Game1Controller">
    <children>
@@ -10,7 +11,10 @@
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label prefHeight="18.0" prefWidth="251.0" text="Game 1" />
+                  <Label fx:id="turnLabel" alignment="CENTER" prefHeight="18.0" prefWidth="251.0" text="your move" textFill="#000000f1" textOverrun="CENTER_ELLIPSIS">
+                     <font>
+                        <Font size="23.0" />
+                     </font></Label>
                   <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="163.0" text="back to mainMenu" />
                </children>
             </HBox>

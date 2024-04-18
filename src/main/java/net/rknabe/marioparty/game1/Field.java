@@ -24,14 +24,14 @@ public class Field {
             case EMPTY -> {
                 return "L";
             }
-            case O -> {
-                return "O";
+            case A -> {
+                return "A";
             }
-            case X -> {
-                return "X";
+            case B -> {
+                return "B";
             }
             default -> {
-                return "error";
+                return "err";
             }
         }
     }
@@ -51,4 +51,5 @@ public class Field {
     public int getCol() {
         return col;
     }
+
 }
