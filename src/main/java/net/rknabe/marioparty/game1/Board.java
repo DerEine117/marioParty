@@ -1,7 +1,7 @@
 package net.rknabe.marioparty.game1;
 
 public class Board {
-    private Field[][] board;
+    public Field[][] board;
 
     // Constructor
     public Board() {
@@ -53,5 +53,9 @@ public class Board {
                 board[i][j] = new Field(i,j);
             }
         }
+    }
+
+    public void drawField(Field field, FieldState state) {
+        board[field.getRow()][field.getCol()].setState(state);
     }
 }

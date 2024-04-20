@@ -11,7 +11,7 @@
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="turnLabel" alignment="CENTER" prefHeight="18.0" prefWidth="251.0" text="Player A's turn!" textFill="#000000f1" textOverrun="CENTER_ELLIPSIS">
+                  <Label fx:id="turnLabel" alignment="CENTER" prefHeight="18.0" prefWidth="251.0" text="Your turn!" textFill="#000000f1" textOverrun="CENTER_ELLIPSIS">
                      <font>
                         <Font size="23.0" />
                      </font></Label>

@@ -76,11 +76,6 @@ public class Drawer {
         double x = field.getCol() * cellWidth + cellWidth / 2;
         double y = field.getRow() * cellHeight + cellHeight / 2;
 
-        // Hier kannst du das Feld zeichnen
-        // Beispiel: graphicsContext.fillOval(x - 10, y - 10, 20, 20);
-        //graphicsContext.setFill(Color.rgb(255, 0, 0, 0.5));
-        //graphicsContext.fillOval(x, y, cellWidth / 2, cellHeight / 2);
-
         //read image and set field to not free
         Image playerFieldImage;
         if (playerAB == 'A') {
@@ -91,8 +86,6 @@ public class Drawer {
             field.setState(FieldState.B);
         }
         graphicsContext.drawImage(playerFieldImage, x-15, y-15);
-
-        // set field to not free
 
     }
 

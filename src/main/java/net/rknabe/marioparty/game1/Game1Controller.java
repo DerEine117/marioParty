@@ -20,7 +20,8 @@ import java.util.ResourceBundle;
 
 public class Game1Controller extends GameController implements Initializable {
     Drawer drawer;
-    GameEvaluator gameEvaluator;
+    //GameEvaluator gameEvaluator;
+    ComputerPlayer computerPlayer;
     Board board;
     boolean playerATurn;
 
@@ -56,7 +57,10 @@ public class Game1Controller extends GameController implements Initializable {
         board = new Board();
 
         // creating gameEvulator
-        gameEvaluator = new GameEvaluator(board);
+        //gameEvaluator = new GameEvaluator(board);
+
+        // intilializing ComputerPlayer
+        computerPlayer = new ComputerPlayer(board);
 
         // first Player A starts
         playerATurn = true;
@@ -67,18 +71,24 @@ public class Game1Controller extends GameController implements Initializable {
         double x = event.getX();
         double y = event.getY();
 
-        if (board.getClickedField(x,y).isFree() && playerATurn) {
+        if (board.getClickedField(x,y).isFree()) {
             drawer.drawMove(board.getClickedField(x,y), 'A');
-            turnLabel.setText("Player B's turn!");
-        } else if (board.getClickedField(x,y).isFree() && !playerATurn) {
-            drawer.drawMove(board.getClickedField(x,y), 'B');
-            turnLabel.setText("Player A's turn!");
+            board.drawField(board.getClickedField(x,y), FieldState.A);
+
         }
-        playerATurn = !playerATurn;
+
         board.draw();
 
-        if (gameEvaluator.checkForGameEnd() != FieldState.EMPTY) {
-            gameEnd(gameEvaluator.checkForGameEnd());
+        if (GameEvaluator.checkForGameEnd(board.toArray()) != FieldState.EMPTY) {
+            gameEnd(GameEvaluator.checkForGameEnd(board.toArray()));
+        } else {
+            Field computerField = computerPlayer.findBestMove(board);
+            System.out.println("Computetrfeld: " + computerField.drawField());
+            drawer.drawMove(computerField, 'B');
+            board.drawField(computerField, FieldState.B);
+        }
+        if (GameEvaluator.checkForGameEnd(board.toArray()) != FieldState.EMPTY) {
+            gameEnd(GameEvaluator.checkForGameEnd(board.toArray()));
         }
     }
 
@@ -93,7 +103,7 @@ public class Game1Controller extends GameController implements Initializable {
             alert.setContentText("Player A has won!!! Congratulations!.");
             endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerA.png"), 45, 45, true, false);
         } else if (state == FieldState.B) {
-            alert.setContentText("Player B has won!!! Congratulations!.");
+            alert.setContentText("Computer Player has won!!.");
             endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerB.png"), 45, 45, true, false);
         } else {
             alert.setContentText("Tie! Sounds like a new game!");

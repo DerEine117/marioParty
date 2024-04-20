@@ -1,27 +1,23 @@
 package net.rknabe.marioparty.game1;
 
 public class GameEvaluator {
-    Board gameBoard;
-    public GameEvaluator(Board board) {
-        this.gameBoard = board;
-    }
 
-    public FieldState checkForGameEnd() {
-        Field[][] board = this.gameBoard.toArray();
+    public static FieldState checkForGameEnd(Field[][] board) {
+
         for (int row = 0; row < 3; row++) {
             if (board[row][0].getState() != FieldState.EMPTY && board[row][0].getState() == board[row][1].getState() && board[row][0].getState() == board[row][2].getState()) {
                 return board[row][0].getState();
             }
         }
 
-        // Überprüfen der vertikalen Spalten
+        // check verticals
         for (int col = 0; col < 3; col++) {
             if (board[0][col].getState() != FieldState.EMPTY && board[0][col].getState() == board[1][col].getState() && board[0][col].getState() == board[2][col].getState()) {
                 return board[0][col].getState();
             }
         }
 
-        // Überprüfen der Diagonalen
+        // check diagonal
         if (board[0][0].getState() != FieldState.EMPTY && board[0][0].getState() == board[1][1].getState() && board[0][0].getState() == board[2][2].getState()) {
             return board[0][0].getState();
         }
@@ -29,7 +25,7 @@ public class GameEvaluator {
             return board[0][2].getState();
         }
 
-        // Überprüfen auf Unentschieden
+        // Check for tie
         boolean isFull = true;
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
@@ -40,10 +36,10 @@ public class GameEvaluator {
             }
         }
         if (isFull) {
-            return null; // 'T' steht für Tie (Unentschieden)
+            return null;
         }
 
-        // Wenn niemand gewonnen hat und das Spiel noch nicht vorbei ist
+        // if the game is not over, return EMpty
         return FieldState.EMPTY;
     }
 }
