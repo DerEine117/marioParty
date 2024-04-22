@@ -53,7 +53,7 @@ public class ComputerPlayer {
     private int minimax(Field[][] currentBoard, int depth, boolean isMaximizing) {
         // Überprüfe auf Endspiel oder maximale Tiefe
         FieldState gameResult = GameEvaluator.checkForGameEnd(currentBoard);
-        if (gameResult != FieldState.EMPTY || depth == 5) {
+        if (gameResult != FieldState.EMPTY || depth == 4) {
             if (gameResult == FieldState.A)
                 return -depth;
             else if (gameResult == FieldState.B)
