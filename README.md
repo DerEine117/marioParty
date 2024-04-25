@@ -29,3 +29,4 @@ Wenn das geschehen ist, würde ich vorschlagen wir setzen uns kurz zusammen. Mei
  ---
 
 Wichtig: falls jemand an dem technischem Aufbau (schönes Design kommt später) etwas stört, bitte frühzeitig bescheid sagen. Sobald ich mich tiefer mit meinem Spiel beschäftige, möchte ich die Grundstruktur des Gesamtspiels nicht mehr ändern.
+x

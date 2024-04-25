@@ -65,13 +65,13 @@ public class Game2Controller {
     }
 
     @FXML
-    protected Label playerScore;
+    public Label playerScore;
 
     @FXML
-    protected Label computerScore;
+    public Label computerScore;
 
     @FXML
-    protected TextField balloonsLeft;
+    public Label balloonsLeft;
 
     @FXML
     protected void backToMenuClick() {
