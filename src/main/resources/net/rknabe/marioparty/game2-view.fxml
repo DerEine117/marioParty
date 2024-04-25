@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game2.Game2Controller">
+<AnchorPane maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="339.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game2.Game2Controller">
    <children>
       <Button fx:id="backToMenu" layoutY="1.0" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="back to menu" />
       <VBox layoutX="14.0" layoutY="36.0" prefHeight="215.0" prefWidth="100.0">
@@ -32,6 +32,10 @@
             <Label fx:id="balloonsLeft" text="50" />
          </children>
       </VBox>
-      <Canvas height="400.0" layoutX="222.0" width="378.0" />
+      <VBox layoutX="143.0" layoutY="-2.0" prefHeight="407.0" prefWidth="461.0">
+         <children>
+            <Canvas fx:id="gameCanvas" height="400.0" width="461.0" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
