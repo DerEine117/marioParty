@@ -37,11 +37,7 @@ public class Field {
     }
 
     public boolean isFree() {
-        if (this.state == FieldState.EMPTY) {
-            return true;
-        } else {
-            return false;
-        }
+        return (this.state == FieldState.EMPTY);
     }
 
     public int getRow() {

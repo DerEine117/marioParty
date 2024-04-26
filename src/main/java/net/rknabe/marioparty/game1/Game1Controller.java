@@ -1,5 +1,6 @@
 package net.rknabe.marioparty.game1;
 
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -71,25 +72,49 @@ public class Game1Controller extends GameController implements Initializable {
         double x = event.getX();
         double y = event.getY();
 
-        if (board.getClickedField(x,y).isFree()) {
+        if (board.getClickedField(x,y).isFree() && board.getClickedField(x,y) != null) {
             drawer.drawMove(board.getClickedField(x,y), 'A');
             board.drawField(board.getClickedField(x,y), FieldState.A);
+            board.draw();
 
-        }
-
-        board.draw();
-
-        if (GameEvaluator.checkForGameEnd(board.toArray()) != FieldState.EMPTY) {
-            gameEnd(GameEvaluator.checkForGameEnd(board.toArray()));
+            if (GameEvaluator.checkForGameEnd(board.toArray()) != FieldState.EMPTY) {
+                gameEnd(GameEvaluator.checkForGameEnd(board.toArray()));
+            } else {
+                Field computerField = computerPlayer.findBestMove(board);
+                System.out.println("Computetrfeld: " + computerField.drawField());
+                drawer.drawMove(computerField, 'B');
+                board.drawField(computerField, FieldState.B);
+            }
+            if (GameEvaluator.checkForGameEnd(board.toArray()) != FieldState.EMPTY) {
+                gameEnd(GameEvaluator.checkForGameEnd(board.toArray()));
+            }
         } else {
-            Field computerField = computerPlayer.findBestMove(board);
-            System.out.println("Computetrfeld: " + computerField.drawField());
-            drawer.drawMove(computerField, 'B');
-            board.drawField(computerField, FieldState.B);
+            Thread thread = new Thread(() -> {
+                try {
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            turnLabel.setTextFill(Color.RED);
+                            turnLabel.setText("Field is not free!");
+                        }
+                    });
+                    Thread.sleep(1000);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            turnLabel.setTextFill(Color.BLACK);
+                            turnLabel.setText("Your turn");
+                        }
+                    });
+
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            thread.start();
         }
-        if (GameEvaluator.checkForGameEnd(board.toArray()) != FieldState.EMPTY) {
-            gameEnd(GameEvaluator.checkForGameEnd(board.toArray()));
-        }
+
     }
 
     private void gameEnd(FieldState state) {
