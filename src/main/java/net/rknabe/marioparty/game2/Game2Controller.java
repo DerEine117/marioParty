@@ -20,7 +20,7 @@ public class Game2Controller implements Initializable {
 
     private static final int NUM_BALLOONS = 70;
     private final List<Balloon> balloons = new ArrayList<>();
-    private int deploy_speed;
+    private int deploy_speed = 1000;
 
 
     @FXML
