@@ -35,6 +35,31 @@ public class Game2Controller implements Initializable {
         StageChanger.setScene(0);
     }
     @FXML
+    private Button reset;
+
+    @FXML
+    protected void resetClick(){
+        // delete all the balloons on the canvas
+        // reset the score
+        List<Balloon> balloonsToRemove = new ArrayList<>(balloons);
+        for (Balloon balloon : balloonsToRemove) {
+            Balloon.remove(balloon);
+            balloons.remove(balloon);
+        }
+    }
+
+    @FXML
+    private Button startGame;
+    @FXML
+    protected void startGameClick() {
+        for (int i = 0; i < NUM_BALLOONS; i++) {
+            Balloon balloon = new Balloon(gameCanvas);
+            balloons.add(balloon);
+            balloon.display(balloon);
+        }
+        // Start the game loop here, if you have one
+    }
+    @FXML
     public Label playerScore;
     @FXML
     public Label computerScore;
@@ -46,15 +71,6 @@ public class Game2Controller implements Initializable {
     public Canvas gameCanvas;
 
     private GraphicsContext gc;
-
-    @FXML
-    protected void balloonClicked() {
-        Balloon.remove();
-        Player.increaseScore();
-        increaseMove();
-        increaseDeploy();
-        Effects();
-    }
 
     protected void increaseMove(){
         move_speed += MOVE_SPEED_INCREASEMENT;
@@ -68,16 +84,59 @@ public class Game2Controller implements Initializable {
         //sound effekt and pop animation
     }
 
+    public void updateScore() {
+        playerScore.setText("Score: " + Player.getScore());
+    }
 
+
+    protected boolean isEnd() {
+        if (balloons.isEmpty()) {
+            return true;
+        }
+        // else if (ballon on top event) {
+         //   return true;}
+        return false;
+    }
+
+    protected void endGame() {
+        // show end screen
+        // show score
+        // show highscore
+        // show play again button
+    }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // create Person and Computer Objects
+        // create a new Player
         // todo: go through the list of balloons and make one after another visible and move up the screen
         // iterate through list with thread that sleeps for deploy_speed milliseconds
-
         // if balloon is clicked-> balloon.remove and Player.increaseSc the speed of the balloons
-        // if y = canvas max height -> ballon.remove()
+
+        // todo: set the metal_spikes.png in the Hbox in the fxml file
+        //
+        gameCanvas.setOnMouseClicked(event -> {
+            double clickX = event.getX();
+            double clickY = event.getY();
+
+            for (Balloon balloon : balloons) {
+                double balloonMinX = balloon.getX();
+                double balloonMaxX = balloon.getX() + balloon.getBalloonImage().getFitWidth();
+                double balloonMinY = balloon.getY();
+                double balloonMaxY = balloon.getY() + balloon.getBalloonImage().getFitHeight();
+
+                if (clickX >= balloonMinX && clickX <= balloonMaxX && clickY >= balloonMinY && clickY <= balloonMaxY) {
+                    Balloon.remove(balloon);
+                    Effects();
+                    Player.increaseScore();
+                    updateScore();
+                    increaseMove();
+                    increaseDeploy();
+                    break;
+                }
+            }
+        });
     }
+
+
 }

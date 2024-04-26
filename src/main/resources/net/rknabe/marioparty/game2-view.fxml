@@ -30,11 +30,13 @@
                </font>
             </Label>
             <Label fx:id="balloonsLeft" text="50" />
+            <Button fx:id="startGame" mnemonicParsing="false" onAction="#startGameClick" text="start" />
+            <Button fx:id="reset" mnemonicParsing="false" onAction="#resetClick" text="reset" />
          </children>
       </VBox>
-      <VBox layoutX="143.0" layoutY="-2.0" prefHeight="407.0" prefWidth="461.0">
+      <VBox layoutX="124.0" layoutY="-2.0" prefHeight="407.0" prefWidth="480.0">
          <children>
-            <Canvas fx:id="gameCanvas" height="400.0" width="461.0" />
+            <Canvas fx:id="gameCanvas" height="402.0" nodeOrientation="INHERIT" width="480.0" />
          </children>
       </VBox>
    </children>
