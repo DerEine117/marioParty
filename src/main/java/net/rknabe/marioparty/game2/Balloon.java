@@ -12,9 +12,18 @@ public class Balloon {
     private final int move_speed;
     private final ImageView balloonImage;
     private final Canvas gameCanvas;
+    private boolean popped;
 
     public int getMoveSpeed() {
         return this.move_speed;
+    }
+
+    public boolean isPopped() {
+        return this.popped;
+    }
+
+    public void setPopped(boolean popped) {
+        this.popped = popped;
     }
 
 
@@ -27,6 +36,7 @@ public class Balloon {
         // this.y = bottom of the canvas
         this.y = gameCanvas.getHeight() -10;
         this.move_speed = (int)(Math.random() * (25 - 3)) + 3;
+        this.popped = false;
 
         Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/Balloon.png").toExternalForm());
         this.balloonImage = new ImageView(image);

@@ -14,14 +14,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class Game2Controller implements Initializable {
 
     private static final int NUM_BALLOONS = 70;
-    private final List<Balloon> balloons = new ArrayList<>();
+    private final ConcurrentLinkedQueue<Balloon> balloons = new ConcurrentLinkedQueue<>();
     private int deploy_speed = 1000;
-
 
     @FXML
     private ImageView imageView1;
@@ -116,26 +116,29 @@ public class Game2Controller implements Initializable {
     public void gameLoop() {
         increaseSpeeds();
         new Thread(() -> {
-            for (Balloon balloon : balloons) {
-                new Thread(() -> {
-                    while (!isEnd()) {
-                        final Balloon b = balloon;
-                        Platform.runLater(() -> {
-                            b.move();
-                            redrawCanvas();
-                        });
-                        try {
-                            Thread.sleep(b.getMoveSpeed());
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+            while (!isEnd()) {
+                for (Balloon balloon : balloons) {
+                    new Thread(() -> {
+                        while (!balloon.isPopped()) {
+                            final Balloon b = balloon;
+                            Platform.runLater(() -> {
+                                b.move();
+                                Balloon.remove(b);
+                                redrawCanvas();
+                            });
+                            try {
+                                Thread.sleep(b.getMoveSpeed());
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                }).start();
+                    }).start();
 
-                try {
-                    Thread.sleep(deploy_speed);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    try {
+                        Thread.sleep(deploy_speed);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();
@@ -150,6 +153,7 @@ public class Game2Controller implements Initializable {
             gc.drawImage(balloon.getBalloonImage().getImage(), balloon.getX(), balloon.getY(), balloon.getBalloonImage().getFitWidth(), balloon.getBalloonImage().getFitHeight());
         }
     }
+
 
     protected boolean isEnd() {
         //todo
@@ -186,6 +190,7 @@ public class Game2Controller implements Initializable {
             double clickX = event.getX();
             double clickY = event.getY();
 
+            Balloon balloonToRemove = null;
             for (Balloon balloon : balloons) {
                 double balloonMinX = balloon.getX();
                 double balloonMaxX = balloon.getX() + balloon.getBalloonImage().getFitWidth();
@@ -193,7 +198,9 @@ public class Game2Controller implements Initializable {
                 double balloonMaxY = balloon.getY() + balloon.getBalloonImage().getFitHeight();
 
                 if (clickX >= balloonMinX && clickX <= balloonMaxX && clickY >= balloonMinY && clickY <= balloonMaxY) {
-                    Balloon.remove(balloon);
+                    balloonToRemove = balloon;
+                    balloon.setPopped(true);
+
                     Effects();
                     Player.increaseScore();
                     updateScore();
@@ -201,6 +208,10 @@ public class Game2Controller implements Initializable {
                     // todo add other updated labels
                     break;
                 }
+            }
+            if (balloonToRemove != null) {
+                balloons.remove(balloonToRemove);
+                Balloon.remove(balloonToRemove);
             }
         });
     }
