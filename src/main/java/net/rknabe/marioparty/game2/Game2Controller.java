@@ -1,6 +1,6 @@
 package net.rknabe.marioparty.game2;
 
-
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import net.rknabe.marioparty.StageChanger;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +18,10 @@ import java.util.ResourceBundle;
 
 public class Game2Controller implements Initializable {
 
-    private static final int NUM_BALLOONS = 5;
-    private static final double MOVE_SPEED_INCREASEMENT = 1;
-    private double move_speed = 5.0;
+    private static final int NUM_BALLOONS = 70;
     private final List<Balloon> balloons = new ArrayList<>();
-    private int deploy_speed = 3000; // milliseconds
-    private static final int DEPLOY_SPEED_INCREASEMENT = 20; // milliseconds
+    private int deploy_speed;
 
-    // todo initialize the construktor and add the number of balloons to the list(NUM_BALLOONS)
 
     @FXML
     private ImageView imageView1;
@@ -45,6 +40,12 @@ public class Game2Controller implements Initializable {
     }
     @FXML
     private Button reset;
+    @FXML
+    public Label playerScore;
+    @FXML
+    public Label balloonsLeft;
+    @FXML
+    public Canvas gameCanvas;
 
     @FXML
     protected void resetClick(){
@@ -55,54 +56,76 @@ public class Game2Controller implements Initializable {
             Balloon.remove(balloon);
             balloons.remove(balloon);
         }
+        // todo: maybe?
     }
 
     @FXML
     private Button startGame;
     @FXML
     protected void startGameClick() {
+        // create all the Balloons and display them on the canvas, but:
+        // make sure the next balloon has an y ->   previousY-60 > y or y > previousY +60
+        double previousX = gameCanvas.getWidth()/2;
+
         for (int i = 0; i < NUM_BALLOONS; i++) {
             Balloon balloon = new Balloon(gameCanvas);
-            balloons.add(balloon);
-            balloon.display(balloon);
+            if (i == 0) {
+                previousX = balloon.getX();
+            } else {
+                if (previousX - 60 > balloon.getX() || balloon.getX() > previousX + 60) {
+                    balloons.add(balloon);
+                    previousX = balloon.getX();
+                } else {
+                    i--;
+                }
+            }
+
         }
         gameLoop();
     }
-    @FXML
-    public Label playerScore;
-    @FXML
-    public Label computerScore;
-    @FXML
-    public Label balloonsLeft;
-    @FXML
-    public Canvas gameCanvas;
 
     private GraphicsContext gc;
 
-    protected void increaseMove(){
-        move_speed += MOVE_SPEED_INCREASEMENT;
+    private void updateScore() {
+        playerScore.setText(toString().valueOf(Player.getScore()));
+    }
+    private void updateBalloonsLeft() {
+        balloonsLeft.setText(toString().valueOf(balloons.size()));
     }
 
-    protected void increaseDeploy(){
-        deploy_speed -= DEPLOY_SPEED_INCREASEMENT;
+    private void increaseSpeeds(){
+        new Thread(() -> {
+            while (!isEnd()) {
+                try {
+                    Thread.sleep(1000); // wait for 1 second
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                deploy_speed = (int)(Math.random() * (1000 - 700)) + 700;
+            }
+            }).start();
     }
+
 
     protected void Effects(){
+        // todo
         //sound effekt and pop animation
     }
 
-    public void updateScore() {
-        playerScore.setText("Score: " + Player.getScore());
-    }
-
     public void gameLoop() {
+        increaseSpeeds();
         new Thread(() -> {
             for (Balloon balloon : balloons) {
                 new Thread(() -> {
                     while (!isEnd()) {
-                        balloon.move(balloon, move_speed);
+                        final Balloon b = balloon;
+                        Platform.runLater(() -> {
+                            b.move();
+                            redrawCanvas();
+                        });
                         try {
-                            Thread.sleep(100);
+                            Thread.sleep(b.getMoveSpeed());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -118,7 +141,18 @@ public class Game2Controller implements Initializable {
         }).start();
     }
 
+    public void redrawCanvas() {
+        GraphicsContext gc = gameCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight()); // clear the entire canvas
+
+        for (Balloon balloon : balloons) {
+            // redraw the balloon at the updated position
+            gc.drawImage(balloon.getBalloonImage().getImage(), balloon.getX(), balloon.getY(), balloon.getBalloonImage().getFitWidth(), balloon.getBalloonImage().getFitHeight());
+        }
+    }
+
     protected boolean isEnd() {
+        //todo
         if (balloons.isEmpty()) {
             return true;
         }
@@ -128,6 +162,7 @@ public class Game2Controller implements Initializable {
     }
 
     protected void endGame() {
+        // todo
         // show end screen
         // show score
         // show highscore
@@ -138,13 +173,10 @@ public class Game2Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // create a new Player
-        // todo: go through the list of balloons and make one after another visible and move up the screen
-        // iterate through list with thread that sleeps for deploy_speed milliseconds
-        // if balloon is clicked-> balloon.remove and Player.increaseSc the speed of the balloons
+        Player player = new Player();
 
-        // todo: set the metal_spikes.png in the Hbox in the fxml file
 
-        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/metal-spikes.png").toExternalForm());
+        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/metal-spikes.png").toExternalForm());        imageView1.setImage(image);
         imageView1.setImage(image);
         imageView2.setImage(image);
         imageView3.setImage(image);
@@ -165,8 +197,8 @@ public class Game2Controller implements Initializable {
                     Effects();
                     Player.increaseScore();
                     updateScore();
-                    increaseMove();
-                    increaseDeploy();
+                    updateBalloonsLeft();
+                    // todo add other updated labels
                     break;
                 }
             }

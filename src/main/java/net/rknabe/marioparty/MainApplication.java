@@ -28,7 +28,7 @@ public class MainApplication extends Application {
         game1Scene = new Scene(fxmlLoaderGame1.load(), 600, 400);
 
         FXMLLoader fxmlLoaderGame2 = new FXMLLoader(MainApplication.class.getResource("game2-view.fxml"));
-        game2Scene = new Scene(fxmlLoaderGame2.load(), 600, 400);
+        game2Scene = new Scene(fxmlLoaderGame2.load(), 711, 400);
 
         FXMLLoader fxmlLoaderGame3 = new FXMLLoader(MainApplication.class.getResource("game3-view.fxml"));
         game3Scene = new Scene(fxmlLoaderGame3.load(), 600, 400);

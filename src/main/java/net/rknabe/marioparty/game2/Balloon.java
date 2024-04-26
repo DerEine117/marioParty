@@ -6,14 +6,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Balloon {
+
     private double x;
     private double y;
-    private static final double BALLOON_RADIUS = 20.0;
-    private ImageView balloonImage;
-    private Canvas gameCanvas;
+    private final int move_speed;
+    private final ImageView balloonImage;
+    private final Canvas gameCanvas;
 
-
-
+    public int getMoveSpeed() {
+        return this.move_speed;
+    }
 
 
     // ballon is a picture of a balloon
@@ -22,12 +24,9 @@ public class Balloon {
         this.gameCanvas = gameCanvas;
         // this.x = random number between ((fxml width - canvas width) and fxml width)
         this.x = (Math.random() * (gameCanvas.getWidth()-50));
-        System.out.println("x: " + this.x);
-        System.out.println("canvas width: " + gameCanvas.getWidth());
         // this.y = bottom of the canvas
         this.y = gameCanvas.getHeight() -10;
-        System.out.println("y: " + this.y);
-        System.out.println("canvas height: " + gameCanvas.getHeight());
+        this.move_speed = (int)(Math.random() * (25 - 3)) + 3;
 
         Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/Balloon.png").toExternalForm());
         this.balloonImage = new ImageView(image);
@@ -36,22 +35,15 @@ public class Balloon {
         this.balloonImage.setX(this.x);
         this.balloonImage.setY(this.y);
 
-        this.balloonImage.setOnMouseClicked(event -> {
-            // Hier können Sie den Code hinzufügen, der ausgeführt werden soll, wenn auf den Ballon geklickt wird
-            System.out.println("Balloon clicked!");
-            // Zum Beispiel, Sie könnten die remove-Methode hier aufrufen
-            // remove(this);
-        });
     }
     //todo: erstelle Event was abbildet das ein Ballon oben am Canvas angekommen ist
 
-    public void move(Balloon balloon, double move_speed){
+    public void move(){
         // todo: move the balloon up the screen
         // aufgerufen in Game2Controller
-        remove(balloon);
-        this.y-=move_speed;
+
+        this.y--;
         this.balloonImage.setY(this.y);
-        display(balloon);
 
     }
 
