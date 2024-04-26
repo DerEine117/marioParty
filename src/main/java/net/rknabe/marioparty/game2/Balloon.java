@@ -25,7 +25,7 @@ public class Balloon {
         System.out.println("x: " + this.x);
         System.out.println("canvas width: " + gameCanvas.getWidth());
         // this.y = bottom of the canvas
-        this.y = Math.random() * gameCanvas.getHeight();
+        this.y = gameCanvas.getHeight() -10;
         System.out.println("y: " + this.y);
         System.out.println("canvas height: " + gameCanvas.getHeight());
 
@@ -45,11 +45,13 @@ public class Balloon {
     }
     //todo: erstelle Event was abbildet das ein Ballon oben am Canvas angekommen ist
 
-    public void move(Balloon balloon){
+    public void move(Balloon balloon, double move_speed){
         // todo: move the balloon up the screen
         // aufgerufen in Game2Controller
-        this.y++; //?
+        remove(balloon);
+        this.y-=move_speed;
         this.balloonImage.setY(this.y);
+        display(balloon);
 
     }
 
