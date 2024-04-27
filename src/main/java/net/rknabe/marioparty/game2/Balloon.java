@@ -7,15 +7,20 @@ import javafx.scene.image.ImageView;
 
 public class Balloon {
 
-    private double x;
+    private final double x;
     private double y;
     private final int move_speed;
+    private final int deploy_speed;
     private final ImageView balloonImage;
     private final Canvas gameCanvas;
     private boolean popped;
+    private boolean reachedTop;
 
     public int getMoveSpeed() {
         return this.move_speed;
+    }
+    public int getDeploySpeed() {
+        return this.deploy_speed;
     }
 
     public boolean isPopped() {
@@ -24,6 +29,12 @@ public class Balloon {
 
     public void setPopped(boolean popped) {
         this.popped = popped;
+        // todo
+        // shouldnt be neccesarry
+    }
+
+    public boolean hasReachedTop() {
+        return this.reachedTop;
     }
 
 
@@ -35,8 +46,10 @@ public class Balloon {
         this.x = (Math.random() * (gameCanvas.getWidth()-50));
         // this.y = bottom of the canvas
         this.y = gameCanvas.getHeight() -10;
-        this.move_speed = (int)(Math.random() * (25 - 3)) + 3;
+        this.move_speed = (int)(Math.random() * (20 - 3)) + 3;
+        this.deploy_speed = (int)(Math.random() * (1000 - 400)) + 400;
         this.popped = false;
+        this.reachedTop = false;
 
         Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/Balloon.png").toExternalForm());
         this.balloonImage = new ImageView(image);
@@ -46,14 +59,16 @@ public class Balloon {
         this.balloonImage.setY(this.y);
 
     }
-    //todo: erstelle Event was abbildet das ein Ballon oben am Canvas angekommen ist
 
     public void move(){
-        // todo: move the balloon up the screen
-        // aufgerufen in Game2Controller
-
+        // move the balloon up the screen
         this.y--;
         this.balloonImage.setY(this.y);
+
+        // Check if the balloon has reached the top of the canvas
+        if (this.y <= 0) {
+            this.reachedTop = true;
+        }
 
     }
 
