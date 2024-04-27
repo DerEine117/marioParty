@@ -11,22 +11,21 @@
 
 <AnchorPane fx:id="myAnchorPane" minHeight="400.0" minWidth="711.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game2.Game2Controller">
    <children>
-      <VBox layoutX="17.0" layoutY="47.0" prefHeight="215.0" prefWidth="100.0">
+      <VBox layoutX="14.0" layoutY="114.0" prefHeight="215.0" prefWidth="100.0">
          <children>
             <Label alignment="BASELINE_LEFT" text="Your Score:">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Label fx:id="playerScore" text="0" />
+            <Label fx:id="balloonsInflated" text="0" />
             <Label prefHeight="17.0" prefWidth="141.0" text="Balloons Left:">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Label fx:id="balloonsLeft" text="50" />
+            <Label fx:id="balloonsLeft" text="Label" />
             <Button fx:id="startGame" mnemonicParsing="false" onAction="#startGameClick" text="start" />
-            <Button fx:id="reset" mnemonicParsing="false" onAction="#resetClick" text="reset" />
             <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="back to menu" />
          </children>
       </VBox>

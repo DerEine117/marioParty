@@ -21,6 +21,7 @@ public class Game2Controller implements Initializable {
     private static final int NUM_BALLOONS = 5;
     private final ConcurrentLinkedQueue<Balloon> balloons = new ConcurrentLinkedQueue<>();
     private boolean end = false;
+    private int balloonsPopped;
 
     @FXML
     private AnchorPane myAnchorPane;
@@ -42,31 +43,11 @@ public class Game2Controller implements Initializable {
         StageChanger.setScene(0);
     }
     @FXML
-    private Button reset;
-    @FXML
-    public Label playerScore;
+    public Label balloonsInflated;
     @FXML
     public Label balloonsLeft;
     @FXML
     public Canvas gameCanvas;
-
-    @FXML
-    protected void resetClick(){
-        // Stop the game
-        setEnd(true);
-
-        // Reset the player's score
-        updateScore();
-
-        // Reset the number of balloons left
-        balloons.clear();
-        updateBalloonsLeft();
-
-        // Clear the canvas
-        GraphicsContext gc = gameCanvas.getGraphicsContext2D();
-        gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
-    }
-
     @FXML
     private Button startGame;
     @FXML
@@ -74,6 +55,8 @@ public class Game2Controller implements Initializable {
         // create all the Balloons and display them on the canvas, but:
         // make sure the next balloon has an y ->   previousY-60 > y or y > previousY +60
         // make them more spread out
+        reset();
+        balloonsPopped = 0;
         double previousX = gameCanvas.getWidth()/2;
 
         for (int i = 0; i <= NUM_BALLOONS; i++) {
@@ -88,20 +71,23 @@ public class Game2Controller implements Initializable {
                     i--;
                 }
             }
-
         }
         gameLoop();
     }
 
     private GraphicsContext gc;
 
-    private void updateScore() {
-        playerScore.setText(toString().valueOf(Player.getScore()));
-    }
-    private void updateBalloonsLeft() {
-        balloonsLeft.setText(toString().valueOf(balloons.size()));
+    private void updateBallonsPopped() {
+        balloonsInflated.setText(increaseBalloonsPopped()+ "");
     }
 
+    private void updateBalloonsLeft() {
+        balloonsLeft.setText(toString().valueOf(balloons.size()-1));
+    }
+    private int increaseBalloonsPopped() {
+        balloonsPopped++;
+        return balloonsPopped;
+    }
 
     protected void Effects(){
         // todo
@@ -156,6 +142,13 @@ public class Game2Controller implements Initializable {
         }
     }
 
+    private void reset(){
+        // Stop the game
+        endGame(false);
+        // Reset the number of balloons left
+        balloons.clear();
+        setEnd(false);
+    }
 
     private boolean isEnd() {
         return end;
@@ -168,6 +161,8 @@ public class Game2Controller implements Initializable {
     protected void endGame(boolean playerWon) {
         setEnd(true);
         System.out.println("Game Over");
+        balloons.clear();
+        redrawCanvas();
         // todo
         // show end screen
         // show score
@@ -180,7 +175,8 @@ public class Game2Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // create a new Player
         Player player = new Player();
-
+        balloonsInflated.setText("0");
+        balloonsLeft.setText(NUM_BALLOONS + "");
 
         // set the background image
         String imageUrl = getClass().getResource("/net/rknabe/marioparty/assets/backgroundGame2.png").toExternalForm();
@@ -213,7 +209,7 @@ public class Game2Controller implements Initializable {
                     // should be initialized 1x in endGame(true)
                     // change the variable that is displayed in the label
 
-                    updateScore();
+                    updateBallonsPopped();
                     updateBalloonsLeft();
                     break;
                 }
