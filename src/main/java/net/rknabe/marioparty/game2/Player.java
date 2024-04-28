@@ -8,7 +8,7 @@ public class Player {
     }
 
     public static void increaseScore() {
-        score++;
+        score+=50;
     }
 
     public static int getScore() {

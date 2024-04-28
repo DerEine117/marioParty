@@ -5,13 +5,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import net.rknabe.marioparty.StageChanger;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -110,7 +110,7 @@ public class Game2Controller implements Initializable {
                                 Balloon.remove(b);
                                 balloons.remove(b);
                                 updateBalloonsLeft();
-                                endGame(true);
+                                endGame(true, false);
                             });
                         }
                         try {
@@ -119,7 +119,7 @@ public class Game2Controller implements Initializable {
                             e.printStackTrace();
                         }
                         if (balloons.isEmpty()) {
-                            endGame(true);
+                            endGame(true, false);
                         }
                     }
                 }).start();
@@ -144,7 +144,7 @@ public class Game2Controller implements Initializable {
 
     private void reset(){
         // Stop the game
-        endGame(false);
+        endGame(false, true);
         // Reset the number of balloons left
         balloons.clear();
         setEnd(false);
@@ -158,16 +158,34 @@ public class Game2Controller implements Initializable {
         this.end = end;
     }
 
-    protected void endGame(boolean playerWon) {
+    protected void endGame(boolean playerWon, boolean reset) {
         setEnd(true);
-        System.out.println("Game Over");
         balloons.clear();
         redrawCanvas();
-        // todo
-        // show end screen
-        // show score
-        // show highscore
-        // show play again button
+
+        // todo: better visuals
+        if (!reset) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Spielende");
+                alert.setHeaderText(null);
+                if (playerWon) {
+                    Player.increaseScore();
+                    alert.setContentText("Sie haben gewonnen!");
+                } else {
+                    alert.setContentText("Sie haben verloren!");
+                    Computer.increaseScore();
+                }
+
+                ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+                alert.getButtonTypes().setAll(okButton);
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == okButton) {
+                    StageChanger.setScene(0); // Zurück zum Hauptspiel
+                }
+            });
+        }
     }
 
 

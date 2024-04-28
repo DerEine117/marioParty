@@ -29,8 +29,6 @@ public class Balloon {
 
     public void setPopped(boolean popped) {
         this.popped = popped;
-        // todo
-        // shouldnt be neccesarry
     }
 
     public boolean hasReachedTop() {
@@ -53,8 +51,8 @@ public class Balloon {
 
         Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/Balloon.png").toExternalForm());
         this.balloonImage = new ImageView(image);
-        this.balloonImage.setFitWidth(60); // set the width of the image to 20
-        this.balloonImage.setFitHeight(60); // set the height of the image to 20
+        this.balloonImage.setFitWidth(60);
+        this.balloonImage.setFitHeight(60);
         this.balloonImage.setX(this.x);
         this.balloonImage.setY(this.y);
 
