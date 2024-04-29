@@ -52,7 +52,7 @@ public class Balloon {
         Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/Balloon.png").toExternalForm());
         this.balloonImage = new ImageView(image);
         this.balloonImage.setFitWidth(60);
-        this.balloonImage.setFitHeight(60);
+        this.balloonImage.setFitHeight(73);
         this.balloonImage.setX(this.x);
         this.balloonImage.setY(this.y);
 

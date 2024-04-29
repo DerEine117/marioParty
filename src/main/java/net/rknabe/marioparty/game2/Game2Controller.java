@@ -18,15 +18,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Game2Controller implements Initializable {
 
-    private static final int NUM_BALLOONS = 5;
+    private static final int NUM_BALLOONS = 20;
     private final ConcurrentLinkedQueue<Balloon> balloons = new ConcurrentLinkedQueue<>();
     private boolean end = false;
     private int balloonsPopped;
 
     @FXML
     private AnchorPane myAnchorPane;
-    @FXML
-    private ImageView background;
     @FXML
     private ImageView imageView1;
     @FXML
@@ -110,7 +108,7 @@ public class Game2Controller implements Initializable {
                                 Balloon.remove(b);
                                 balloons.remove(b);
                                 updateBalloonsLeft();
-                                endGame(true, false);
+                                endGame(false, false);
                             });
                         }
                         try {
@@ -159,6 +157,11 @@ public class Game2Controller implements Initializable {
     }
 
     protected void endGame(boolean playerWon, boolean reset) {
+        // Check if the game has already ended
+        if (isEnd()) {
+            return;
+        }
+
         setEnd(true);
         balloons.clear();
         redrawCanvas();
@@ -172,7 +175,7 @@ public class Game2Controller implements Initializable {
                 if (playerWon) {
                     Player.increaseScore();
                     alert.setContentText("Sie haben gewonnen!");
-                } else {
+                } else if (!playerWon) {
                     alert.setContentText("Sie haben verloren!");
                     Computer.increaseScore();
                 }
