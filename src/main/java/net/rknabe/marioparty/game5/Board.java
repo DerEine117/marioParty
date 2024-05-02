@@ -63,17 +63,18 @@ public class Board {
         return true;
     }
 
+    public Ship getShipAt(int x, int y) {
+        return ships[x][y];
+    }
+
     public boolean isOccupied(int x, int y) {
         return ships[x][y] != null;
     }
 
     public boolean isHit(int x, int y) {
-        if (ships[x][y] != null) {
-            ships[x][y].hit();
-            return true;
-        }
-        return false;
+        return ships[x][y] != null && ships[x][y].isHit();
     }
+
 
     public boolean isSunk(int x, int y) {
         return ships[x][y] != null && ships[x][y].isSunk();

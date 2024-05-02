@@ -1,5 +1,6 @@
 package net.rknabe.marioparty.game5;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Ship {
@@ -9,33 +10,48 @@ public class Ship {
     String orientation;
     Board board;
     int hits = 0;
+    private boolean hit;
 
 
     public Ship(int length, Board board) {
         this.length = length;
         this.board = board;
-        do {
-            this.position = getRandomPosition();
-            this.orientation = getRandomOrientation();
-        } while (!board.canPlaceShip(this));
+        this.orientation = getRandomOrientation();
+        this.position = getRandomPosition();
     }
 
 
-    private int[] getRandomPosition() {
+    public int[] getRandomPosition() {
         Random random = new Random();
         int x, y;
         do {
-            x = random.nextInt(10);
-            y = random.nextInt(10);
-        } while (board.isOccupied(x, y));
+            x = random.nextInt(10 - (orientation.equals("horizontal") ? length - 1 : 0));
+            y = random.nextInt(10 - (orientation.equals("vertical") ? length - 1 : 0));
+        } while (!board.canPlaceShip(this));
         return new int[]{x, y};
     }
-
-    private String getRandomOrientation() {
-        return new Random().nextBoolean() ? "horizontal" : "vertical";
+    public String getRandomOrientation() {
+        Random random = new Random();
+        return random.nextBoolean() ? "horizontal" : "vertical";
     }
+
+    private boolean arePositionsFree(int[][] positions) {
+        for (int[] position : positions) {
+            if (board.isOccupied(position[0], position[1])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     public void hit() {
-        hits++;
+        this.hit = true;
+        this.hits++;
+    }
+
+    public boolean isHit() {
+        return hit;
     }
 
     public boolean isSunk() {
