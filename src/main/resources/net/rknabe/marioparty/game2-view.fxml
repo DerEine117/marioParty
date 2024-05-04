@@ -11,7 +11,7 @@
 
 <AnchorPane fx:id="myAnchorPane" minHeight="400.0" minWidth="711.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game2.Game2Controller">
    <children>
-      <VBox layoutX="14.0" layoutY="114.0" prefHeight="215.0" prefWidth="100.0">
+      <VBox layoutX="14.0" layoutY="94.0" prefHeight="215.0" prefWidth="100.0">
          <children>
             <Label alignment="BASELINE_LEFT" text="Your Score:">
                <font>

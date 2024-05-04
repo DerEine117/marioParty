@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Game2Controller implements Initializable {
 
-    private static final int NUM_BALLOONS = 20;
+    private static final int NUM_BALLOONS = 25;
     private final ConcurrentLinkedQueue<Balloon> balloons = new ConcurrentLinkedQueue<>();
     private boolean end = false;
     private int balloonsPopped;
@@ -69,6 +69,7 @@ public class Game2Controller implements Initializable {
                     i--;
                 }
             }
+
         }
         gameLoop();
     }

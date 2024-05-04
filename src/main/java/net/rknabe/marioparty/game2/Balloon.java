@@ -44,7 +44,8 @@ public class Balloon {
         this.x = (Math.random() * (gameCanvas.getWidth()-50));
         // this.y = bottom of the canvas
         this.y = gameCanvas.getHeight() -10;
-        this.move_speed = (int)(Math.random() * (20 - 3)) + 3;
+        // lower is faster (Thread.sleep(move_speed)-> ms per pixel
+        this.move_speed = (int)(Math.random() * (18 - 2)) + 2;
         this.deploy_speed = (int)(Math.random() * (1000 - 400)) + 400;
         this.popped = false;
         this.reachedTop = false;
