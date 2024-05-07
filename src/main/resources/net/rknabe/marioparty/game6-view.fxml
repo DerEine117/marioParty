@@ -5,18 +5,17 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.StackPane?>
-<VBox fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="net.rknabe.marioparty.game6.Game6Controller">
+<VBox fx:id="root" minHeight="-Infinity" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game6.Game6Controller">
     <children>
         <HBox alignment="CENTER">
-            <VBox prefHeight="123.0" prefWidth="235.0">
+            <VBox prefHeight="500.0" prefWidth="235.0">
                 <children>
-                    <Label text="Minesweeper">
+                    <Label alignment="CENTER" contentDisplay="CENTER" text="Minesweeper">
                         <font>
                             <Font name="System Bold Italic" size="36.0" />
                         </font>
@@ -34,7 +33,10 @@
                             <Label text="Time:" />
                             <Label fx:id="timerLabel" GridPane.columnIndex="1" />
                             <Label text="Bombs:" GridPane.rowIndex="1" />
-                            <Label fx:id="bombsLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <Label fx:id="bombsLabel" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <font>
+                                    <Font name="System Bold" size="18.0" />
+                                </font></Label>
                         </children>
                     </GridPane>
                     <Label fx:id="gameStatusLabel" textAlignment="CENTER">
@@ -42,12 +44,12 @@
                             <Font size="15.0" />
                         </font>
                     </Label>
+                    <StackPane fx:id="game6Pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
                 </children>
             </VBox>
-        </HBox>
-        <StackPane fx:id="game6Pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />        <HBox alignment="CENTER">
-            <Button fx:id="backToMenu" onAction="#backToMenuClick" text="Back to Menu" />
-            <Button fx:id="newGameButton" onAction="#newGame" text="New Game" />
-        </HBox>
+        </HBox>        <HBox alignment="CENTER">
+        <Button fx:id="backToMenu" onAction="#backToMenuClick" text="Back to Menu" />
+        <Button fx:id="newGameButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" onAction="#newGame" text="New Game" />
+    </HBox>
     </children>
 </VBox>
