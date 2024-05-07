@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board extends Pane {
-    static final int TILE_SIZE = 60;
-    private static final int W = 800;
-    private static final int H = 800;
+    static final int TILE_SIZE = 70;
+    private static final int W = 500;
+    private static final int H = 500;
 
-    private static final int X_TILES = W/TILE_SIZE;
-    private static final int Y_TILES = H/TILE_SIZE;
+    public static final int X_TILES = W/TILE_SIZE;
+    public static final int Y_TILES = H/TILE_SIZE;
 
     private Tile[][] grid = new Tile[X_TILES][Y_TILES];
 
@@ -29,6 +29,9 @@ public class Board extends Pane {
                 getChildren().add(tile);
             }
         }
+        setPrefWidth(X_TILES * TILE_SIZE);
+        setPrefHeight(Y_TILES * TILE_SIZE);
+
         for (int y = 0; y < Y_TILES; y++) {
             for (int x = 0; x < X_TILES; x++) {
                 Tile tile = grid[x][y];

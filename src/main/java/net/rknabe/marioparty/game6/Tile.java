@@ -64,6 +64,8 @@ public class Tile extends StackPane {
 
         if (hasBomb) {
             System.out.println("Game Over");
+            Game6Controller.getInstance().getGameTimer().stop();
+
         } else {
             System.out.println("Safe");
             if (adjacentBombs == 0) {
