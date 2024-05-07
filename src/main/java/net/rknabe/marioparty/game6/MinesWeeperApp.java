@@ -17,6 +17,9 @@ public class MinesWeeperApp extends Pane {
 
         board.startGame();
     }
+    public Board getBoard() { // Add this method
+        return board;
+    }
 
 
 }

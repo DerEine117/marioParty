@@ -51,6 +51,9 @@ public class Tile extends StackPane {
         marked = !marked;
         update();
         ((Board) getParent()).checkWin();
+        if (((Board) getParent()).allTilesRevealedOrMarked()) {
+            ((Board) getParent()).checkWin();
+        }
 
     }
 
@@ -67,8 +70,7 @@ public class Tile extends StackPane {
         if (hasBomb) {
             System.out.println("Game Over");
             Game6Controller.getInstance().getGameTimer().stop();
-            Game6Controller.getInstance().setGameOver(true);
-
+            Game6Controller.getInstance().setGameOver(true, "Game Over");
 
         } else {
             System.out.println("Safe");
@@ -78,6 +80,9 @@ public class Tile extends StackPane {
                 // Reveal all neighbors if this tile has no adjacent bombs
                 board.getNeighbors(this).forEach(Tile::reveal);
             }
+        }
+        if (((Board) getParent()).allTilesRevealedOrMarked()) {
+            ((Board) getParent()).checkWin();
         }
 
         update();
