@@ -1,7 +1,11 @@
 package net.rknabe.marioparty.game6;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +26,29 @@ public class Board extends Pane {
     }
 
     public void startGame() {
+
+        ImageView backgroundView = null;
+        try {
+            FileInputStream inputstream = new FileInputStream("/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/background_game6.jpeg");
+            Image backgroundImage = new Image(inputstream);
+            backgroundView = new ImageView(backgroundImage);
+            backgroundView.setFitWidth(W);
+            backgroundView.setFitHeight(H);
+
+            getChildren().add(0, backgroundView);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (!getChildren().contains(backgroundView)) {
+            System.out.println("The ImageView is not in the Pane.");
+        } else if (!backgroundView.isVisible()) {
+            System.out.println("The ImageView is not visible.");
+        } else {
+            System.out.println("The ImageView is in the Pane and visible.");
+        }
+
         totalBombs = 0; // Reset totalBombs at the start of each game
 
         System.out.println("Board's startGame was called"); // Debug output

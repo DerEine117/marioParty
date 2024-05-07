@@ -3,12 +3,10 @@ package net.rknabe.marioparty.game6;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
@@ -29,7 +27,8 @@ public class Game6Controller extends GameController {
     private Label bombsLabel;
 
     @FXML
-    private Pane game6Pane;
+    private StackPane game6Pane;
+
 
     private static Game6Controller instance;
 
@@ -68,15 +67,20 @@ public class Game6Controller extends GameController {
             gameTimer.stop(); // Stop the existing timer
         }
         game = new MinesWeeperApp();
+        game.setPrefSize(500, 500); // Set the preferred size of the MinesWeeperApp pane
+
         game6Pane.getChildren().add(game);
+        game6Pane.setAlignment(Pos.CENTER); // Center the MinesWeeperApp pane in the game6Pane
+        Scene scene = game6Pane.getScene();
+        game.initializeBackground(scene);
         game.startGame();
         gameTimer = new GameTimer(game.getBoard());
         gameTimer.start(timerLabel);
         gameOver = false;
         gameStatusLabel.setText("Spiel gestartet. Viel Glück!");
         bombsLabel.setText(String.valueOf(game.getBoard().getTotalBombs()));
-
     }
+
 
     public boolean isGameOver() {
         return gameOver;

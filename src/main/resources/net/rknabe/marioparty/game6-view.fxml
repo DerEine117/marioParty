@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.StackPane?>
 <VBox fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="net.rknabe.marioparty.game6.Game6Controller">
     <children>
         <HBox alignment="CENTER">
@@ -44,8 +45,7 @@
                 </children>
             </VBox>
         </HBox>
-        <Pane fx:id="game6Pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
-        <HBox alignment="CENTER">
+        <StackPane fx:id="game6Pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />        <HBox alignment="CENTER">
             <Button fx:id="backToMenu" onAction="#backToMenuClick" text="Back to Menu" />
             <Button fx:id="newGameButton" onAction="#newGame" text="New Game" />
         </HBox>

@@ -5,10 +5,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import static net.rknabe.marioparty.game6.Board.TILE_SIZE;
+import javafx.scene.image.Image;
 
 public class Tile extends StackPane {
+    private ImageView bombImage;
     private int x, y;
     private boolean hasBomb;
     private boolean revealed;
@@ -19,6 +22,14 @@ public class Tile extends StackPane {
         this.x = x;
         this.y = y;
         this.hasBomb = hasBomb;
+
+        if (hasBomb) {
+            bombImage = new ImageView(new Image("file:/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/bomb.gif"));            bombImage.setVisible(false); // Das Bild sollte zunächst nicht sichtbar sein
+            bombImage.setFitWidth(TILE_SIZE);
+            bombImage.setFitHeight(TILE_SIZE);
+            bombImage.setVisible(false); // The image should initially not be visible
+            getChildren().add(bombImage);
+        }
 
         setPrefSize(TILE_SIZE, TILE_SIZE);
         setTranslateX(x * TILE_SIZE);
@@ -68,6 +79,11 @@ public class Tile extends StackPane {
         revealed = true;
 
         if (hasBomb) {
+            if (bombImage == null) {
+                System.out.println("bombImage is null. Check if the image file exists at the specified path.");
+            } else {
+                bombImage.setVisible(true);
+            }
             System.out.println("Game Over");
             Game6Controller.getInstance().getGameTimer().stop();
             Game6Controller.getInstance().setGameOver(true, "Game Over");
@@ -87,7 +103,6 @@ public class Tile extends StackPane {
 
         update();
         ((Board) getParent()).checkWin();
-
     }
 
     public boolean isRevealed() {
@@ -105,7 +120,17 @@ public class Tile extends StackPane {
         Rectangle border = new Rectangle(TILE_SIZE - 2, TILE_SIZE - 2);
         border.setFill(revealed ? (hasBomb ? Color.RED : Color.GREEN) : Color.GRAY);
 
-        getChildren().addAll(border);
+        getChildren().clear(); // Clear all children
+
+        // If the tile is revealed and it has a bomb, don't add the Rectangle
+        if (!(revealed && hasBomb)) {
+            getChildren().add(border);
+        }
+
+        // If the tile has a bomb, add the bombImage
+        if (hasBomb) {
+            getChildren().add(bombImage);
+        }
 
         // If the tile is revealed and it doesn't have a bomb, display the number of adjacent bombs
         if (revealed && !hasBomb && adjacentBombs > 0) {
