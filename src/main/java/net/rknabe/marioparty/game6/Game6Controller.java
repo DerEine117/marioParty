@@ -1,36 +1,26 @@
 package net.rknabe.marioparty.game6;
 
-import javafx.scene.Scene;
-import javafx.scene.input.MouseButton;
-import net.rknabe.marioparty.GameController;
-import javafx.stage.Stage;
+import javafx.fxml.FXML;
+import javafx.scene.layout.Pane;
 
-public class Game6Controller extends GameController {
-    private Board board;
-    private Stage stage;
+public class Game6Controller {
+    @FXML
+    private Pane game6Pane; // Dieses Pane wird in der FXML-Datei definiert
 
-    public Game6Controller() {
+    private MinesWeeperApp game;
+
+    public void initialize() {
+        game = new MinesWeeperApp();
+        game6Pane.getChildren().add(game);
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    @FXML
+    protected void startGame6Click() {
+        game.startGame();
     }
 
-    public void startGame() {
-        board = new Board(10, 10, 0.2);
-
-        Scene scene = new Scene(board, 200, 200);
-
-        scene.setOnMouseClicked(e -> {
-            int x = (int) e.getX() / 20;
-            int y = (int) e.getY() / 20;
-
-            if (e.getButton() == MouseButton.PRIMARY) {
-                board.revealTile(x, y);
-            }
-        });
-
-        stage.setScene(scene);
-        stage.show();
+    @FXML
+    protected void backToMenuClick() {
+        // Implementieren Sie die Logik, um zur Menüszene zurückzukehren
     }
 }
