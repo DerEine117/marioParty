@@ -8,8 +8,7 @@
         <VBox layoutX="1.0" layoutY="1.0" prefHeight="400.0" prefWidth="600.0">
             <children>
                 <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="back to menu" />
-                <Button fx:id="startGame6" onAction="#startGame6Click" text="Start Game 6" />
-            </children>
+                            </children>
         </VBox>
         <Pane fx:id="game6Pane" /> <!-- Add this line -->
     </children>

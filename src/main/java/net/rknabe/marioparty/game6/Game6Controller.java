@@ -1,6 +1,7 @@
 package net.rknabe.marioparty.game6;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
 public class Game6Controller {
@@ -9,15 +10,17 @@ public class Game6Controller {
 
     private MinesWeeperApp game;
 
+    @FXML
+    private Button startGame6;
+
     public void initialize() {
+        System.out.println("initialize was called"); // Debug output
+
         game = new MinesWeeperApp();
         game6Pane.getChildren().add(game);
-    }
-
-    @FXML
-    protected void startGame6Click() {
         game.startGame();
     }
+
 
     @FXML
     protected void backToMenuClick() {

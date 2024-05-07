@@ -57,7 +57,7 @@ public class Tile extends StackPane {
     }
 
     public void reveal() {
-        if (marked)
+        if (marked || revealed)
             return;
 
         revealed = true;

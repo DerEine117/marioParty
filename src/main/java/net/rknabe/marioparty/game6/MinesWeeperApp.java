@@ -11,6 +11,8 @@ public class MinesWeeperApp extends Pane {
     }
 
     public void startGame() {
+        System.out.println("MinesWeeperApp's startGame was called"); // Debug output
+
         System.out.println("startGame was called"); // Debug output
 
         board.startGame();
