@@ -50,6 +50,8 @@ public class Tile extends StackPane {
     public void mark() {
         marked = !marked;
         update();
+        ((Board) getParent()).checkWin();
+
     }
 
     public boolean isMarked() {
@@ -57,7 +59,7 @@ public class Tile extends StackPane {
     }
 
     public void reveal() {
-        if (marked || revealed)
+        if (Game6Controller.getInstance().isGameOver() || marked || revealed)
             return;
 
         revealed = true;
@@ -65,6 +67,8 @@ public class Tile extends StackPane {
         if (hasBomb) {
             System.out.println("Game Over");
             Game6Controller.getInstance().getGameTimer().stop();
+            Game6Controller.getInstance().setGameOver(true);
+
 
         } else {
             System.out.println("Safe");
@@ -77,6 +81,8 @@ public class Tile extends StackPane {
         }
 
         update();
+        ((Board) getParent()).checkWin();
+
     }
 
     public boolean isRevealed() {

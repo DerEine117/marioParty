@@ -48,16 +48,17 @@ public class Board extends Pane {
         for (int y = 0; y < Y_TILES; y++) {
             for (int x = 0; x < X_TILES; x++) {
                 Tile tile = grid[x][y];
-                if (tile.hasBomb() && !tile.isMarked()) {
-                    return;
-                }
-                if (!tile.hasBomb() && !tile.isRevealed()) {
+                if (!tile.isMarked() && !tile.isRevealed()) {
                     return;
                 }
             }
         }
 
+        // Wenn wir hier ankommen, bedeutet das, dass alle Felder entweder markiert oder aufgedeckt sind.
         System.out.println("You win!");
+
+        // Das Spiel beenden
+        Game6Controller.getInstance().setGameOver(true);
     }
 
     public List<Tile> getNeighbors(Tile tile) {

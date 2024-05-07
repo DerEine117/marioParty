@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 
 public class Game6Controller {
 
+    private boolean gameOver = false;
+
+
     private static Game6Controller instance;
 
     public Game6Controller() {
@@ -25,7 +28,15 @@ public class Game6Controller {
     public GameTimer getGameTimer() {
         return gameTimer;
     }
-
+    public boolean isGameOver() {
+        return gameOver;
+    }
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+        gameTimer.stop();
+    }
+    @FXML
+    private Button newGameButton;
 
     @FXML
     private Label timerLabel;
@@ -42,7 +53,16 @@ public class Game6Controller {
     private GameTimer gameTimer = new GameTimer();
 
 
-
+    @FXML
+    protected void newGame() {
+        // Das Spiel zurücksetzen
+        game6Pane.getChildren().remove(game);
+        game = new MinesWeeperApp();
+        game6Pane.getChildren().add(game);
+        game.startGame();
+        gameTimer.start(timerLabel);
+        gameOver = false;
+    }
 
     public void initialize() {
         System.out.println("initialize was called"); // Debug output

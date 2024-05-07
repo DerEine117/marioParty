@@ -5,7 +5,10 @@
 
 <BorderPane fx:id="root" fx:controller="net.rknabe.marioparty.game6.Game6Controller" xmlns:fx="http://javafx.com/fxml">
     <top>
-        <Label fx:id="timerLabel" />
+        <HBox alignment="CENTER">
+            <Label fx:id="timerLabel" />
+            <Button fx:id="newGameButton" text="New Game" onAction="#newGame"/>
+        </HBox>
     </top>
     <center>
         <Pane fx:id="game6Pane" />
