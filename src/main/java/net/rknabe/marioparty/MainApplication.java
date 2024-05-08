@@ -20,7 +20,6 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoaderMenu = new FXMLLoader(MainApplication.class.getResource("mainMenu-view.fxml"));
         mainMenuScene = new Scene(fxmlLoaderMenu.load(), 550, 500);
 
-        VBox gameLayout = new VBox(10);
 
         // Initializing the game Scenes from fxml
 
