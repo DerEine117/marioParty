@@ -1,5 +1,6 @@
 package net.rknabe.marioparty.game2;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
+import net.rknabe.marioparty.GameController;
 import net.rknabe.marioparty.StageChanger;
 import java.net.URL;
 import java.util.Optional;
@@ -16,7 +19,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
-public class Game2Controller implements Initializable {
+
+public class Game2Controller extends GameController implements Initializable {
 
     private static final int NUM_BALLOONS = 25;
     private final ConcurrentLinkedQueue<Balloon> balloons = new ConcurrentLinkedQueue<>();
@@ -34,12 +38,7 @@ public class Game2Controller implements Initializable {
     @FXML
     private ImageView imageView4;
 
-    @FXML
-    private Button backToMenu;
-    @FXML
-    protected void backToMenuClick() {
-        StageChanger.setScene(0);
-    }
+
     @FXML
     public Label balloonsInflated;
     @FXML
@@ -86,11 +85,6 @@ public class Game2Controller implements Initializable {
     private int increaseBalloonsPopped() {
         balloonsPopped++;
         return balloonsPopped;
-    }
-
-    protected void Effects(){
-        // todo
-        //sound effekt and pop animation
     }
 
     public void gameLoop() {
@@ -142,6 +136,8 @@ public class Game2Controller implements Initializable {
     }
 
     private void reset(){
+        // zum einfacheren Testen
+
         // Stop the game
         endGame(false, true);
         // Reset the number of balloons left
@@ -167,7 +163,6 @@ public class Game2Controller implements Initializable {
         balloons.clear();
         redrawCanvas();
 
-        // todo: better visuals
         if (!reset) {
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -176,7 +171,10 @@ public class Game2Controller implements Initializable {
                 if (playerWon) {
                     Player.increaseScore();
                     alert.setContentText("Sie haben gewonnen!");
-                } else if (!playerWon) {
+                    Image gifImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/konfetti.gif").toExternalForm());
+                    ImageView gifImageView = new ImageView(gifImage);
+
+                } else {
                     alert.setContentText("Sie haben verloren!");
                     Computer.increaseScore();
                 }
@@ -201,10 +199,10 @@ public class Game2Controller implements Initializable {
         balloonsLeft.setText(NUM_BALLOONS + "");
 
         // set the background image
-        String imageUrl = getClass().getResource("/net/rknabe/marioparty/assets/backgroundGame2.png").toExternalForm();
+        String imageUrl = getClass().getResource("/net/rknabe/marioparty/assets/game2/backgroundGame2.png").toExternalForm();
         myAnchorPane.setStyle("-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;");
 
-        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/metal-spikes.png").toExternalForm());        imageView1.setImage(image);
+        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/metalSpikes.png").toExternalForm());        imageView1.setImage(image);
         imageView1.setImage(image);
         imageView2.setImage(image);
         imageView3.setImage(image);
@@ -225,7 +223,6 @@ public class Game2Controller implements Initializable {
                     balloonToRemove = balloon;
                     balloon.setPopped(true);
 
-                    Effects();
                     Player.increaseScore();
                     // todo, player score shouldnt = popped balloons
                     // should be initialized 1x in endGame(true)
@@ -239,6 +236,22 @@ public class Game2Controller implements Initializable {
             if (balloonToRemove != null) {
                 balloons.remove(balloonToRemove);
                 Balloon.remove(balloonToRemove);
+
+
+                // GIF
+                Image gifImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/platzen.gif").toExternalForm());
+                ImageView gifImageView = new ImageView(gifImage);
+
+                // set position
+                gifImageView.setX(balloonToRemove.getX()+720-557);
+                gifImageView.setY(balloonToRemove.getY()+30);
+
+                myAnchorPane.getChildren().add(gifImageView);
+
+                // remove
+                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                pause.setOnFinished(GIFevent -> myAnchorPane.getChildren().remove(gifImageView));
+                pause.play();
             }
         });
     }

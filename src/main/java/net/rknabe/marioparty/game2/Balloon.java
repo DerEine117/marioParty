@@ -45,12 +45,12 @@ public class Balloon {
         // this.y = bottom of the canvas
         this.y = gameCanvas.getHeight() -10;
         // lower is faster (Thread.sleep(move_speed)-> ms per pixel
-        this.move_speed = (int)(Math.random() * (18 - 2)) + 2;
+        this.move_speed = (int)(Math.random() * (18 - 3)) + 3;
         this.deploy_speed = (int)(Math.random() * (1000 - 400)) + 400;
         this.popped = false;
         this.reachedTop = false;
 
-        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/Balloon.png").toExternalForm());
+        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/balloon.png").toExternalForm());
         this.balloonImage = new ImageView(image);
         this.balloonImage.setFitWidth(60);
         this.balloonImage.setFitHeight(73);
