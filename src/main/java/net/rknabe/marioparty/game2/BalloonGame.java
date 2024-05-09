@@ -1,31 +1,30 @@
 package net.rknabe.marioparty.game2;
 
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
 import net.rknabe.marioparty.GameController;
 import net.rknabe.marioparty.StageChanger;
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BalloonGame extends GameController implements Initializable {
 
     private static final int NUM_BALLOONS = 25;
-    private final ConcurrentLinkedQueue<Balloon> balloons = new ConcurrentLinkedQueue<>();
-    private boolean end = false;
     private int balloonsPopped;
-    private int playerScore;
-    private int computerScore;
+    private int playerScore = 0;
+    private int computerScore = 0;
+    private IntializeBalloons initializer = new IntializeBalloons();
+    private Drawer drawer = new Drawer(initializer);
+    private GameState gameState = new GameState();
+
 
     @FXML
     private AnchorPane myAnchorPane;
@@ -46,60 +45,83 @@ public class BalloonGame extends GameController implements Initializable {
     @FXML
     private Button startGame;
 
+    @Override
+    @FXML
+    protected void backToMenuClick() {
+        endGame(false, true);
+        StageChanger.setScene(0);
+    }
     @FXML
     protected void startGameClick() {
-        // create all the Balloons and display them on the canvas, but:
-        // make sure the next balloon has a y ->   previousY-60 > y or y > previousY +60
-        // make them more spread out
         reset();
-        double previousX = gameCanvas.getWidth()/2;
-
-        for (int i = 0; i <= NUM_BALLOONS; i++) {
-            Balloon balloon = new Balloon(gameCanvas);
-            if (i == 0) {
-                previousX = balloon.getX();
-            } else {
-                if (previousX - 60 > balloon.getX() || balloon.getX() > previousX + 60) {
-                    balloons.add(balloon);
-                    previousX = balloon.getX();
-                } else {
-                    i--;
-                }
-            }
-
-        }
+        initializer.createBalloons(NUM_BALLOONS, gameCanvas);
+        System.out.println(initializer.getBalloons());
         gameLoop();
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        balloonsInflated.setText("0");
+        balloonsLeft.setText(NUM_BALLOONS + "");
+        drawer.drawBackground(myAnchorPane);
+        drawer.drawSpikes(imageView1, imageView2, imageView3, imageView4);
+
+        gameCanvas.setOnMouseClicked(event -> {
+            double clickX = event.getX();
+            double clickY = event.getY();
+
+            Balloon balloonToRemove = null;
+            for (Balloon balloon : initializer.getBalloons()) {
+                double balloonMinX = balloon.getX();
+                double balloonMaxX = balloon.getX() + balloon.getBalloonImage().getFitWidth();
+                double balloonMinY = balloon.getY();
+                double balloonMaxY = balloon.getY() + balloon.getBalloonImage().getFitHeight();
+
+                if (clickX >= balloonMinX && clickX <= balloonMaxX && clickY >= balloonMinY && clickY <= balloonMaxY) {
+                    balloonToRemove = balloon;
+                    balloon.setPopped(true);
+                    updateBallonsPopped();
+                    updateBalloonsLeft();
+                    break;
+                }
+            }
+            if (balloonToRemove != null) {
+                initializer.removeBalloon(balloonToRemove);
+                Drawer.remove(gameCanvas, balloonToRemove);
+                drawer.drawExplosion(myAnchorPane, balloonToRemove);
+            }
+        });
+    }
 
     private void updateBallonsPopped() {
-        balloonsInflated.setText(increaseBalloonsPopped()+ "");
+        balloonsInflated.setText(balloonsPopped++ + "");
     }
 
     private void updateBalloonsLeft() {
-        balloonsLeft.setText(toString().valueOf(balloons.size()-1));
-    }
-    private int increaseBalloonsPopped() {
-        balloonsPopped++;
-        return balloonsPopped;
+        balloonsLeft.setText(toString().valueOf(initializer.getBalloons().size() - 1));
     }
 
     public void gameLoop() {
+        if (initializer == null) {
+            System.out.println("Initializer is null. Please make sure to call startGameClick before gameLoop.");
+            return;
+        }
         new Thread(() -> {
-            for (Balloon balloon : balloons) {
+            for (Balloon balloon : initializer.getBalloons()) {
                 new Thread(() -> {
-                    while (!balloon.isPopped() && !isEnd()) {
+                    while (!balloon.isPopped() && !gameState.isEnd()) {
                         final Balloon b = balloon;
                         Platform.runLater(() -> {
                             b.move();
-                            Balloon.remove(b);
-                            redrawCanvas();
+                            Drawer.remove(gameCanvas, b);
+                            drawer.redrawCanvas(gameCanvas);
+                            // has to update every ballon, so they don't overlap
                         });
-                        if (b.hasReachedTop()){
+                        if (b.hasReachedTop()) {
                             Platform.runLater(() -> {
-                                Balloon.remove(b);
-                                balloons.remove(b);
-                                updateBalloonsLeft();
+                                Drawer.remove(gameCanvas, b);
+                                initializer.removeAllBalloons();
+                                balloonsLeft.setText(toString().valueOf(initializer.getBalloons().size()));
                                 endGame(false, false);
                             });
                         }
@@ -108,7 +130,7 @@ public class BalloonGame extends GameController implements Initializable {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if (balloons.isEmpty()) {
+                        if (initializer.getBalloons().isEmpty()) {
                             endGame(true, false);
                         }
                     }
@@ -122,47 +144,27 @@ public class BalloonGame extends GameController implements Initializable {
         }).start();
     }
 
-    public void redrawCanvas() {
-        GraphicsContext gc = gameCanvas.getGraphicsContext2D();
-        gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight()); // clear the entire canvas
-
-        for (Balloon balloon : balloons) {
-            // redraw the balloon at the updated position
-            gc.drawImage(balloon.getBalloonImage().getImage(), balloon.getX(), balloon.getY(), balloon.getBalloonImage().getFitWidth(), balloon.getBalloonImage().getFitHeight());
-        }
-    }
-
-    private void reset(){
-        // zum einfacheren Testen
-
+    private void reset() {
         // Stop the game
         endGame(false, true);
         // Reset the number of balloons left
-        balloons.clear();
-        setEnd(false);
-        balloonsPopped = -1;
+        initializer.removeAllBalloons();
+        gameState.setEnd(false);
+        balloonsPopped = 0;
         updateBallonsPopped();
         balloonsLeft.setText(NUM_BALLOONS + "");
-    }
-
-    private boolean isEnd() {
-        return end;
-    }
-
-    private void setEnd(boolean end) {
-        this.end = end;
     }
 
     protected void endGame(boolean playerWon, boolean reset) {
         // Check if the game has already ended
         // and creates an alert dialog to inform the player
-        if (isEnd()) {
+        if (gameState.isEnd()) {
             return;
         }
 
-        setEnd(true);
-        balloons.clear();
-        redrawCanvas();
+        gameState.setEnd(true);
+        initializer.removeAllBalloons();
+        drawer.redrawCanvas(gameCanvas);
 
         if (!reset) {
             Platform.runLater(() -> {
@@ -171,7 +173,7 @@ public class BalloonGame extends GameController implements Initializable {
                 alert.setHeaderText(null);
                 if (playerWon) {
                     //todo
-                    playerScore+= 50;
+                    playerScore += 50;
                     // set image
                     // Load the first image
                     Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/gewonnenText.png").toExternalForm());
@@ -181,7 +183,7 @@ public class BalloonGame extends GameController implements Initializable {
                     alert.setGraphic(imageView);
 
                 } else {
-                    computerScore+= 50;
+                    computerScore += 50;
 
                     // Load the second image
                     Image image2 = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/verlorenText.png").toExternalForm());
@@ -202,64 +204,4 @@ public class BalloonGame extends GameController implements Initializable {
             });
         }
     }
-
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        balloonsInflated.setText("0");
-        balloonsLeft.setText(NUM_BALLOONS + "");
-
-        // set the background image
-        String imageUrl = getClass().getResource("/net/rknabe/marioparty/assets/game2/backgroundGame2.png").toExternalForm();
-        myAnchorPane.setStyle("-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;");
-
-        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/metalSpikes.png").toExternalForm());        imageView1.setImage(image);
-        imageView1.setImage(image);
-        imageView2.setImage(image);
-        imageView3.setImage(image);
-        imageView4.setImage(image);
-
-        gameCanvas.setOnMouseClicked(event -> {
-            double clickX = event.getX();
-            double clickY = event.getY();
-
-            Balloon balloonToRemove = null;
-            for (Balloon balloon : balloons) {
-                double balloonMinX = balloon.getX();
-                double balloonMaxX = balloon.getX() + balloon.getBalloonImage().getFitWidth();
-                double balloonMinY = balloon.getY();
-                double balloonMaxY = balloon.getY() + balloon.getBalloonImage().getFitHeight();
-
-                if (clickX >= balloonMinX && clickX <= balloonMaxX && clickY >= balloonMinY && clickY <= balloonMaxY) {
-                    balloonToRemove = balloon;
-                    balloon.setPopped(true);
-                    updateBallonsPopped();
-                    updateBalloonsLeft();
-                    break;
-                }
-            }
-            if (balloonToRemove != null) {
-                balloons.remove(balloonToRemove);
-                Balloon.remove(balloonToRemove);
-
-
-                // GIF
-                Image gifImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/platzen.gif").toExternalForm());
-                ImageView gifImageView = new ImageView(gifImage);
-
-                // set position
-                gifImageView.setX(balloonToRemove.getX()+720-557);
-                gifImageView.setY(balloonToRemove.getY()+30);
-
-                myAnchorPane.getChildren().add(gifImageView);
-
-                // remove
-                PauseTransition pause = new PauseTransition(Duration.seconds(1));
-                pause.setOnFinished(GIFevent -> myAnchorPane.getChildren().remove(gifImageView));
-                pause.play();
-            }
-        });
-    }
-
-
 }
