@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import net.rknabe.marioparty.GameController;
@@ -51,6 +50,7 @@ public class BalloonGame extends GameController implements Initializable {
         endGame(false, true);
         StageChanger.setScene(0);
     }
+
     @FXML
     protected void startGameClick() {
         reset();
@@ -70,26 +70,25 @@ public class BalloonGame extends GameController implements Initializable {
             double clickX = event.getX();
             double clickY = event.getY();
 
-            Balloon balloonToRemove = null;
-            for (Balloon balloon : initializer.getBalloons()) {
-                double balloonMinX = balloon.getX();
-                double balloonMaxX = balloon.getX() + balloon.getBalloonImage().getFitWidth();
-                double balloonMinY = balloon.getY();
-                double balloonMaxY = balloon.getY() + balloon.getBalloonImage().getFitHeight();
+            Optional<Balloon> balloonToRemove = initializer.getBalloons().stream()
+                    .filter(balloon -> {
+                        double balloonMinX = balloon.getX();
+                        double balloonMaxX = balloon.getX() + balloon.getBalloonImage().getFitWidth();
+                        double balloonMinY = balloon.getY();
+                        double balloonMaxY = balloon.getY() + balloon.getBalloonImage().getFitHeight();
 
-                if (clickX >= balloonMinX && clickX <= balloonMaxX && clickY >= balloonMinY && clickY <= balloonMaxY) {
-                    balloonToRemove = balloon;
-                    balloon.setPopped(true);
-                    updateBallonsPopped();
-                    updateBalloonsLeft();
-                    break;
-                }
-            }
-            if (balloonToRemove != null) {
-                initializer.removeBalloon(balloonToRemove);
-                Drawer.remove(gameCanvas, balloonToRemove);
-                drawer.drawExplosion(myAnchorPane, balloonToRemove);
-            }
+                        return clickX >= balloonMinX && clickX <= balloonMaxX && clickY >= balloonMinY && clickY <= balloonMaxY;
+                    })
+                    .findFirst();
+
+            balloonToRemove.ifPresent(balloon -> {
+                balloon.setPopped(true);
+                updateBallonsPopped();
+                updateBalloonsLeft();
+                initializer.removeBalloon(balloon);
+                Drawer.remove(gameCanvas, balloon);
+                drawer.drawExplosion(myAnchorPane, balloon);
+            });
         });
     }
 
@@ -161,7 +160,6 @@ public class BalloonGame extends GameController implements Initializable {
         if (gameState.isEnd()) {
             return;
         }
-
         gameState.setEnd(true);
         initializer.removeAllBalloons();
         drawer.redrawCanvas(gameCanvas);
@@ -172,26 +170,12 @@ public class BalloonGame extends GameController implements Initializable {
                 alert.setTitle("Spielende");
                 alert.setHeaderText(null);
                 if (playerWon) {
-                    //todo
                     playerScore += 50;
-                    // set image
-                    // Load the first image
-                    Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/gewonnenText.png").toExternalForm());
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitWidth(175);
-                    imageView.setFitHeight(30);
-                    alert.setGraphic(imageView);
+                    drawer.drawText(true, alert);
 
                 } else {
                     computerScore += 50;
-
-                    // Load the second image
-                    Image image2 = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/verlorenText.png").toExternalForm());
-                    ImageView imageView2 = new ImageView(image2);
-                    imageView2.setFitWidth(175);
-                    imageView2.setFitHeight(30);
-                    // Set the Pane as the graphic for the alert
-                    alert.setGraphic(imageView2);
+                    drawer.drawText(false, alert);
                 }
 
                 ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
