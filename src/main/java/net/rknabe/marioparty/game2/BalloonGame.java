@@ -18,12 +18,14 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class Game2Controller extends GameController implements Initializable {
+public class BalloonGame extends GameController implements Initializable {
 
     private static final int NUM_BALLOONS = 25;
     private final ConcurrentLinkedQueue<Balloon> balloons = new ConcurrentLinkedQueue<>();
     private boolean end = false;
     private int balloonsPopped;
+    private int playerScore;
+    private int computerScore;
 
     @FXML
     private AnchorPane myAnchorPane;
@@ -35,8 +37,6 @@ public class Game2Controller extends GameController implements Initializable {
     private ImageView imageView3;
     @FXML
     private ImageView imageView4;
-
-
     @FXML
     public Label balloonsInflated;
     @FXML
@@ -45,10 +45,11 @@ public class Game2Controller extends GameController implements Initializable {
     public Canvas gameCanvas;
     @FXML
     private Button startGame;
+
     @FXML
     protected void startGameClick() {
         // create all the Balloons and display them on the canvas, but:
-        // make sure the next balloon has an y ->   previousY-60 > y or y > previousY +60
+        // make sure the next balloon has a y ->   previousY-60 > y or y > previousY +60
         // make them more spread out
         reset();
         double previousX = gameCanvas.getWidth()/2;
@@ -70,7 +71,6 @@ public class Game2Controller extends GameController implements Initializable {
         gameLoop();
     }
 
-    private GraphicsContext gc;
 
     private void updateBallonsPopped() {
         balloonsInflated.setText(increaseBalloonsPopped()+ "");
@@ -170,7 +170,8 @@ public class Game2Controller extends GameController implements Initializable {
                 alert.setTitle("Spielende");
                 alert.setHeaderText(null);
                 if (playerWon) {
-                    Player.increaseScore();
+                    //todo
+                    playerScore+= 50;
                     // set image
                     // Load the first image
                     Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/gewonnenText.png").toExternalForm());
@@ -180,7 +181,7 @@ public class Game2Controller extends GameController implements Initializable {
                     alert.setGraphic(imageView);
 
                 } else {
-                    Computer.increaseScore();
+                    computerScore+= 50;
 
                     // Load the second image
                     Image image2 = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/verlorenText.png").toExternalForm());
@@ -205,8 +206,6 @@ public class Game2Controller extends GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // create a new Player
-        Player player = new Player();
         balloonsInflated.setText("0");
         balloonsLeft.setText(NUM_BALLOONS + "");
 
@@ -234,12 +233,6 @@ public class Game2Controller extends GameController implements Initializable {
                 if (clickX >= balloonMinX && clickX <= balloonMaxX && clickY >= balloonMinY && clickY <= balloonMaxY) {
                     balloonToRemove = balloon;
                     balloon.setPopped(true);
-
-                    Player.increaseScore();
-                    // todo, player score shouldnt = popped balloons
-                    // should be initialized 1x in endGame(true)
-                    // change the variable that is displayed in the label
-
                     updateBallonsPopped();
                     updateBalloonsLeft();
                     break;
