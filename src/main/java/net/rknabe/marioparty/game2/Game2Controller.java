@@ -18,8 +18,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-
-
 public class Game2Controller extends GameController implements Initializable {
 
     private static final int NUM_BALLOONS = 25;
@@ -53,7 +51,6 @@ public class Game2Controller extends GameController implements Initializable {
         // make sure the next balloon has an y ->   previousY-60 > y or y > previousY +60
         // make them more spread out
         reset();
-        balloonsPopped = 0;
         double previousX = gameCanvas.getWidth()/2;
 
         for (int i = 0; i <= NUM_BALLOONS; i++) {
@@ -143,6 +140,9 @@ public class Game2Controller extends GameController implements Initializable {
         // Reset the number of balloons left
         balloons.clear();
         setEnd(false);
+        balloonsPopped = -1;
+        updateBallonsPopped();
+        balloonsLeft.setText(NUM_BALLOONS + "");
     }
 
     private boolean isEnd() {
@@ -155,6 +155,7 @@ public class Game2Controller extends GameController implements Initializable {
 
     protected void endGame(boolean playerWon, boolean reset) {
         // Check if the game has already ended
+        // and creates an alert dialog to inform the player
         if (isEnd()) {
             return;
         }
@@ -170,13 +171,24 @@ public class Game2Controller extends GameController implements Initializable {
                 alert.setHeaderText(null);
                 if (playerWon) {
                     Player.increaseScore();
-                    alert.setContentText("Sie haben gewonnen!");
-                    Image gifImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/konfetti.gif").toExternalForm());
-                    ImageView gifImageView = new ImageView(gifImage);
+                    // set image
+                    // Load the first image
+                    Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/gewonnenText.png").toExternalForm());
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitWidth(175);
+                    imageView.setFitHeight(30);
+                    alert.setGraphic(imageView);
 
                 } else {
-                    alert.setContentText("Sie haben verloren!");
                     Computer.increaseScore();
+
+                    // Load the second image
+                    Image image2 = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/verlorenText.png").toExternalForm());
+                    ImageView imageView2 = new ImageView(image2);
+                    imageView2.setFitWidth(175);
+                    imageView2.setFitHeight(30);
+                    // Set the Pane as the graphic for the alert
+                    alert.setGraphic(imageView2);
                 }
 
                 ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
