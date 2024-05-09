@@ -1,20 +1,20 @@
 package net.rknabe.marioparty.game6;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Board extends Pane {
     private int totalBombs; // Add this line
 
-    static final int TILE_SIZE = 70;
+    static final int TILE_SIZE = 60;
     private static final int W = 500;
     private static final int H = 500;
+    public double difficulty = 0.1;
+    private static final Random RANDOM = new Random();
+
 
     public static final int X_TILES = W/TILE_SIZE;
     public static final int Y_TILES = H/TILE_SIZE;
@@ -25,49 +25,49 @@ public class Board extends Pane {
         setPrefSize(W, H);
     }
 
+    public void setDifficulty(double difficulty) {
+        this.difficulty = difficulty;
+        setTotalBombs();
+    }
+    public void setTotalBombs() {
+        if (difficulty <= 0.10) { // easy
+            totalBombs = RANDOM.nextInt(3) + 2; // 2 to 4 bombs
+        } else if (difficulty >= 0.35) { // hard
+            totalBombs = RANDOM.nextInt(6) + 5; // 8 to 11 bombs
+        } else { // middle
+            totalBombs = RANDOM.nextInt(3) + 5; // 5 to 7 bombs
+        }
+    }
+
+
     public void startGame() {
-
-        ImageView backgroundView = null;
-        try {
-            FileInputStream inputstream = new FileInputStream("/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/background_game6.jpeg");
-            Image backgroundImage = new Image(inputstream);
-            backgroundView = new ImageView(backgroundImage);
-            backgroundView.setFitWidth(W);
-            backgroundView.setFitHeight(H);
-
-            getChildren().add(0, backgroundView);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if (!getChildren().contains(backgroundView)) {
-            System.out.println("The ImageView is not in the Pane.");
-        } else if (!backgroundView.isVisible()) {
-            System.out.println("The ImageView is not visible.");
-        } else {
-            System.out.println("The ImageView is in the Pane and visible.");
-        }
-
-        totalBombs = 0; // Reset totalBombs at the start of each game
+        // Reset totalBombs at the start of each game
+        setTotalBombs();
 
         System.out.println("Board's startGame was called"); // Debug output
         getChildren().clear();
-        for (int y = 0; y < Y_TILES; y++) {
-            for (int x = 0; x < X_TILES; x++) {
-                Tile tile = new Tile(x, y, Math.random() < 0.1);
+
+        // Create a list to hold all tiles
+        List<Tile> allTiles = new ArrayList<>();
+
+        for (int y = 2; y < Y_TILES; y++) {
+            for (int x = 2; x < X_TILES; x++) {
+                Tile tile = new Tile(x, y, false);
                 grid[x][y] = tile;
                 getChildren().add(tile);
-                if (tile.hasBomb()) {
-                    totalBombs++; // Increment totalBombs for each bomb
-                }
+                allTiles.add(tile);
             }
         }
-        setPrefWidth(X_TILES * TILE_SIZE);
-        setPrefHeight(Y_TILES * TILE_SIZE);
 
-        for (int y = 0; y < Y_TILES; y++) {
-            for (int x = 0; x < X_TILES; x++) {
+        // Randomly assign bombs to tiles
+        for (int i = 0; i < totalBombs; i++) {
+            int index = RANDOM.nextInt(allTiles.size());
+            Tile randomTile = allTiles.remove(index);
+            randomTile.setBomb(true);
+        }
+
+        for (int y = 2; y < Y_TILES; y++) {
+            for (int x = 2; x < X_TILES; x++) {
                 Tile tile = grid[x][y];
                 if (tile.hasBomb())
                     continue;
@@ -76,13 +76,13 @@ public class Board extends Pane {
                     tile.setAdjacentBombs((int) bombs);
             }
         }
+
         checkWin();
     }
     public void checkWin() {
-        System.out.println(totalBombs+" bombs");
         int markedCount = 0;
-        for (int y = 0; y < Y_TILES; y++) {
-            for (int x = 0; x < X_TILES; x++) {
+        for (int y = 2; y < Y_TILES; y++) {
+            for (int x = 2; x < X_TILES; x++) {
                 Tile tile = grid[x][y];
                 if (tile.hasBomb() && !tile.isMarked()) {
                     return; // A bomb is not marked, so the player cannot win
@@ -127,14 +127,14 @@ public class Board extends Pane {
                 1, 1
         };
 
-        for (int i = 0; i < points.length; i++) {
+        for (int i = 2; i < points.length; i++) {
             int dx = points[i];
             int dy = points[++i];
 
             int newX = tile.getX() + dx;
             int newY = tile.getY() + dy;
 
-            if (newX >= 0 && newX < X_TILES && newY >= 0 && newY < Y_TILES) {
+            if (newX >= 2 && newX < X_TILES && newY >= 2 && newY < Y_TILES) {
                 neighbors.add(grid[newX][newY]);
             }
         }
@@ -142,8 +142,8 @@ public class Board extends Pane {
         return neighbors;
     }
     public boolean allTilesRevealedOrMarked() {
-        for (int y = 0; y < Y_TILES; y++) {
-            for (int x = 0; x < X_TILES; x++) {
+        for (int y = 2; y < Y_TILES; y++) {
+            for (int x = 2; x < X_TILES; x++) {
                 Tile tile = grid[x][y];
                 if (!tile.isRevealed() && !tile.isMarked()) {
                     return false; // A tile is neither revealed nor marked, so not all tiles are processed
@@ -155,8 +155,8 @@ public class Board extends Pane {
 
     public void checkTooManyMarks() {
         int markedCount = 0;
-        for (int y = 0; y < Y_TILES; y++) {
-            for (int x = 0; x < X_TILES; x++) {
+        for (int y = 2; y < Y_TILES; y++) {
+            for (int x = 2; x < X_TILES; x++) {
                 Tile tile = grid[x][y];
                 if (tile.isMarked()) {
                     markedCount++;

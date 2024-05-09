@@ -1,55 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" minHeight="-Infinity" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game6.Game6Controller">
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<StackPane fx:id="root" maxHeight="1000.0" maxWidth="600.0" minHeight="1000.0" minWidth="600.0" prefHeight="1000.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game6.Game6Controller">
     <children>
-        <HBox alignment="CENTER">
-            <VBox prefHeight="500.0" prefWidth="235.0">
-                <children>
-                    <Label alignment="CENTER" contentDisplay="CENTER" text="Minesweeper">
-                        <font>
-                            <Font name="System Bold Italic" size="36.0" />
-                        </font>
-                    </Label>
-                    <GridPane prefHeight="33.0" prefWidth="235.0">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        </rowConstraints>
-                        <children>
-                            <Label text="Time:" />
-                            <Label fx:id="timerLabel" GridPane.columnIndex="1" />
-                            <Label text="Bombs:" GridPane.rowIndex="1" />
-                            <Label fx:id="bombsLabel" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                <font>
-                                    <Font name="System Bold" size="18.0" />
-                                </font></Label>
-                        </children>
-                    </GridPane>
-                    <Label fx:id="gameStatusLabel" textAlignment="CENTER">
-                        <font>
-                            <Font size="15.0" />
-                        </font>
-                    </Label>
-                    <StackPane fx:id="game6Pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
-                </children>
-            </VBox>
-        </HBox>        <HBox alignment="CENTER">
-        <Button fx:id="backToMenu" onAction="#backToMenuClick" text="Back to Menu" />
-        <Button fx:id="newGameButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" onAction="#newGame" text="New Game" />
-    </HBox>
+        <AnchorPane prefHeight="1000.0" prefWidth="600.0">
+            <children>
+                <VBox>
+                    <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="600.0" text="Minesweeper" textAlignment="CENTER" underline="true" VBox.vgrow="ALWAYS">
+                            <font>
+                                <Font name="System Bold" size="38.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets top="50.0" />
+                            </VBox.margin>
+                        </Label>
+                        <Button fx:id="backToMenu" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="100.0" text="Back to Menu">
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin>
+                        </Button>
+                        <GridPane prefHeight="33.0" prefWidth="235.0" vgap="20.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="101.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="399.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Time:" GridPane.halignment="RIGHT">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font></Label>
+                                <Label fx:id="timerLabel" GridPane.columnIndex="1">
+                                    <font>
+                                        <Font name="System Bold" size="18.0" />
+                                    </font>
+                                </Label>
+                                <Label text="Bombs:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font></Label>
+                                <Label fx:id="bombsLabel" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <font>
+                                        <Font name="System Bold" size="18.0" />
+                                    </font>
+                                </Label>
+                                <Button fx:id="newGameButton" alignment="CENTER" contentDisplay="CENTER" onAction="#newGame" prefHeight="26.0" prefWidth="100.0" text="New Game" GridPane.halignment="LEFT" />
+                                <ComboBox fx:id="cmb_auswahl" onAction="#click" prefWidth="100.0" promptText="Difficulty" GridPane.rowIndex="1">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="easy" />
+                                            <String fx:value="hard" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>                            </children>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <VBox.margin>
+                                <Insets top="12.0" />
+                            </VBox.margin>
+                        </GridPane>
+                        <Label fx:id="gameStatusLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="600.0" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold Italic" size="36.0" />
+                            </font>
+                        </Label>
+                        <StackPane fx:id="game6Pane" alignment="CENTER" layoutY="4.0" maxHeight="600.0" maxWidth="600.0" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" />
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
     </children>
-</VBox>
+</StackPane>

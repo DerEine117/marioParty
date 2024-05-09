@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 
 public class Tile extends StackPane {
     private ImageView bombImage;
+    private ImageView flagImage;
     private int x, y;
     private boolean hasBomb;
     private boolean revealed;
@@ -30,6 +31,11 @@ public class Tile extends StackPane {
             bombImage.setVisible(false); // The image should initially not be visible
             getChildren().add(bombImage);
         }
+        flagImage = new ImageView(new Image("file:/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/flag_game6.gif"));
+        flagImage.setVisible(false); // Das Bild sollte zunächst nicht sichtbar sein
+        flagImage.setFitWidth(TILE_SIZE);
+        flagImage.setFitHeight(TILE_SIZE);
+        getChildren().add(flagImage);
 
         setPrefSize(TILE_SIZE, TILE_SIZE);
         setTranslateX(x * TILE_SIZE);
@@ -54,19 +60,33 @@ public class Tile extends StackPane {
         return y;
     }
 
+    public void setBomb(boolean hasBomb) {
+        this.hasBomb = hasBomb;
+        if (hasBomb && bombImage == null) {
+            bombImage = new ImageView(new Image("file:/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/bomb.gif"));
+            bombImage.setVisible(false); // The image should initially not be visible
+            bombImage.setFitWidth(TILE_SIZE);
+            bombImage.setFitHeight(TILE_SIZE);
+            getChildren().add(bombImage);
+        }
+    }
+
     public boolean hasBomb() {
         return hasBomb;
     }
 
     public void mark() {
         marked = !marked;
-        update();
-        ((Board) getParent()).checkWin();
-        if (((Board) getParent()).allTilesRevealedOrMarked()) {
-            ((Board) getParent()).checkWin();
-        }
+        System.out.println("Mark method called, marked: " + marked); // Debug output
 
+        if (marked) {
+            flagImage.setVisible(true); // Zeigen Sie das Flaggen-GIF an, wenn das Feld markiert ist
+        } else {
+            flagImage.setVisible(false); // Verstecken Sie das Flaggen-GIF, wenn das Feld nicht markiert ist
+        }
+        update();
     }
+
 
     public boolean isMarked() {
         return marked;
@@ -122,27 +142,24 @@ public class Tile extends StackPane {
 
         getChildren().clear(); // Clear all children
 
-        // If the tile is revealed and it has a bomb, don't add the Rectangle
-        if (!(revealed && hasBomb)) {
-            getChildren().add(border);
-        }
-
-        // If the tile has a bomb, add the bombImage
-        if (hasBomb) {
-            getChildren().add(bombImage);
-        }
+        getChildren().add(border);
 
         // If the tile is revealed and it doesn't have a bomb, display the number of adjacent bombs
         if (revealed && !hasBomb && adjacentBombs > 0) {
             Text text = new Text(String.valueOf(adjacentBombs));
             getChildren().add(text);
         }
+
+        // If the tile is revealed and has a bomb, display the bomb image
+        if (revealed && hasBomb && bombImage != null) {
+            bombImage.setVisible(true);
+            getChildren().add(bombImage);
+        }
+
         if (marked) {
-            // Change the appearance of the tile to show that it is marked
-            // This is just an example, you can change it to fit your needs
-            Rectangle border1 = new Rectangle(TILE_SIZE - 2, TILE_SIZE - 2);
-            border.setFill(Color.BLUE);
-            getChildren().add(border1);
+            getChildren().add(flagImage);
         }
     }
+
+
 }
