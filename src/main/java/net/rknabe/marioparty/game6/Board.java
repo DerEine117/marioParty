@@ -1,5 +1,7 @@
 package net.rknabe.marioparty.game6;
 
+import javafx.application.Platform;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -131,7 +133,8 @@ public class Board extends Pane {
 
     //here we check if the player has won the game
     public void checkWin() {
-        boolean bombNotMarked = false;
+        Platform.runLater(() -> {
+            boolean bombNotMarked = false;
         boolean safeFieldNotRevealed = false;
         int markedCount = 0;
 
@@ -165,12 +168,20 @@ public class Board extends Pane {
             if (markedCount == totalBombs) {
                 Game6Controller.getInstance().setGameOver(false, "You win!");
                 Game6Controller.getInstance().getGameTimer().interrupt(); // Stop the timer when the game is won
+                ImageView winImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/win.gif").toString());
+                winImage.setFitWidth(W); // Set the width of the image to the width of the board
+                winImage.setFitHeight(H); // Set the height of the image to the height of the board
+                winImage.setTranslateX(70); // Adjust this value as needed
+                getChildren().remove(winImage);
+                getChildren().add(winImage);
             }
         } else {
             // If not all bombs are marked or not all safe fields are revealed, the game continues
             return;
         }
+        });
     }
+
 
 
 }

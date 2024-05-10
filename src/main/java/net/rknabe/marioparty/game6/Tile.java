@@ -134,6 +134,7 @@ public class Tile extends StackPane {
         if (revealed && hasBomb && bombImage != null) {
             bombImage.setVisible(true);
             getChildren().add(bombImage);
+
         }
         if (marked) {
             getChildren().add(flagImage);
