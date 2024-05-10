@@ -32,7 +32,7 @@ public class Tile extends StackPane {
             bombImage.setVisible(false);
             getChildren().add(bombImage);
         }
-        flagImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/flag_game6.gif").toString());
+        flagImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/flag2_game6.gif").toString());
         flagImage.setVisible(false);
         flagImage.setFitWidth(TILE_SIZE);
         flagImage.setFitHeight(TILE_SIZE);
@@ -137,6 +137,9 @@ public class Tile extends StackPane {
         }
         if (marked) {
             getChildren().add(flagImage);
+            border.setFill(Color.PINK);
+            border.setStroke(Color.RED);
+            border.setStrokeWidth(5.0);
         }
     }
 }
