@@ -25,13 +25,15 @@ public class Tile extends StackPane {
         this.hasBomb = hasBomb;
 
         if (hasBomb) {
-            bombImage = new ImageView(new Image("file:/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/bomb.gif"));            bombImage.setVisible(false); // Das Bild sollte zunächst nicht sichtbar sein
+            bombImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/bomb.gif").toString());
             bombImage.setFitWidth(TILE_SIZE);
             bombImage.setFitHeight(TILE_SIZE);
             bombImage.setVisible(false); // The image should initially not be visible
             getChildren().add(bombImage);
         }
-        flagImage = new ImageView(new Image("file:/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/flag_game6.gif"));
+        //flagImage = new ImageView(new Image("file:/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/flag_game6.gif"));
+        flagImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/flag_game6.gif").toString());
+
         flagImage.setVisible(false); // Das Bild sollte zunächst nicht sichtbar sein
         flagImage.setFitWidth(TILE_SIZE);
         flagImage.setFitHeight(TILE_SIZE);
@@ -63,7 +65,9 @@ public class Tile extends StackPane {
     public void setBomb(boolean hasBomb) {
         this.hasBomb = hasBomb;
         if (hasBomb && bombImage == null) {
-            bombImage = new ImageView(new Image("file:/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/bomb.gif"));
+            bombImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/bomb.gif").toString());
+
+           // bombImage = new ImageView(new Image("file:/Users/student/IdeaProjects/marioParty/src/main/resources/net/rknabe/marioparty/assets/bomb.gif"));
             bombImage.setVisible(false); // The image should initially not be visible
             bombImage.setFitWidth(TILE_SIZE);
             bombImage.setFitHeight(TILE_SIZE);
