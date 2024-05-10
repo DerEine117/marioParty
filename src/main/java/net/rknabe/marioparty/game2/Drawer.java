@@ -10,9 +10,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 public class Drawer {
-    IntializeBalloons initializer;
+    private IntializeBalloons initializer;
 
-    public Drawer(IntializeBalloons initializer) {
+    protected Drawer(IntializeBalloons initializer) {
         this.initializer = initializer;
     }
 

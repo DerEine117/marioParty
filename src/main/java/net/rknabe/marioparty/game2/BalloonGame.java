@@ -17,7 +17,8 @@ import java.util.ResourceBundle;
 public class BalloonGame extends GameController implements Initializable {
 
     private static final int NUM_BALLOONS = 40;
-    private int balloonsPopped;
+    private int numBalloonsInflated;
+    private int numBalloonsLeft;
     private int playerScore = 0;
     private int computerScore = 0;
     private IntializeBalloons initializer = new IntializeBalloons();
@@ -35,11 +36,11 @@ public class BalloonGame extends GameController implements Initializable {
     @FXML
     private ImageView imageView4;
     @FXML
-    public Label balloonsInflated;
+    private Label balloonsInflated;
     @FXML
-    public Label balloonsLeft;
+    private Label balloonsLeft;
     @FXML
-    public Canvas gameCanvas;
+    private Canvas gameCanvas;
     @FXML
     private Button startGame;
 
@@ -51,7 +52,7 @@ public class BalloonGame extends GameController implements Initializable {
     }
 
     @FXML
-    protected void startGameClick() {
+    private void startGameClick() {
         reset();
         initializer.createBalloons(NUM_BALLOONS, gameCanvas);
         initializer.sortBalloonsByDeploySpeed();
@@ -60,8 +61,11 @@ public class BalloonGame extends GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        balloonsInflated.setText("0");
-        balloonsLeft.setText(NUM_BALLOONS + "");
+        numBalloonsInflated = 0;
+        numBalloonsLeft = NUM_BALLOONS;
+        updateBallonsInflated();
+        updateBalloonsLeft();
+
         drawer.drawBackground(myAnchorPane);
         drawer.drawSpikes(imageView1, imageView2, imageView3, imageView4);
 
@@ -82,8 +86,11 @@ public class BalloonGame extends GameController implements Initializable {
 
             balloonToRemove.ifPresent(balloon -> {
                 balloon.setPopped(true);
-                updateBallonsPopped();
+                numBalloonsLeft--;
+                numBalloonsInflated++;
+                updateBallonsInflated();
                 updateBalloonsLeft();
+
                 initializer.removeBalloon(balloon);
                 Drawer.remove(gameCanvas, balloon);
                 drawer.drawExplosion(myAnchorPane, balloon);
@@ -91,15 +98,15 @@ public class BalloonGame extends GameController implements Initializable {
         });
     }
 
-    private void updateBallonsPopped() {
-        balloonsInflated.setText(balloonsPopped++ + "");
+    private void updateBallonsInflated() {
+        balloonsInflated.setText(String.valueOf(numBalloonsInflated));
     }
 
     private void updateBalloonsLeft() {
-        balloonsLeft.setText(toString().valueOf(initializer.getBalloons().size() - 1));
+        balloonsLeft.setText(String.valueOf(numBalloonsLeft));
     }
 
-    public void gameLoop() {
+    private void gameLoop() {
         new Thread(() -> {
             for (Balloon balloon : initializer.getBalloons()) {
                 new Thread(() -> {
@@ -109,13 +116,11 @@ public class BalloonGame extends GameController implements Initializable {
                             b.move();
                             Drawer.remove(gameCanvas, b);
                             drawer.redrawCanvas(gameCanvas);
-                            // has to update every ballon, so they don't overlap
                         });
                         if (b.hasReachedTop()) {
                             Platform.runLater(() -> {
                                 Drawer.remove(gameCanvas, b);
                                 initializer.removeAllBalloons();
-                                balloonsLeft.setText(toString().valueOf(initializer.getBalloons().size()));
                                 endGame(false, false);
                             });
                         }
@@ -144,12 +149,12 @@ public class BalloonGame extends GameController implements Initializable {
         // Reset the number of balloons left
         initializer.removeAllBalloons();
         gameState.setEnd(false);
-        balloonsPopped = 0;
-        updateBallonsPopped();
+        numBalloonsInflated = 0;
+        updateBallonsInflated();
         balloonsLeft.setText(NUM_BALLOONS + "");
     }
 
-    protected void endGame(boolean playerWon, boolean reset) {
+    private void endGame(boolean playerWon, boolean reset) {
         // Check if the game has already ended
         // and creates an alert dialog to inform the player
         if (gameState.isEnd()) {

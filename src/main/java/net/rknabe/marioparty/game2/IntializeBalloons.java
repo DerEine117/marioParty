@@ -41,11 +41,11 @@ public class IntializeBalloons {
         balloons.clear();
     }
 
-    public List<Balloon> getBalloons() {
+    protected List<Balloon> getBalloons() {
         return new ArrayList<>(balloons);
     }
 
-    public void sortBalloonsByDeploySpeed() {
+    protected void sortBalloonsByDeploySpeed() {
         List<Balloon> balloonList = new ArrayList<>(balloons);
         int n = balloonList.size();
         for (int i = 0; i < n-1; i++) {

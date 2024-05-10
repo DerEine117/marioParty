@@ -3,15 +3,15 @@ package net.rknabe.marioparty.game2;
 public class GameState {
     private boolean end;
 
-    public GameState() {
+    protected GameState() {
         this.end = false;
     }
 
-    public boolean isEnd() {
+    protected boolean isEnd() {
         return end;
     }
 
-    public void setEnd(boolean end) {
+    protected void setEnd(boolean end) {
         this.end = end;
     }
 }

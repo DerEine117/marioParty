@@ -15,19 +15,19 @@ public class Balloon {
     private boolean popped;
     private boolean reachedTop;
 
-    public int getMoveSpeed() {
+    protected int getMoveSpeed() {
         return this.move_speed;
     }
 
-    public int getDeploySpeed() {
+    protected int getDeploySpeed() {
         return this.deploy_speed;
     }
 
-    public boolean isPopped() {
+    protected boolean isPopped() {
         return this.popped;
     }
 
-    public void setPopped(boolean popped) {
+    protected void setPopped(boolean popped) {
         this.popped = popped;
     }
 
@@ -35,10 +35,22 @@ public class Balloon {
         return this.reachedTop;
     }
 
+    protected ImageView getBalloonImage() {
+        return balloonImage;
+    }
+
+    protected double getX() {
+        return x;
+    }
+
+    protected double getY() {
+        return y;
+    }
+
 
     // ballon is a picture of a balloon
 
-    public Balloon(Canvas gameCanvas) {
+    protected Balloon(Canvas gameCanvas) {
         // this.x = random number between ((fxml width - canvas width) and fxml width)
         this.x = (Math.random() * (gameCanvas.getWidth() - 50));
         // this.y = bottom of the canvas
@@ -58,7 +70,7 @@ public class Balloon {
 
     }
 
-    public void move() {
+    protected void move() {
         // move the balloon up the screen
         this.y--;
         this.balloonImage.setY(this.y);
@@ -67,17 +79,5 @@ public class Balloon {
         if (this.y <= 0) {
             this.reachedTop = true;
         }
-    }
-
-    public ImageView getBalloonImage() {
-        return balloonImage;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
     }
 }
