@@ -16,14 +16,13 @@ import java.util.ResourceBundle;
 
 public class BalloonGame extends GameController implements Initializable {
 
-    private static final int NUM_BALLOONS = 25;
+    private static final int NUM_BALLOONS = 40;
     private int balloonsPopped;
     private int playerScore = 0;
     private int computerScore = 0;
     private IntializeBalloons initializer = new IntializeBalloons();
     private Drawer drawer = new Drawer(initializer);
     private GameState gameState = new GameState();
-
 
     @FXML
     private AnchorPane myAnchorPane;
@@ -55,7 +54,7 @@ public class BalloonGame extends GameController implements Initializable {
     protected void startGameClick() {
         reset();
         initializer.createBalloons(NUM_BALLOONS, gameCanvas);
-        System.out.println(initializer.getBalloons());
+        initializer.sortBalloonsByDeploySpeed();
         gameLoop();
     }
 
@@ -101,10 +100,6 @@ public class BalloonGame extends GameController implements Initializable {
     }
 
     public void gameLoop() {
-        if (initializer == null) {
-            System.out.println("Initializer is null. Please make sure to call startGameClick before gameLoop.");
-            return;
-        }
         new Thread(() -> {
             for (Balloon balloon : initializer.getBalloons()) {
                 new Thread(() -> {

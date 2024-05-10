@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class IntializeBalloons {
-    private final ConcurrentLinkedQueue<Balloon> balloons = new ConcurrentLinkedQueue<>();
+    private ConcurrentLinkedQueue<Balloon> balloons = new ConcurrentLinkedQueue<>();
 
     protected void createBalloons(int amount, Canvas gameCanvas) {
         // create all the Balloons and display them on the canvas, but:
@@ -17,7 +17,9 @@ public class IntializeBalloons {
 
         for (int i = 0; i <= amount; i++) {
             Balloon balloon = new Balloon(gameCanvas);
-            if (i == 0) {
+
+            balloons.add(balloon);
+            /*if (i == 0) {
                 previousX = balloon.getX();
             } else {
                 if (previousX - 60 > balloon.getX() || balloon.getX() > previousX + 60) {
@@ -27,7 +29,7 @@ public class IntializeBalloons {
                     i--;
                 }
             }
-
+            */
         }
     }
 
@@ -41,5 +43,21 @@ public class IntializeBalloons {
 
     public List<Balloon> getBalloons() {
         return new ArrayList<>(balloons);
+    }
+
+    public void sortBalloonsByDeploySpeed() {
+        List<Balloon> balloonList = new ArrayList<>(balloons);
+        int n = balloonList.size();
+        for (int i = 0; i < n-1; i++) {
+            for (int j = 0; j < n-i-1; j++) {
+                if (balloonList.get(j).getDeploySpeed() < balloonList.get(j+1).getDeploySpeed()) {
+                    // Swap balloons[j+1] and balloons[i]
+                    Balloon temp = balloonList.get(j);
+                    balloonList.set(j, balloonList.get(j+1));
+                    balloonList.set(j+1, temp);
+                }
+            }
+        }
+        balloons = new ConcurrentLinkedQueue<>(balloonList);
     }
 }
