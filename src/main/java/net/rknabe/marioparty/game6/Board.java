@@ -7,43 +7,26 @@ import java.util.List;
 import java.util.Random;
 
 public class Board extends Pane {
-    private int totalBombs; // Add this line
+
+    private int totalBombs;
 
     static final int TILE_SIZE = 60;
     private static final int W = 500;
     private static final int H = 500;
-    public double difficulty = 0.1;
-    private static final Random RANDOM = new Random();
-
-
-    public static final int X_TILES = W/TILE_SIZE;
-    public static final int Y_TILES = H/TILE_SIZE;
-
+    public static final int X_TILES = W / TILE_SIZE;
+    public static final int Y_TILES = H / TILE_SIZE;
     private Tile[][] grid = new Tile[X_TILES][Y_TILES];
+
+    public String difficulty = "easy";
+    private static final Random RANDOM = new Random();
 
     public Board() {
         setPrefSize(W, H);
     }
 
-    public void setDifficulty(double difficulty) {
-        this.difficulty = difficulty;
-        setTotalBombs();
-    }
-    public void setTotalBombs() {
-        if (difficulty <= 0.10) { // easy
-            totalBombs = RANDOM.nextInt(3) + 2; // 2 to 4 bombs
-        } else if (difficulty >= 0.35) { // hard
-            totalBombs = RANDOM.nextInt(6) + 5; // 8 to 11 bombs
-        } else { // middle
-            totalBombs = RANDOM.nextInt(3) + 5; // 5 to 7 bombs
-        }
-    }
-
-
     public void startGame() {
         // Reset totalBombs at the start of each game
         setTotalBombs();
-
         System.out.println("Board's startGame was called"); // Debug output
         getChildren().clear();
 
@@ -79,43 +62,12 @@ public class Board extends Pane {
 
         checkWin();
     }
-    public void checkWin() {
-        int markedCount = 0;
-        for (int y = 2; y < Y_TILES; y++) {
-            for (int x = 2; x < X_TILES; x++) {
-                Tile tile = grid[x][y];
-                if (tile.hasBomb() && !tile.isMarked()) {
-                    return; // A bomb is not marked, so the player cannot win
-                }
-                if (!tile.hasBomb() && !tile.isRevealed()) {
-                    return; // A safe field is not revealed, so the player cannot win
-                }
-                if (tile.isMarked()) {
-                    markedCount++;
-                    if (!tile.hasBomb()) {
-                        System.out.println("You lose! A safe field is marked.");
-                        Game6Controller.getInstance().setGameOver(true, "You lose!");
-                        return; // A safe field is marked, so the player loses
-                    }
-                }
-            }
-        }
 
-        // If we get here, it means that all bombs are marked and all safe fields are revealed
-        if (markedCount > totalBombs) {
-            System.out.println("You lose! Too many fields are marked.");
-            Game6Controller.getInstance().setGameOver(true, "You lose! Too many fields are marked.");
-        } else {
-            System.out.println("You win!");
-            Game6Controller.getInstance().setGameOver(false, "You win!");
-            Game6Controller.getInstance().getGameTimer().stop(); // Stop the timer when the game is won
-        }
-    }
-
-
+    //here we get the neighbors of a tile
     public List<Tile> getNeighbors(Tile tile) {
         List<Tile> neighbors = new ArrayList<>();
 
+        // 8 directions
         int[] points = {
                 -1, -1,
                 -1, 0,
@@ -141,18 +93,26 @@ public class Board extends Pane {
 
         return neighbors;
     }
-    public boolean allTilesRevealedOrMarked() {
-        for (int y = 2; y < Y_TILES; y++) {
-            for (int x = 2; x < X_TILES; x++) {
-                Tile tile = grid[x][y];
-                if (!tile.isRevealed() && !tile.isMarked()) {
-                    return false; // A tile is neither revealed nor marked, so not all tiles are processed
-                }
-            }
-        }
-        return true; // All tiles are either revealed or marked
+
+    //here we set the difficulty of the game
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+        setTotalBombs();
     }
 
+    //here we set the total number of bombs with the range of bombs depending on the difficulty
+    public void setTotalBombs() {
+        if (difficulty == "easy") {
+            totalBombs = RANDOM.nextInt(3) + 2;
+        } else if (difficulty == "hard") {
+            totalBombs = RANDOM.nextInt(6) + 5;
+        }
+    }
+    public int getTotalBombs() {
+        return totalBombs;
+    }
+
+    //here we check if the player has marked too many fields
     public void checkTooManyMarks() {
         int markedCount = 0;
         for (int y = 2; y < Y_TILES; y++) {
@@ -165,11 +125,52 @@ public class Board extends Pane {
         }
 
         if (markedCount > totalBombs) {
-            System.out.println("You lose! Too many fields are marked.");
             Game6Controller.getInstance().setGameOver(true, "You lose! Too many fields are marked.");
         }
     }
-    public int getTotalBombs() {
-        return totalBombs;
+
+    //here we check if the player has won the game
+    public void checkWin() {
+        boolean bombNotMarked = false;
+        boolean safeFieldNotRevealed = false;
+        int markedCount = 0;
+
+        for (int y = 2; y < Y_TILES; y++) {
+            for (int x = 2; x < X_TILES; x++) {
+                Tile tile = grid[x][y];
+
+                // Check if a bomb is not marked
+                if (tile.hasBomb() && !tile.isMarked()) {
+                    bombNotMarked = true;
+                }
+
+                // Check if a safe field is not revealed
+                if (!tile.hasBomb() && !tile.isRevealed()) {
+                    safeFieldNotRevealed = true;
+                }
+
+                // Count marked tiles
+                if (tile.isMarked()) {
+                    markedCount++;
+                    if (!tile.hasBomb()) {
+                        Game6Controller.getInstance().setGameOver(true, "You lose! There was no bomb!");
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Check if all bombs are marked and all safe fields are revealed
+        if (!bombNotMarked && !safeFieldNotRevealed) {
+            if (markedCount == totalBombs) {
+                Game6Controller.getInstance().setGameOver(false, "You win!");
+                Game6Controller.getInstance().getGameTimer().interrupt(); // Stop the timer when the game is won
+            }
+        } else {
+            // If not all bombs are marked or not all safe fields are revealed, the game continues
+            return;
+        }
     }
+
+
 }

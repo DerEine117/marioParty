@@ -3,46 +3,34 @@ package net.rknabe.marioparty.game6;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
-import java.util.Timer;
-import java.util.TimerTask;
+public class GameTimer extends Thread {
+    private long startTime;
+    private Board board;
+    private Label label;
 
-public class GameTimer {
-    private Timer timer;
-    private int elapsedTime = 0;
-    private Board board; // Add this line
-
-    public GameTimer(Board board) { // Add this line
-        this.board = board; // Add this line
+    public GameTimer(Board board, Label label) {
+        this.board = board;
+        this.label = label;
     }
-
-    public void start(Label label) {
-        if (timer != null) {
-            timer.cancel(); // Stop the existing timer
-        }
-        elapsedTime = 0; // Reset elapsed time
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                elapsedTime++;
-                System.out.println("Elapsed time: " + elapsedTime);
-                updateLabel(label);
-                board.checkWin(); // Add this line
-                board.checkTooManyMarks();
+    // start the timer
+    @Override
+    public void run() {
+        startTime = System.currentTimeMillis();
+        while (!Game6Controller.getInstance().isGameOver()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                break;
             }
-        }, 1000, 1000);
-    }
 
-    public void stop() {
-        if (timer != null) {
-            timer.cancel();
+            long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
+            updateLabel(elapsedTime);
+            board.checkWin();
+            board.checkTooManyMarks();
         }
     }
 
-    public int getElapsedTime() {
-        return elapsedTime;
-    }
-    public void updateLabel(Label label) {
-        Platform.runLater(() -> label.setText( elapsedTime + " Sekunden"));
+    public void updateLabel(long elapsedTime) {
+        Platform.runLater(() -> label.setText(elapsedTime + " Sekunden"));
     }
 }

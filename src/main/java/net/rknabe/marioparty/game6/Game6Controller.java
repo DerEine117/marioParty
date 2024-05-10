@@ -5,101 +5,45 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 import net.rknabe.marioparty.GameController;
 
-import java.net.URL;
 
 public class Game6Controller extends GameController {
     private MinesWeeperApp game;
     private GameTimer gameTimer;
     private boolean gameOver = false;
-    @FXML
-    private Label gameOverLabel;
+    private static Game6Controller instance;
+
+
     @FXML
     private Label gameStatusLabel;
-
     @FXML
     private Label timerLabel;
-
     @FXML
     private Label bombsLabel;
-
     @FXML
     private StackPane game6Pane;
     @FXML
-    private ImageView backgroundImageView;
-
-    @FXML
-    private Image backgroundImage;
-
-
-    @FXML
     private ComboBox<String> cmb_auswahl;
-
-
-
-
-    private static Game6Controller instance;
 
     public Game6Controller() {
         instance = this;
     }
-
     public static Game6Controller getInstance() {
         return instance;
     }
+
     public void initialize() {
         game = new MinesWeeperApp();
         cmb_auswahl.setValue("easy");
-
-        game6Pane.sceneProperty().addListener(new ChangeListener<Scene>() {
-            @Override
-            public void changed(ObservableValue<? extends Scene> observableValue, Scene oldScene, Scene newScene) {
-                if (newScene != null) {
-                    newScene.windowProperty().addListener(new ChangeListener<Window>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Window> observableValue, Window oldWindow, Window newWindow) {
-                            if (newWindow != null) {
-                                ((Stage) newWindow).addEventHandler(WindowEvent.WINDOW_SHOWN, window -> newGame());
-                            }
-                        }
-                    });
-                }
-            }
-        });
     }
-
-    @FXML
-    public void newGame() {
-        // Reset the game
-        game6Pane.getChildren().remove(game);
-        if (gameTimer != null) {
-            gameTimer.stop(); // Stop the existing timer
-        }
-        game = new MinesWeeperApp();
-
-        // Set the difficulty from the selection
-        setDifficultyFromSelection();
-
-        game6Pane.getChildren().add(game);
-        game.startGame();
-        gameTimer = new GameTimer(game.getBoard());
-        gameTimer.start(timerLabel);
-        gameOver = false;
-        gameStatusLabel.setText("Game started. Good luck!");
-        bombsLabel.setText(String.valueOf(game.getBoard().getTotalBombs()));
-    }
-
 
     public boolean isGameOver() {
         return gameOver;
@@ -112,7 +56,7 @@ public class Game6Controller extends GameController {
             gameStatusLabel.setVisible(true);
         });
         if (gameOver) {
-            gameTimer.stop();
+            gameTimer.interrupt();
         }
     }
 
@@ -123,24 +67,48 @@ public class Game6Controller extends GameController {
     @FXML
     void click(ActionEvent event) {
         setDifficultyFromSelection();
-        newGame(); // Start a new game with the selected difficulty
+        newGame();
     }
 
     private void setDifficultyFromSelection() {
         String selectedDifficulty = cmb_auswahl.getValue();
         switch (selectedDifficulty) {
             case "easy":
-                game.getBoard().setDifficulty(0.10);
-                System.out.println("easy");
+                game.getBoard().setDifficulty("easy");
                 break;
             case "hard":
-                game.getBoard().setDifficulty(0.35);
-                System.out.println("hard");
+                game.getBoard().setDifficulty("hard");
                 break;
-
-            default:
-                System.out.println("Unbekannte Schwierigkeitsstufe ausgewählt");
         }
-        System.out.println("Schwierigkeit:" +selectedDifficulty);
+        System.out.println("Schwierigkeit:" + selectedDifficulty);
+    }
+
+    public void newGame() {
+        resetGame();
+        initializeGame_after_newGame();
+        startGame();
+    }
+
+    private void resetGame() {
+        game6Pane.getChildren().remove(game);
+        if (gameTimer != null) {
+            gameTimer.interrupt();
+            gameTimer.updateLabel(0);
+        }
+        gameOver = false;
+    }
+
+    private void initializeGame_after_newGame() {
+        game = new MinesWeeperApp();
+        setDifficultyFromSelection();
+        game6Pane.getChildren().add(game);
+    }
+
+    private void startGame() {
+        game.startGame();
+        gameTimer = new GameTimer(game.getBoard(), timerLabel);
+        gameTimer.start();
+        gameStatusLabel.setText("Game started. Good luck!");
+        bombsLabel.setText(String.valueOf(game.getBoard().getTotalBombs()));
     }
 }
