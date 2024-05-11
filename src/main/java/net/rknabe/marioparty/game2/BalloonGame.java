@@ -21,9 +21,9 @@ public class BalloonGame extends GameController implements Initializable {
     private int numBalloonsLeft;
     private int playerScore = 0;
     private int computerScore = 0;
-    private IntializeBalloons initializer = new IntializeBalloons();
-    private Drawer drawer = new Drawer(initializer);
-    private GameState gameState = new GameState();
+    private final InitializeBalloons initializer = new InitializeBalloons();
+    private final Drawer drawer = new Drawer(initializer);
+    private final GameState gameState = new GameState();
 
     @FXML
     private AnchorPane myAnchorPane;
@@ -146,7 +146,7 @@ public class BalloonGame extends GameController implements Initializable {
     private void reset() {
         // Stop the game
         endGame(false, true);
-        // Reset the number of balloons left
+        // Resets the number of balloons left
         initializer.removeAllBalloons();
         gameState.setEnd(false);
         numBalloonsInflated = 0;
@@ -183,7 +183,7 @@ public class BalloonGame extends GameController implements Initializable {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == okButton) {
-                    StageChanger.setScene(0); // Zurück zum Hauptspiel
+                    StageChanger.setScene(0);
                 }
             });
         }

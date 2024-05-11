@@ -10,9 +10,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 public class Drawer {
-    private IntializeBalloons initializer;
+    private InitializeBalloons initializer;
 
-    protected Drawer(IntializeBalloons initializer) {
+    protected Drawer(InitializeBalloons initializer) {
         this.initializer = initializer;
     }
 
@@ -49,7 +49,7 @@ public class Drawer {
         Image gifImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/platzen.gif").toExternalForm());
         ImageView gifImageView = new ImageView(gifImage);
 
-        // set position
+        // position
         gifImageView.setX(balloon.getX() + 720 - 557);
         gifImageView.setY(balloon.getY() + 30);
 
@@ -69,12 +69,10 @@ public class Drawer {
             alert.setGraphic(imageView);
         }
         else {
-            // Load the second image
             Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/verlorenText.png").toExternalForm());
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(175);
             imageView.setFitHeight(30);
-            // Set the Pane as the graphic for the alert
             alert.setGraphic(imageView);
         }
     }

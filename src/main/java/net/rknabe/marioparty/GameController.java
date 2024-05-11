@@ -3,7 +3,7 @@ package net.rknabe.marioparty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class GameController {
+public abstract class GameController {
     @FXML
     protected Button backToMenu;
 

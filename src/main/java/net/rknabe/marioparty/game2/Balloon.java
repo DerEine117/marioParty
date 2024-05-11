@@ -49,13 +49,12 @@ public class Balloon {
 
 
     // ballon is a picture of a balloon
-
     protected Balloon(Canvas gameCanvas) {
         // this.x = random number between ((fxml width - canvas width) and fxml width)
         this.x = (Math.random() * (gameCanvas.getWidth() - 50));
         // this.y = bottom of the canvas
         this.y = gameCanvas.getHeight() - 10;
-        // lower is faster (Thread.sleep(move_speed)-> ms per pixel
+        // lower is faster (Thread.sleep(move_speed)-> ms per pixel)
         this.move_speed = (int) (Math.random() * (18 - 3)) + 3;
         this.deploy_speed = (int) (Math.random() * (1000 - 400)) + 400;
         this.popped = false;
