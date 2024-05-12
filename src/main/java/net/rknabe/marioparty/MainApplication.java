@@ -41,6 +41,8 @@ public class MainApplication extends Application {
 
         FXMLLoader fxmlLoaderGame6 = new FXMLLoader(MainApplication.class.getResource("game6-view.fxml"));
         game6Scene = new Scene(fxmlLoaderGame6.load(), 600, 400);
+        window.setHeight(750);
+        window.setWidth(600);
 
 
         StageChanger.createStageController(window,mainMenuScene, game1Scene,game2Scene,game3Scene,game4Scene,game5Scene,game6Scene);
