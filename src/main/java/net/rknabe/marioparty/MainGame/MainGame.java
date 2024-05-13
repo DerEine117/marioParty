@@ -27,6 +27,10 @@ public class MainGame extends Application {
     ImageView dice2;
     @FXML
     ImageView playerPicture;
+    @FXML
+    private void onRollButtonClicked() {
+        drawer.drawPicture(playerPicture);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
