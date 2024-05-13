@@ -42,14 +42,14 @@ public class MainGame extends Application {
         primaryStage.setTitle("Main Game");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        Board board = new Board();
-        board.initalizeBoard(gridPane);
 
     }
 
     @FXML
     public void initialize() {
         drawer.drawPicture(playerPicture);
+        Board board = new Board();
+        board.initalizeBoard(gridPane);
     }
 
     public static void main(String[] args) {

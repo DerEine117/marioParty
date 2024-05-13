@@ -12,7 +12,7 @@
       <HBox layoutX="10.0" layoutY="7.0" prefHeight="383.0" prefWidth="409.0" />
       <ImageView fx:id="playerPicture" fitHeight="170.0" fitWidth="255.0" layoutX="445.0" layoutY="169.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="dice1" fitHeight="130.0" fitWidth="130.0" layoutX="427.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="rollButton" layoutX="526.0" layoutY="143.0" mnemonicParsing="false" text="Würfeln" />
+      <Button fx:id="rollButton" onAction="#onRollButtonClicked" layoutX="526.0" layoutY="143.0" mnemonicParsing="false" text="Würfeln" />
       <HBox layoutX="429.0" layoutY="346.0" prefHeight="53.0" prefWidth="263.0" />
       <ImageView fx:id="dice2" fitHeight="130.0" fitWidth="130.0" layoutX="560.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
       <Label layoutX="460.0" layoutY="321.0" prefHeight="18.0" prefWidth="216.0" text="Mario (Du)          Bowser(Computer)">
