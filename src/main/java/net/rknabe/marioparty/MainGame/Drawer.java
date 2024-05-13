@@ -15,6 +15,7 @@ public class Drawer {
     public void drawDice(Player player, ImageView whichDice) {
         // draw the dice
     }
+
     protected void drawPicture (ImageView imageView) {
         Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/MainGame/players.png").toExternalForm());
         imageView.setImage(image);

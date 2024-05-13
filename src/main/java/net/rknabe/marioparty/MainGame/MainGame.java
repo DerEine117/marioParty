@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 
 public class MainGame {
+    private final Drawer drawer = new Drawer();
 
     @FXML
     private Button rollButton;
@@ -14,8 +15,10 @@ public class MainGame {
     ImageView dice2;
     @FXML
     ImageView playerPicture;
+    @FXML
+    private void clickOnRollButton() {
+        drawer.drawPicture(playerPicture);
+    }
 
-    Drawer drawer = new Drawer();
 
-    drawer.drawPicture(playerPicture);
 }
