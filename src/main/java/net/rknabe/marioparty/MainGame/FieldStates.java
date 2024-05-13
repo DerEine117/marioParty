@@ -1,2 +1,4 @@
-package net.rknabe.marioparty.MainGame;public class FieldStates {
+package net.rknabe.marioparty.MainGame;
+
+public class FieldStates {
 }
