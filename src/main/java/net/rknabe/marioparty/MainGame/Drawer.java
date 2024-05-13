@@ -1,14 +1,17 @@
 package net.rknabe.marioparty.MainGame;
 
+import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 
 public class Drawer {
     // class for drawing the player_picture on the designed field
     // drawing the dices
     // drawing the field
     // drawing the ....
+
 
     public Drawer() {
     }
@@ -35,4 +38,10 @@ public class Drawer {
         imageView3.setImage(image);
         imageView4.setImage(image);
     }
+    protected void drawBoard(GridPane gridpane){
+
+
+        // draw the board
+    }
+
 }

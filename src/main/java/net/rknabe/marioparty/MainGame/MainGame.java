@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 
 public class MainGame extends Application {
@@ -27,6 +29,12 @@ public class MainGame extends Application {
     ImageView dice2;
     @FXML
     ImageView playerPicture;
+    @FXML
+    private void onRollButtonClicked() {
+        drawer.drawPicture(playerPicture);
+    }
+    @FXML
+    private GridPane gridPane;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -34,6 +42,8 @@ public class MainGame extends Application {
         primaryStage.setTitle("Main Game");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+        Board board = new Board();
+        board.initalizeBoard(gridPane);
 
     }
 
