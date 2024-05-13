@@ -8,8 +8,14 @@ public class MainGame {
 
     @FXML
     private Button rollButton;
+    @FXML
+    ImageView dice1;
+    @FXML
+    ImageView dice2;
+    @FXML
+    ImageView playerPicture;
 
-    ImageView player_pictures;
+    Drawer drawer = new Drawer();
 
-    image = new ImageView("file:src/main/resources/images/players.png");
+    drawer.drawPicture(playerPicture);
 }
