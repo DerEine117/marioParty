@@ -2,6 +2,7 @@ package net.rknabe.marioparty.MainGame;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 public class Drawer {
     // class for drawing the player_picture on the designed field
@@ -12,13 +13,18 @@ public class Drawer {
     public Drawer() {
     }
 
+    protected void drawBackground(AnchorPane myAnchorPane) {
+        String imageUrl = getClass().getResource("//path").toExternalForm();
+        myAnchorPane.setStyle("-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;");
+    }
+
     public void drawDice(Player player, ImageView whichDice) {
         // draw the dice
     }
 
-    protected void drawPicture (ImageView imageView) {
+    protected void drawPicture (ImageView imageview) {
         Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/MainGame/players.png").toExternalForm());
-        imageView.setImage(image);
+        imageview.setImage(image);
     }
 
 

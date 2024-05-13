@@ -3,7 +3,7 @@ package net.rknabe.marioparty.MainGame;
 import java.util.Random;
 
 public class Dice {
-    private Random random;
+    private final Random random;
 
     public Dice() {
         this.random = new Random();
