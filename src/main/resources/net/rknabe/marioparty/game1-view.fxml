@@ -3,18 +3,22 @@
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="522.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game1.Game1Controller">
+<AnchorPane fx:id="rootPane" prefHeight="522.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game1.Game1Controller">
    <children>
       <VBox layoutX="132.0" layoutY="59.0" prefHeight="386.0" prefWidth="324.0">
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label prefHeight="18.0" prefWidth="251.0" text="Game 1" />
+                  <Label fx:id="turnLabel" alignment="CENTER" prefHeight="18.0" prefWidth="251.0" text="Your turn!" textFill="#000000f1" textOverrun="CENTER_ELLIPSIS">
+                     <font>
+                        <Font size="23.0" />
+                     </font></Label>
                   <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="163.0" text="back to mainMenu" />
                </children>
             </HBox>
-            <Canvas fx:id="gameCanvas" height="325.0" width="325.0" />
+            <Canvas fx:id="gameCanvas" height="330.0" onMouseClicked="#gameCanvasClick" onMouseDragReleased="#gameCanvasClick" width="330.0" />
          </children>
       </VBox>
    </children>
