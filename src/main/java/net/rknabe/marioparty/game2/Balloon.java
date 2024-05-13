@@ -31,7 +31,7 @@ public class Balloon {
         this.popped = popped;
     }
 
-    public boolean hasReachedTop() {
+    protected boolean hasReachedTop() {
         return this.reachedTop;
     }
 
