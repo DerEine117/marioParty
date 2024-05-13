@@ -4,18 +4,51 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.MainGame.MainGame">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.MainGame.MainGame">
    <children>
-      <HBox layoutX="10.0" layoutY="7.0" prefHeight="383.0" prefWidth="409.0" />
-      <ImageView fx:id="playerPicture" fitHeight="170.0" fitWidth="255.0" layoutX="445.0" layoutY="169.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="dice1" fitHeight="130.0" fitWidth="130.0" layoutX="427.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="rollButton" onAction="#onRollButtonClicked" layoutX="526.0" layoutY="143.0" mnemonicParsing="false" text="Würfeln" />
-      <HBox layoutX="429.0" layoutY="346.0" prefHeight="53.0" prefWidth="263.0" />
-      <ImageView fx:id="dice2" fitHeight="130.0" fitWidth="130.0" layoutX="560.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-      <Label layoutX="460.0" layoutY="321.0" prefHeight="18.0" prefWidth="216.0" text="Mario (Du)          Bowser(Computer)">
+      <HBox layoutX="1.0" layoutY="-1.0" prefHeight="401.0" prefWidth="424.0" />
+      <ImageView fx:id="playerPicture" fitHeight="194.0" fitWidth="331.0" layoutX="459.0" layoutY="142.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="dice1" fitHeight="130.0" fitWidth="130.0" layoutX="453.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="rollButton" layoutX="540.0" layoutY="125.0" mnemonicParsing="false" onAction="#onWürfelnClick" text="Würfeln" />
+      <HBox layoutX="430.0" layoutY="336.0" prefHeight="60.0" prefWidth="263.0">
+         <children>
+            <GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="263.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="96.0" minWidth="10.0" prefWidth="66.73980712890625" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.38262939453125" minWidth="10.0" prefWidth="122.26019287109375" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.1478271484375" minWidth="10.0" prefWidth="73.9183349609375" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints fillHeight="false" maxHeight="60.5" minHeight="0.0" prefHeight="25.0" />
+                  <RowConstraints fillHeight="false" maxHeight="56.90301513671875" minHeight="0.0" prefHeight="25.0" />
+              </rowConstraints>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Münzen:">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Feld:" wrappingWidth="37.5068359375" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Text>
+                  <Label fx:id="bowserCoins" text="Label" GridPane.columnIndex="2" />
+                  <Label fx:id="bowserPosition" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label fx:id="marioCoins" prefHeight="17.0" prefWidth="35.0" text="Label" GridPane.columnIndex="1" />
+                  <Label fx:id="marioPosition" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children></HBox>
+      <ImageView fx:id="dice2" fitHeight="130.0" fitWidth="130.0" layoutX="593.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="488.0" layoutY="321.0" prefHeight="18.0" prefWidth="241.0" text="Mario (Du)              Bowser(Computer)">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

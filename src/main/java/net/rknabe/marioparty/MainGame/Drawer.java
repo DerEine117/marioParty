@@ -1,6 +1,5 @@
 package net.rknabe.marioparty.MainGame;
 
-import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -12,7 +11,6 @@ public class Drawer {
     // drawing the field
     // drawing the ....
 
-
     public Drawer() {
     }
 
@@ -21,8 +19,25 @@ public class Drawer {
         myAnchorPane.setStyle("-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;");
     }
 
-    public void drawDice(Player player, ImageView whichDice) {
-        // draw the dice
+    protected void drawDicePicture(int number, ImageView imageView) {
+        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/MainGame/dice/" + number + ".png").toExternalForm());
+        imageView.setImage(image);
+        imageView.setFitWidth(85);
+        imageView.setFitHeight(85);
+        double centerX = (130 - imageView.getFitWidth()) / 2;
+        double centerY = (130 - imageView.getFitHeight()) / 2;
+        imageView.setX(centerX);
+        imageView.setY(centerY);
+    }
+    protected void drawDiceAnimation(ImageView imageView) {
+        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/MainGame/dice/diceRoll.gif").toExternalForm());
+        imageView.setImage(image);
+        imageView.setFitWidth(130);
+        imageView.setFitHeight(130);
+        double centerX = (130 - imageView.getFitWidth()) / 2;
+        double centerY = (130 - imageView.getFitHeight()) / 2;
+        imageView.setX(centerX);
+        imageView.setY(centerY);
     }
 
     protected void drawPicture (ImageView imageview) {
@@ -30,18 +45,7 @@ public class Drawer {
         imageview.setImage(image);
     }
 
-
-    protected void drawSpikes(ImageView imageView1, ImageView imageView2, ImageView imageView3, ImageView imageView4) {
-        Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game2/metalSpikes.png").toExternalForm());
-        imageView1.setImage(image);
-        imageView2.setImage(image);
-        imageView3.setImage(image);
-        imageView4.setImage(image);
-    }
     protected void drawBoard(GridPane gridpane){
-
-
         // draw the board
     }
-
 }

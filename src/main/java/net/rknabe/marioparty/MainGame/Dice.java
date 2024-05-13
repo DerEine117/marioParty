@@ -12,12 +12,4 @@ public class Dice {
     public int roll() {
         return random.nextInt(6) + 1;
     }
-
-    public void startAnimation() {
-        // Start the animation
-    }
-
-    public void stopAnimation() {
-        // Stop the animation
-    }
 }
