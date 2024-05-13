@@ -4,24 +4,18 @@ public class Board {
     private Ship[][] ships;
     private boolean[][] shots;
 
+    // Constructor for the Board class, initializes the ships and shots arrays
     public Board() {
         this.ships = new Ship[10][10];
         this.shots = new boolean[10][10];
     }
 
-    public boolean shoot(int x, int y) {
-        if (ships[x][y] != null) {
-            ships[x][y].hit();
-            return true;
-        }
-        shots[x][y] = true;
-        return false;
+    // Returns the ship at the given coordinates
+    public Ship getShipAt(int x, int y) {
+        return ships[x][y];
     }
 
-    public boolean wasShot(int x, int y) {
-        return shots[x][y];
-    }
-
+    // Places a ship on the board at the ship's position
     public void placeShip(Ship ship) {
         int x = ship.position[0];
         int y = ship.position[1];
@@ -37,46 +31,32 @@ public class Board {
         }
     }
 
-    public boolean canPlaceShip(Ship ship) {
-        int x = ship.position[0];
-        int y = ship.position[1];
-
-        if (ship.orientation.equals("horizontal")) {
-            if (x + ship.length > 10) {
-                return false;
-            }
-            for (int i = 0; i < ship.length; i++) {
-                if (isOccupied(x + i, y)) {
-                    return false;
-                }
-            }
-        } else {
-            if (y + ship.length > 10) {
-                return false;
-            }
-            for (int i = 0; i < ship.length; i++) {
-                if (isOccupied(x, y + i)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public Ship getShipAt(int x, int y) {
-        return ships[x][y];
-    }
-
+    // Checks if a ship is present at the given coordinates
     public boolean isOccupied(int x, int y) {
         return ships[x][y] != null;
     }
 
-    public boolean isHit(int x, int y) {
-        return ships[x][y] != null && ships[x][y].isHit();
+    // Checks if the hit is part of a horizontally placed ship
+    public boolean isHorizontalHit(int x, int y) {
+        if (x < 9 && ships[x + 1][y] != null) {
+            return true;
+        }
+        if (x > 0 && ships[x - 1][y] != null) {
+            return true;
+        }
+        return false;
     }
 
+    // Checks if the hit is part of a vertically placed ship
+    public boolean isVerticalHit(int x, int y) {
+        if (y < 9 && ships[x][y + 1] != null) {
+            return true;
+        }
 
-    public boolean isSunk(int x, int y) {
-        return ships[x][y] != null && ships[x][y].isSunk();
+        if (y > 0 && ships[x][y - 1] != null) {
+            return true;
+        }
+        return false;
     }
+
 }

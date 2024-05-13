@@ -3,10 +3,16 @@ package net.rknabe.marioparty.game5;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import net.rknabe.marioparty.GameController;
-import javafx.scene.Node;
+import javafx.scene.image.Image;
+
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.*;
@@ -14,237 +20,252 @@ import java.util.*;
 public class Game5Controller extends GameController implements Initializable {
     @FXML
     private GridPane gridPlayer1, gridPlayer2;
+    @FXML
+    private VBox gameLayout;
+    @FXML
+    private Label playerShipCountLabel;
+    @FXML
+    private Label computerShipCountLabel;
+
     private Board boardPlayer1, boardPlayer2;
     private ComputerPlayer computerPlayer;
     private List<Ship> playerShips;  // Declare playerShips as an instance variable
     private List<Ship> computerShips;
-    private Map<Button, Ship>buttonToShipMap;
+    private Canvas[][] canvasesPlayer1 = new Canvas[10][10];
+    private Canvas[][] canvasesPlayer2 = new Canvas[10][10];
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Create new boards for player 1 and player 2
         boardPlayer1 = new Board();
         boardPlayer2 = new Board();
-        computerPlayer = new ComputerPlayer(boardPlayer1);
 
-        // Create a list of ships
-        playerShips = new ArrayList<>();
-        computerShips = new ArrayList<>();
+        // Create a new computer player with player 2's board
+        computerPlayer = new ComputerPlayer(boardPlayer2);
 
-        buttonToShipMap = new HashMap<>();
+        // Create ships for both the player and the computer
+        playerShips = createShips();
+        computerShips = createShips();
 
-        // Call the placeShipsRandomly method to place ships randomly on the boards
-        placeShipsRandomly();
+        // Initialize the grid fields with the created boards and ships
+        initializeGrid(gridPlayer1, boardPlayer1, false, playerShips);
+        initializeGrid(gridPlayer2, boardPlayer2, true, computerShips);
 
-        initializeGrid(gridPlayer1, boardPlayer1, true);
-        initializeGrid(gridPlayer2, boardPlayer2, false);
+        // Load the image from the specified path
+        String imagePath = "file:src/main/resources/net/rknabe/marioparty/assets/game5/Hintergrund.jpg";
+        Image image = new Image(imagePath);
+
+        // Create a BackgroundImage object with the loaded image
+        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+
+        // Set the background image of the game layout
+        gameLayout.setBackground(new Background(backgroundImage));
+
+        // Update the count of ships for both the player and the computer
+        updateShipCount();
     }
 
-    public void placeShipsRandomly() {
-        Random random = new Random();
-        for (int size = 1; size <= 5; size++) {
-            Ship playerShip = new Ship(size, boardPlayer1);
-            Ship computerShip = new Ship(size, boardPlayer2);
 
-            // Set the orientation of the ships
-            playerShip.orientation = playerShip.getRandomOrientation();
-            computerShip.orientation = computerShip.getRandomOrientation();
-
-            // Try to place the ships
-            boolean playerShipPlaced = false;
-            boolean computerShipPlaced = false;
-            while (!playerShipPlaced || !computerShipPlaced) {
-                if (!playerShipPlaced) {
-                    playerShip.position = playerShip.getRandomPosition();
-                    if (boardPlayer1.canPlaceShip(playerShip)) {
-                        boardPlayer1.placeShip(playerShip);
-                        playerShipPlaced = true;
-                    }
-                }
-                if (!computerShipPlaced) {
-                    computerShip.position = computerShip.getRandomPosition();
-                    if (boardPlayer2.canPlaceShip(computerShip)) {
-                        boardPlayer2.placeShip(computerShip);
-                        computerShipPlaced = true;
-                    }
-                }
-            }
-
-            playerShips.add(playerShip);
-            computerShips.add(computerShip);
-
-            // Add each field of the ship to the buttonToShipMap
-            for (int i = 0; i < size; i++) {
-                addShipToButtonMap(playerShip, gridPlayer1, i);
-                addShipToButtonMap(computerShip, gridPlayer2, i);
-            }
+    private void initializeGrid(GridPane grid, Board board, boolean showShips, List<Ship> ships) {
+        // Place ships on the game board
+        for (Ship ship : ships) {
+            placeShipRandomly(ship, board);
         }
-    }
 
-    private void addShipToButtonMap(Ship ship, GridPane grid, int i) {
-        int x = ship.position[0] + (ship.orientation.equals("horizontal") ? i : 0);
-        int y = ship.position[1] + (ship.orientation.equals("vertical") ? i : 0);
-        Button button = getButtonAt(grid, x, y);
-        if (button != null) {
-            buttonToShipMap.put(button, ship);
-        }
-    }
-
-
-
-    private void initializeGrid(GridPane grid, Board board, boolean showShips) {
+        // Iterate over the 10x10 grid
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                int x = i;
-                int y = j;
+                // Create final copies of i and j for use in lambda expression
+                final int finalI = i;
+                final int finalJ = j;
 
-                Button button = new Button();
-                button.setPrefWidth(50);  // Set the preferred width to 50
-                button.setPrefHeight(50); // Set the preferred height to 50
-
-                //show or hide ships
+                // Load the image
+                Image image;
+                // load the yellow star image
                 if (showShips && board.isOccupied(i, j)) {
-                    button.setStyle("-fx-background-color: black;");
+                    image = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/Stern_gelb.png");
+                    //or cloud image
+                } else {
+                    image = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/Wolke.png");
                 }
 
+                // Create a new Canvas
+                Canvas canvas = new Canvas(25, 25);
+                if (grid == gridPlayer1) {
+                    canvasesPlayer1[i][j] = canvas;
+                } else if (grid == gridPlayer2) {
+                    canvasesPlayer2[i][j] = canvas;
+                }
 
+                // Get the GraphicsContext to draw on the Canvas
+                GraphicsContext gc = canvas.getGraphicsContext2D();
 
-                button.setOnAction(event -> {
+                // Draw the image on the Canvas
+                gc.drawImage(image, 0, 0, 25, 25);
 
-                    // click = shoot on the board
-                    boolean hit = board.shoot(x, y);
-
-                    // If a ship was hit, color the button red. Otherwise, color it dark gray.
-                    if (hit) {
-                        button.setStyle("-fx-background-color: red;");
+                // Add a mouse click event handler to the canvas
+                canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                    // If a ship is present at the clicked position on player 1's board, change the image to a red star
+                    if (boardPlayer1.isOccupied(finalI, finalJ)) {
+                        Image hitImage = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/Stern_rot.png");
+                        gc.clearRect(0, 0, 25, 25);
+                        gc.drawImage(hitImage, 0, 0, 25, 25);
+                        //or clear the image
                     } else {
-                        button.setStyle("-fx-background-color: darkgray;");
+                        gc.clearRect(0, 0, 25, 25);
                     }
 
-                    // if the player schoots on the board of computer, the computer will take a turn
-                    if (grid == gridPlayer2) {
-                        int[] computerShot = computerPlayer.takeTurn();
-                        boolean computerHit = boardPlayer1.shoot(computerShot[0], computerShot[1]);
-
-                        System.out.println("Computer shot at coordinates: " + computerShot[0] + ", " + computerShot[1]);
-                        System.out.println("Was the shot a hit? " + computerHit);
-
-                        // Find the button corresponding to the computer's shot
-                        for (Node node : gridPlayer1.getChildren()) {
-                            if (GridPane.getColumnIndex(node) == computerShot[0] && GridPane.getRowIndex(node) == computerShot[1]) {
-                                Button computerButton = (Button) node;
-
-                                // If the computer hit a ship, color the button red. Otherwise, color it dark gray.
-                                if (computerHit) {
-                                    computerButton.setStyle("-fx-background-color: red;");
-                                } else {
-                                    computerButton.setStyle("-fx-background-color: darkgray;");
-                                }
-                            }
-                        }
+                    // Call the hit() method if a ship is present at the clicked position
+                    Ship ship = boardPlayer1.getShipAt(finalI, finalJ);
+                    if (ship != null) {
+                        ship.hit();
                     }
 
-                    // das Ship-Objekt wird abgerufen, das mit dem angeklickten Button verknüpft ist
-                    Ship clickedship = buttonToShipMap.get(button);
+                    // Let the computer take its turn
+                    int[] computerMove = computerPlayer.takeTurn();
+                    GraphicsContext gcComputer = getGraphicsContextAt(computerMove[0], computerMove[1], gridPlayer2);
 
-                    if (clickedship != null) {
-
-                        // clicked schip wird als getroffen markiert und die Anzahl der Treffer wird erhöht
-                        clickedship.hit();
-
-                        // Wenn das Schiff versenkt ist, wird es aus der Liste der Schiffe entfernt
-                        if (clickedship.isSunk()) {
-
-                            // Wenn das Schiff des Spielers getroffen wurde
-                            if (playerShips.contains(clickedship)) {
-                                //wird es aus der Liste der Spieler entfernt
-                                checkAndRemoveSunkShip(playerShips, clickedship);
-
-                                //überprüft, ob das Schiff erfolgreich aus der Liste der Schiffe des Spielers entfernt wurde.
-                                if (isShipRemoved(playerShips, clickedship)) {
-                                    System.out.println("The player's ship of length " + clickedship.length + " has been removed from the list");
-                                } else {
-                                    System.out.println("The player's ship is still in the list");
-                                }
-
-                                //Hier wird überprüft, ob alle Schiffe des Spielers gesunken sind.
-                                // Wenn ja, wird das Spiel beendet und eine Nachricht ausgegeben, dass der Computer gewonnen hat.
-                                if (areAllShipsSunk(playerShips)) {
-                                    endGame("Computer hat gewonnen");
-                                }
-
-
-                            } else if (computerShips.contains(clickedship)) {
-                                checkAndRemoveSunkShip(computerShips, clickedship);
-
-
-                                if (isShipRemoved(computerShips, clickedship)) {
-                                    System.out.println("The computer's ship of length " + clickedship.length + " has been removed from the list");
-                                } else {
-                                    System.out.println("The computer's ship is still in the list");
-                                }
-
-
-                                if (areAllShipsSunk(computerShips)) {
-                                    endGame("Du hast gewonnen");
-                                }
-                            }
-                        }
+                    // If a ship is present at the computer's clicked position, change the image to a red star
+                    if (boardPlayer2.isOccupied(computerMove[0], computerMove[1])) {
+                        Image hitImage = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/Stern_rot.png");
+                        gcComputer.clearRect(0, 0, 25, 25);
+                        gcComputer.drawImage(hitImage, 0, 0, 25, 25);
+                        // Otherwise, clear the image
+                    } else {
+                        gcComputer.clearRect(0, 0, 25, 25);
+                    }
+                    ship = boardPlayer2.getShipAt(computerMove[0], computerMove[1]);
+                    if (ship != null) {
+                        ship.hit();
                     }
                 });
-                grid.add(button, i, j);
+                // Add the canvas to the grid
+                grid.add(canvas, i, j);
             }
         }
-        // Debugging-Ausgabe hinzufügen
-        for (Map.Entry<Button, Ship> entry : buttonToShipMap.entrySet()) {
-            Button button = entry.getKey();
-            Ship ship = entry.getValue();
-            System.out.println("Button hashcode: " + button.hashCode() + ", Ship position: " + Arrays.toString(ship.position));
-        }
-
     }
 
-    private Button getButtonAt(GridPane grid, int x, int y) {
-        for (Node node : grid.getChildren()) {
-            if (GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y) {
-                return (Button) node;
+    // This method creates a list of ships with lengths from 1 to 5
+    private List<Ship> createShips() {
+        // Erstellen Sie eine Liste von Schiffen
+        List<Ship> ships = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            ships.add(createShip(i));
+        }
+        return ships;
+    }
+
+    // This method creates a ship with a given length and a random orientation
+    private Ship createShip(int length) {
+        // Erstellen Sie ein Schiff mit gegebener Länge und zufälliger Ausrichtung
+        Random random = new Random();
+        String orientation = random.nextBoolean() ? "horizontal" : "vertical";
+        return new Ship(length, orientation, this);
+    }
+
+    // This method places a ship at a random position on the board
+    private void placeShipRandomly(Ship ship, Board board) {
+        Random random = new Random();
+        int x, y;
+        do {
+            x = random.nextInt(10 - (ship.orientation.equals("horizontal") ? ship.length - 1 : 0));
+            y = random.nextInt(10 - (ship.orientation.equals("vertical") ? ship.length - 1 : 0));
+        } while (!canPlaceShipAtPosition(ship, board, x, y));
+        ship.position = new int[]{x, y};
+        board.placeShip(ship);
+    }
+
+    // This method checks if a ship can be placed at a given position on the board
+    private boolean canPlaceShipAtPosition(Ship ship, Board board, int x, int y) {
+        if (ship.orientation.equals("horizontal")) {
+            for (int i = 0; i < ship.length; i++) {
+                if (board.isOccupied(x + i, y)) {
+                    return false;
+                }
+            }
+        } else {
+            for (int i = 0; i < ship.length; i++) {
+                if (board.isOccupied(x, y + i)) {
+                    return false;
+                }
             }
         }
-        return null;
+        return true;
     }
 
+    // This method checks if a ship can be placed at a given position on the board
+    public void shipSunk(Ship ship) {
+        // Entfernen Sie das Schiff aus der entsprechenden Liste
+        if (playerShips.contains(ship)) {
+            playerShips.remove(ship);
+        } else if (computerShips.contains(ship)) {
+            computerShips.remove(ship);
+        }
+        updateShipCount();
+        // Überprüfen Sie, ob das Spiel vorbei ist
+        checkGameOver();
+    }
+    // This method checks if the game is over and shows a game over message if it is
+    private void checkGameOver() {
+        if (allShipsSunk(playerShips)) {
+            showGameOverMessage("Player has won!");
+        } else if (allShipsSunk(computerShips)) {
+            showGameOverMessage("Computer has won!");
+        }
+    }
 
-    private void endGame(String message) {
+    // This method checks if all ships in a list are sunk
+    private boolean allShipsSunk(List<Ship> ships) {
+        for (Ship ship : ships) {
+            if (!ship.isSunk()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    // This method shows a game over message with a given text
+    private void showGameOverMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Spielende");
+        alert.setTitle("Game Over");
         alert.setHeaderText(null);
         alert.setContentText(message);
-
         alert.showAndWait();
     }
 
-    private boolean isShipRemoved(List<Ship> ships, Ship shipToRemove) {
-        for (Ship ship : ships) {
-            if (ship == shipToRemove) {
-                return false;
-            }
-        }
-        return true;
+    // This method updates the count of remaining ships for both players
+    private void updateShipCount() {
+        playerShipCountLabel.setText("Remaining ships: " + playerShips.size());
+        playerShipCountLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        computerShipCountLabel.setText("Remaining ships: " + computerShips.size());
+        computerShipCountLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
     }
-    private void checkAndRemoveSunkShip(List<Ship> ships, Ship shipToCheck) {
-        if (shipToCheck.isSunk()) {
-            ships.remove(shipToCheck);
+
+    // This method returns the GraphicsContext of a Canvas at a given position in a GridPane
+    private GraphicsContext getGraphicsContextAt(int x, int y, GridPane grid) {
+        Canvas canvas;
+        if (grid == gridPlayer1) {
+            canvas = canvasesPlayer1[x][y];
+        } else if (grid == gridPlayer2) {
+            canvas = canvasesPlayer2[x][y];
+        } else {
+            throw new IllegalArgumentException("Invalid grid");
         }
+        return canvas.getGraphicsContext2D();
     }
-    //depnding on the ship that is hit, remove it from the list of ships
-    private boolean areAllShipsSunk(List<Ship> ships) {
-        for (Ship ship : ships) {
-            if (!ship.isSunk()) {
-                System.out.println("Ship is not sunk: " + ship);
-                return false;
-            }
-        }
-        return true;
-    }
+
+
+
+
+
+
+
 }
+
+
+
+
+
+

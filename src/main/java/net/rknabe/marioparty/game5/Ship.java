@@ -1,8 +1,5 @@
 package net.rknabe.marioparty.game5;
 
-import java.util.Arrays;
-import java.util.Random;
-
 public class Ship {
 
     int length;
@@ -12,50 +9,30 @@ public class Ship {
     int hits = 0;
     private boolean hit;
 
+    private Game5Controller gameController;
 
-    public Ship(int length, Board board) {
+    // Constructor for the Ship class, initializes the length, orientation, and gameController
+    public Ship(int length, String orientation, Game5Controller gameController) {
         this.length = length;
-        this.board = board;
-        this.orientation = getRandomOrientation();
-        this.position = getRandomPosition();
+        this.orientation = orientation;
+        this.gameController = gameController;
     }
 
-
-    public int[] getRandomPosition() {
-        Random random = new Random();
-        int x, y;
-        do {
-            x = random.nextInt(10 - (orientation.equals("horizontal") ? length - 1 : 0));
-            y = random.nextInt(10 - (orientation.equals("vertical") ? length - 1 : 0));
-        } while (!board.canPlaceShip(this));
-        return new int[]{x, y};
-    }
-    public String getRandomOrientation() {
-        Random random = new Random();
-        return random.nextBoolean() ? "horizontal" : "vertical";
-    }
-
-    private boolean arePositionsFree(int[][] positions) {
-        for (int[] position : positions) {
-            if (board.isOccupied(position[0], position[1])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
+    // Method to mark a ship as hit and increment the hit count
     public void hit() {
         this.hit = true;
         this.hits++;
+
+        // Check if the ship is sunk after being hit
+        if (isSunk()) {
+            gameController.shipSunk(this);
+        }
     }
 
-    public boolean isHit() {
-        return hit;
-    }
-
+    // Method to check if a ship is sunk (all parts of the ship have been hit)
     public boolean isSunk() {
         return hits == length;
     }
+
 
 }
