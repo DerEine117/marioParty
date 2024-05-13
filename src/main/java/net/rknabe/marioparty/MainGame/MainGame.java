@@ -16,6 +16,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainGame extends Application {
     private final Drawer drawer = new Drawer();
@@ -62,9 +65,18 @@ public class MainGame extends Application {
     public void initialize() {
         drawer.drawPicture(playerPicture);
         Board board = new Board();
-        board.initalizeBoard(gridPane);
-    }
+        GridPane gridPane = new GridPane();
 
+        board.setupBoard(gridPane);
+        board.numberFieldsDFS(gridPane, 0, 0);
+
+        board.setFieldStateBasedOnColor();
+        gameField.getChildren().add(gridPane);
+        board.printFields();
+
+
+
+    }
     public static void main(String[] args) {
         launch(args);
     }

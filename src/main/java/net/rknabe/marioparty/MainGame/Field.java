@@ -1,9 +1,10 @@
 package net.rknabe.marioparty.MainGame;
 
 public class Field {
-    private final int fieldNumber;
+    private int fieldNumber;
     private final int x;
     private final int y;
+    private int state;
 
     public Field(int fieldNumber, int x, int y) {
         this.fieldNumber = fieldNumber;
@@ -16,8 +17,18 @@ public class Field {
     public int getY() {
         return y;
     }
+
     public int getFieldNumber() {
         return fieldNumber;
+    }
+    public void setFieldNumber(int fieldNumber) {
+        this.fieldNumber =fieldNumber;
+    }
+    public int getState() {
+        return state;
+    }
+    public void setState(int state) {
+        this.state = state;
     }
 
 }
