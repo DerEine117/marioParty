@@ -107,8 +107,18 @@ public class BalloonGame extends GameController implements Initializable {
     }
 
     private void gameLoop() {
+        // Check if the game has ended at the start of the game loop
+        if (gameState.isEnd()) {
+            return;
+        }
+
         new Thread(() -> {
             for (Balloon balloon : initializer.getBalloons()) {
+                // Check if the game has ended before starting a new thread for a balloon
+                if (gameState.isEnd()) {
+                    break;
+                }
+
                 new Thread(() -> {
                     while (!balloon.isPopped() && !gameState.isEnd()) {
                         final Balloon b = balloon;
@@ -151,6 +161,8 @@ public class BalloonGame extends GameController implements Initializable {
         gameState.setEnd(false);
         numBalloonsInflated = 0;
         updateBallonsInflated();
+        numBalloonsLeft = NUM_BALLOONS;
+        updateBalloonsLeft();
         balloonsLeft.setText(NUM_BALLOONS + "");
     }
 

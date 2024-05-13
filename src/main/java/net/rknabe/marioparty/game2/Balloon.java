@@ -75,7 +75,7 @@ public class Balloon {
         this.balloonImage.setY(this.y);
 
         // Check if the balloon has reached the top of the canvas
-        if (this.y <= 0) {
+        if (this.y == 0) {
             this.reachedTop = true;
         }
     }

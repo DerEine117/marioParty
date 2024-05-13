@@ -12,7 +12,7 @@ public class InitializeBalloons {
     protected void createBalloons(int amount, Canvas gameCanvas) {
         // creates all the Balloons
 
-        for (int i = 0; i <= amount; i++) {
+        for (int i = 0; i < amount; i++) {
             Balloon balloon = new Balloon(gameCanvas);
             balloons.add(balloon);
         }
