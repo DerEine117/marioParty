@@ -50,32 +50,13 @@ public class Drawer {
         imageview.setImage(image);
     }
 
-    protected void drawBoard(GridPane gridpane){
-        // draw the board
-    }
-    protected void drawPlayer(GridPane gridPane, int position, int playerIndex,Board board) {
+    protected void drawPlayer(GridPane gridPane, int position, int playerIndex, Board board) {
         for (Field field : board.getFields().values()) {
             if (field.getFieldNumber() == position) {
-                Circle circle = new Circle(20, playerIndex == 0 ? Color.PINK : Color.BLACK);
-                gridPane.getChildren().removeAll(gridPane.lookupAll(".player" + playerIndex));
-                System.out.println("DrawPlayer Position: "+ position);
-                circle.setId("player" + playerIndex);
-                gridPane.add(circle, field.getY(), field.getX()); // Vertauschen Sie die x- und y-Koordinaten
-                circle.toFront();
-
-                System.out.println("X: " + field.getX() + ", Y: " + field.getY());
-                markRectangle(field.getX(), field.getY(), board);
-
-                changeRectangleColor(field.getX(), field.getY(), Color.YELLOW, board);
+                changeRectangleColor(field.getX(), field.getY(), playerIndex == 0 ? Color.YELLOW : Color.BLACK, board);
 
                 break;
             }
-        }
-    }
-    public void markRectangle(int x, int y,Board board) {
-        Rectangle rectangle = board.getRectangleByCoordinates(x, y);
-        if (rectangle != null) {
-            System.out.println("Rectangle: " + y + "," + x);
         }
     }
     public void changeRectangleColor(int x, int y, Color color,Board board) {
@@ -84,21 +65,5 @@ public class Drawer {
             rectangle.setFill(color);
         }
     }
-    public void resetRectangleColor(int x, int y, Board board,  int fieldNumber) {
-        Rectangle rectangle = board.getRectangleByCoordinates(x, y);
-        Field field = board.getFieldByNumber(fieldNumber);
-        if (rectangle != null && field != null) {
-            switch (field.getState()) {
-                case 0:
-                    rectangle.setFill(Color.GRAY);
-                    break;
-                case 1:
-                    rectangle.setFill(Color.GREEN);
-                    break;
-                case 2:
-                    rectangle.setFill(Color.RED);
-                    break;
-            }
-        }
-    }
+
 }

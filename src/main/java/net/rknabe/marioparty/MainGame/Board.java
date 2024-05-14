@@ -1,6 +1,8 @@
 package net.rknabe.marioparty.MainGame;
 
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -84,18 +86,24 @@ public class Board {
                             rectangle.setFill(Color.GRAY);
                             break;
                     }
+                    gridPane.add(rectangle, j, i); // Fügen Sie das Rechteck zuerst hinzu
+
                     // Erstellen Sie ein Field-Objekt und speichern Sie es in der Map
                     Field field = new Field(counter, i, j);
                     field.setState(Integer.parseInt(fieldStates.get(key)));
                     fields.put(key, field);
+
+                    if ("-coins".equals(event)) {
+                        final Image systemSecureImage = new Image((getClass().getResource("net/rknabe/marioparty/assets/MainGame/players.png")).toExternalForm());
+                        ImageView imageView = new ImageView(systemSecureImage);
+                        gridPane.add(imageView, j, i);
+                    }
                 }
-                gridPane.add(rectangle, j, i);
             }
         }
 
         return gridPane;
     }
-
     public void removeField(GridPane gridPane, int x, int y) {
         String key = x + "," + y;
         Rectangle rectangle = rectangles.get(key);
@@ -166,15 +174,7 @@ public class Board {
             }
         }
     }
-    public void printFields() {
-        for (Map.Entry<String, Field> entry : fields.entrySet()) {
-            Field field = entry.getValue();
-            System.out.println("Koordinaten: " + entry.getKey());
-            System.out.println("Feldnummer: " + field.getFieldNumber());
-            System.out.println("Zustand: " + field.getState());
-            System.out.println("-------------------");
-        }
-    }
+
     public Field getFieldByNumber(int fieldNumber) {
         for (Field field : fields.values()) {
             if (field.getFieldNumber() == fieldNumber) {

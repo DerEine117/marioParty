@@ -78,7 +78,6 @@ public class MainGame extends Application {
 
         board.setFieldStateBasedOnColor();
         gameField.getChildren().add(gridPane);
-        board.printFields();
         gameField.setBorder(Border.stroke(Color.BLACK));
         player1 = new Player("Player 1",false);
         player2= new Player("Player 2",true);
@@ -90,46 +89,54 @@ public class MainGame extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-private void würfeln(boolean computer) {
-    if (computer) {
-        drawer.drawDiceAnimation(dice2);
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Platform.runLater(() -> {
-                int diceNumber = player2dice.roll();
-                drawer.drawDicePicture(diceNumber, dice2);
-                player2.move(diceNumber);
-                Field field = board.getFieldByNumber(player2.getPosition());
-                if (field != null) {
-                    System.out.println("Computer Field number: " + field.getFieldNumber() + "x: " +field.getX() + " y: " +field.getY());
+    private void würfeln(boolean computer) {
+        if (computer) {
+            drawer.drawDiceAnimation(dice2);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(() -> {
+                    int diceNumber = player2dice.roll();
+                    drawer.drawDicePicture(diceNumber, dice2);
 
+                    // Entfärben Sie das Rechteck, bevor der Spieler bewegt wird
+                    Field currentField = board.getFieldByNumber(player2.getPosition());
+                    if (currentField != null) {
+                        drawer.changeRectangleColor(currentField.getX(), currentField.getY(), Color.GRAY, board);
+                    }
+
+                    // Bewegen Sie den Spieler
+                    player2.move(diceNumber);
                     drawer.drawPlayer(gridPane, player2.getPosition(), 1, board);
+                });
+            }).start();
+        } else {
+            drawer.drawDiceAnimation(dice1);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            });
-        }).start();
-    } else {
-        drawer.drawDiceAnimation(dice1);
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            javafx.application.Platform.runLater(() -> {
-                int diceNumber = player1dice.roll();
-                drawer.drawDicePicture(diceNumber, dice1);
-                player1.move(diceNumber);
-                Field field = board.getFieldByNumber(player1.getPosition());
-                if (field != null) {
-                    System.out.println("Player 1 Field number: " + field.getFieldNumber());
+                javafx.application.Platform.runLater(() -> {
+                    int diceNumber = player1dice.roll();
+                    drawer.drawDicePicture(diceNumber, dice1);
+
+                    // Entfärben Sie das Rechteck, bevor der Spieler bewegt wird
+                    Field currentField = board.getFieldByNumber(player1.getPosition());
+                    if (currentField != null) {
+                        drawer.changeRectangleColor(currentField.getX(), currentField.getY(), Color.GRAY, board);
+                    }
+
+                    // Bewegen Sie den Spieler
+                    player1.move(diceNumber);
                     drawer.drawPlayer(gridPane, player1.getPosition(), 0, board);
-                }
-            });
-        }).start();
+                });
+            }).start();
+        }
     }
-}
+
 }
