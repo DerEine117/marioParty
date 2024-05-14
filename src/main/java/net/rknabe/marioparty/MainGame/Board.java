@@ -22,8 +22,8 @@ public class Board {
     private Map<String, Rectangle> rectangles = new HashMap<>();
     private Map<String, String> fieldStates = new HashMap<>();
     private Map<String, Field> fields = new HashMap<>();
-
-
+    private Map<String, ImageView> imageViews = new HashMap<>();
+    private Map<String, ImageView> fieldImages = new HashMap<>();
     private Set<String> whiteFields = new HashSet<>();
     private Random random = new Random();
 
@@ -94,14 +94,27 @@ public class Board {
                     field.setState(Integer.parseInt(fieldStates.get(key)));
                     fields.put(key, field);
 
-                    if ("+coins".equals(event)) {
-                        URL resourceURL = getClass().getResource("/net/rknabe/marioparty/assets/MainGame/coin.gif");
-                        Image image = new Image(resourceURL.toExternalForm());
+                    if ("+coins".equals(event)&& !field.hasPlayer()) {
+                        URL resourceUrl = getClass().getResource("/net/rknabe/marioparty/assets/MainGame/coin.gif");
+                        Image image = new Image(resourceUrl.toExternalForm());
                         ImageView imageView = new ImageView(image);
                         imageView.setFitHeight(43);
                         imageView.setFitWidth(43);
                         gridPane.add(imageView, j, i);
+                        fieldImages.put(key, imageView);
 
+                        imageViews.put(key, imageView); // Speichern Sie das ImageView in der Map
+                    }
+                    if ("-coins".equals(event) && !field.hasPlayer()) {
+                        URL resourceUrl = getClass().getResource("/net/rknabe/marioparty/assets/MainGame/looseCoins.JPG");
+                        Image image = new Image(resourceUrl.toExternalForm());
+                        ImageView imageView = new ImageView(image);
+                        imageView.setFitHeight(43);
+                        imageView.setFitWidth(43);
+                        gridPane.add(imageView, j, i);
+                        fieldImages.put(key, imageView);
+
+                        imageViews.put(key, imageView); // Speichern Sie das ImageView in der Map
                     }
                 }
             }
@@ -197,7 +210,18 @@ public class Board {
         return rectangles.get(key);
 
     }
+    public ImageView getImageViewByCoordinates(String key) {
+        return imageViews.get(key);
+    }
 
+    public Map<String, String> getSpecialFields() {
+        return specialFields;
+    }
 
-
+    public Map<String, ImageView> getImageViews() {
+        return imageViews;
+    }
+    public Map<String, ImageView> getFieldImages() {
+    return fieldImages;
+}
 }

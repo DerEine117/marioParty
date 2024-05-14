@@ -5,6 +5,7 @@ public class Field {
     private final int x;
     private final int y;
     private int state;
+    private boolean hasPlayer;
 
     public Field(int fieldNumber, int x, int y) {
         this.fieldNumber = fieldNumber;
@@ -29,6 +30,13 @@ public class Field {
     }
     public void setState(int state) {
         this.state = state;
+    }
+    public boolean hasPlayer() {
+        return hasPlayer;
+    }
+
+    public void setHasPlayer(boolean hasPlayer) {
+        this.hasPlayer = hasPlayer;
     }
 
 }

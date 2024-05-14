@@ -45,16 +45,16 @@ public class Drawer {
         imageView.setY(centerY);
     }
 
-    protected void drawPicture (ImageView imageview) {
+    protected void drawPicture(ImageView imageView) {
         Image image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/MainGame/players.png").toExternalForm());
-        imageview.setImage(image);
+        imageView.setImage(image);
+
     }
 
     protected void drawPlayer(GridPane gridPane, int position, int playerIndex, Board board) {
         for (Field field : board.getFields().values()) {
             if (field.getFieldNumber() == position) {
                 changeRectangleColor(field.getX(), field.getY(), playerIndex == 0 ? Color.YELLOW : Color.BLACK, board);
-
                 break;
             }
         }
@@ -63,6 +63,16 @@ public class Drawer {
         Rectangle rectangle = board.getRectangleByCoordinates(x, y);
         if (rectangle != null) {
             rectangle.setFill(color);
+            rectangle.toFront();
+        }
+    }
+    public void resetRectangleColor(GridPane gridPane, int position, Board board) {
+        Field field = board.getFieldByNumber(position);
+        if (field != null) {
+            Rectangle rectangle = board.getRectangleByCoordinates(field.getX(), field.getY());
+            if (rectangle != null) {
+                rectangle.setFill(Color.GRAY);
+            }
         }
     }
 

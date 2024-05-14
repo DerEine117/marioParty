@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,18 +71,19 @@ public class MainGame extends Application {
 
     @FXML
     public void initialize() {
-        drawer.drawPicture(playerPicture);
         GridPane gridPane = new GridPane();
 
         board.setupBoard(gridPane);
         board.numberFieldsDFS(gridPane, 0, 0);
+        drawer.drawPicture(playerPicture);
 
 
         board.setFieldStateBasedOnColor();
         gameField.getChildren().add(gridPane);
+        //board.printFields();
         gameField.setBorder(Border.stroke(Color.BLACK));
         player1 = new Player("Player 1",false);
-        player2= new Player("Player 2",true);
+        player2= new Player("Computer",true);
         drawer.drawPlayer(gridPane, player1.getPosition(), 0,board);
         drawer.drawPlayer(gridPane, player2.getPosition(), 1,board);
 
@@ -90,53 +93,94 @@ public class MainGame extends Application {
         launch(args);
     }
     private void würfeln(boolean computer) {
-        if (computer) {
-            drawer.drawDiceAnimation(dice2);
-            new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Platform.runLater(() -> {
-                    int diceNumber = player2dice.roll();
-                    drawer.drawDicePicture(diceNumber, dice2);
+        Player currentPlayer = computer ? player2 : player1;
+        Dice currentDice = computer ? player2dice : player1dice;
+        ImageView currentDiceImageView = computer ? dice2 : dice1;
 
-                    // Entfärben Sie das Rechteck, bevor der Spieler bewegt wird
-                    Field currentField = board.getFieldByNumber(player2.getPosition());
-                    if (currentField != null) {
-                        drawer.changeRectangleColor(currentField.getX(), currentField.getY(), Color.GRAY, board);
-                    }
+        drawer.drawDiceAnimation(currentDiceImageView);
 
-                    // Bewegen Sie den Spieler
-                    player2.move(diceNumber);
-                    drawer.drawPlayer(gridPane, player2.getPosition(), 1, board);
-                });
-            }).start();
-        } else {
-            drawer.drawDiceAnimation(dice1);
-            new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                javafx.application.Platform.runLater(() -> {
-                    int diceNumber = player1dice.roll();
-                    drawer.drawDicePicture(diceNumber, dice1);
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Platform.runLater(() -> {
+                int diceNumber = currentDice.roll();
+                drawer.drawDicePicture(diceNumber, currentDiceImageView);
 
-                    // Entfärben Sie das Rechteck, bevor der Spieler bewegt wird
-                    Field currentField = board.getFieldByNumber(player1.getPosition());
-                    if (currentField != null) {
-                        drawer.changeRectangleColor(currentField.getX(), currentField.getY(), Color.GRAY, board);
-                    }
-
-                    // Bewegen Sie den Spieler
-                    player1.move(diceNumber);
-                    drawer.drawPlayer(gridPane, player1.getPosition(), 0, board);
-                });
-            }).start();
-        }
+                updateGameState(currentPlayer, diceNumber);
+            });
+        }).start();
     }
 
+    private void updateGameState(Player currentPlayer, int diceNumber) {
+        int oldPosition = currentPlayer.getPosition();
+        currentPlayer.move(diceNumber);
+
+        Field oldField = board.getFieldByNumber(oldPosition);
+        if (oldField != null) {
+            oldField.setHasPlayer(false); // Der Spieler hat das alte Feld verlassen
+        }
+
+        Field newField = board.getFieldByNumber(currentPlayer.getPosition());
+        if (newField != null) {
+            newField.setHasPlayer(true); // Der Spieler hat das neue Feld betreten
+            drawer.resetRectangleColor(gridPane, oldPosition, board);
+
+
+            // Überprüfen Sie, ob das Feld bereits von einem anderen Spieler besucht wurde
+            Player otherPlayer = currentPlayer.equals(player1) ? player2 : player1;
+            if (newField.getFieldNumber() == otherPlayer.getPosition()) {
+                // Setzen Sie den Zustand des Feldes auf "neutral" und ändern Sie die Farbe des Rechtecks auf Grau
+                newField.setState(0);
+                Rectangle rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
+                if (rectangle != null) {
+                    rectangle.setFill(Color.GRAY);
+                }
+            } else {
+                switch (newField.getState()) {
+                    case 1: // Grünes Feld
+                        currentPlayer.setCoins(+5);
+                        Rectangle rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
+                        if (rectangle != null) {
+                            rectangle.toFront();
+                        }
+                        break;
+                    case 2: // Rotes Feld
+                        currentPlayer.setCoins(-5);
+                        rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
+                        if (rectangle != null) {
+                            rectangle.toFront();
+                        }
+                        break;
+                    default: // Graues Feld
+                        System.out.println("Graues Feld");
+                        break;
+                }
+            }
+            int playerIndex = currentPlayer.equals(player1) ? 0 : 1;
+            drawer.drawPlayer(gridPane, currentPlayer.getPosition(), playerIndex, board);
+
+            // Überprüfen Sie, ob der andere Spieler auf der alten Position des aktuellen Spielers ist
+            if (otherPlayer.getPosition() == oldPosition) {
+                int otherPlayerIndex = otherPlayer.equals(player1) ? 0 : 1;
+                drawer.drawPlayer(gridPane, oldPosition, otherPlayerIndex, board);
+            }
+
+            checkPlayersOnSameField();
+        }
+        System.out.println("Player: " + currentPlayer.getName() + " Position: " + currentPlayer.getPosition() + " Coins: " + currentPlayer.getCoins());
+    }
+    private void checkPlayersOnSameField() {
+    if (player1.getPosition() == player2.getPosition()) {
+        Field field = board.getFieldByNumber(player1.getPosition());
+        if (field != null) {
+            Rectangle rectangle = board.getRectangleByCoordinates(field.getX(), field.getY());
+            if (rectangle != null) {
+                rectangle.setFill(Color.BLUE);
+            }
+        }
+    }
+}
 }

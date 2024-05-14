@@ -7,7 +7,7 @@ package net.rknabe.marioparty.MainGame;public class Player {
     public Player(String name, boolean computer) {
         this.name = name;
         this.position = 0;
-        this.coins = 0;
+        this.coins = 100;
         this.computer = computer;
     }
 
@@ -45,6 +45,7 @@ package net.rknabe.marioparty.MainGame;public class Player {
 
     public void move(int diceNumber) {
         this.position += diceNumber;
+
     }
 
 
