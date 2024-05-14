@@ -11,7 +11,7 @@
          <children>
             <TextField fx:id="gamestate" layoutX="452.0" layoutY="28.0" />
          </children></Pane>
-        <Button fx:id="backToMenu" layoutY="1.0" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="Spielanleitung">
+        <Button fx:id="spielinfo" layoutY="1.0" mnemonicParsing="false" onAction="#onSpielInfoClick" prefHeight="26.0" prefWidth="103.0" text="Spielanleitung">
          <font>
             <Font size="13.0" />
          </font></Button>
