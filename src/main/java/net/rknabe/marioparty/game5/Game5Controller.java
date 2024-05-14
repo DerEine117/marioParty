@@ -271,6 +271,7 @@ public class Game5Controller extends GameController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == okButton) {
             backToMenuClick();
+            restartGame();
         }
     }
 
@@ -295,11 +296,25 @@ public class Game5Controller extends GameController implements Initializable {
         return canvas.getGraphicsContext2D();
     }
 
+    public void restartGame() {
+        // Reset the game variables
+        boardPlayer1 = new Board();
+        boardPlayer2 = new Board();
+        computerPlayer = new ComputerPlayer(boardPlayer2);
+        playerShips = createShips();
+        computerShips = createShips();
 
+        // Clear the grids
+        gridPlayer1.getChildren().clear();
+        gridPlayer2.getChildren().clear();
 
+        // Initialize the grid fields with the created boards and ships
+        initializeGrid(gridPlayer1, boardPlayer1, false, playerShips);
+        initializeGrid(gridPlayer2, boardPlayer2, true, computerShips);
 
-
-
+        // Update the count of ships for both the player and the computer
+        updateShipCount();
+    }
 
 }
 
