@@ -2,13 +2,19 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="backgroundPane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game4.Game4Controller">
     <children>
         <Pane fx:id="snakepane" focusTraversable="true" layoutX="52.0" layoutY="59.0" onKeyPressed="#onKeyPressedMove" prefHeight="500.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-        <Pane fx:id="fruitPane" focusTraversable="true" layoutX="52.0" layoutY="59.0" prefHeight="600.0" prefWidth="600.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-        <Button fx:id="backToMenu" layoutY="1.0" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="back to menu" />
+        <Pane fx:id="fruitPane" focusTraversable="true" layoutX="52.0" layoutY="59.0" prefHeight="600.0" prefWidth="600.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TextField fx:id="gamestate" layoutX="452.0" layoutY="28.0" />
+         </children></Pane>
+        <Button fx:id="backToMenu" layoutY="1.0" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="Spielanleitung">
+         <font>
+            <Font size="13.0" />
+         </font></Button>
       <TextField fx:id="lengthSnake" layoutX="451.0" layoutY="2.0" />
-      <TextField fx:id="gamestate" layoutX="228.0" layoutY="2.0" />
     </children>
 </AnchorPane>

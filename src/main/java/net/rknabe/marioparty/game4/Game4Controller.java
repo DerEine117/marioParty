@@ -56,14 +56,14 @@ public class Game4Controller extends GameController {
     public void update() {
         // Mithilfe von currentTimeMillis wird alle 75 Millisekunden ein gameTick ausgeführt
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastUpdateTime >= 75) {
+        if (currentTime - lastUpdateTime >= 125) {
             lastUpdateTime = currentTime;
 
             snake.updateSnakeMovement();
             snake.draw(snakepane);
             checkFruitCollision();
             if (snake.isGameOver()) {
-                if (!gamestate.getText().equals("Verloren!")) {
+                if (!gamestate.getText().equals("Bowser war besser!")) {
                     updateGamestateTextFieldLost();
                 }
             }
@@ -140,18 +140,17 @@ public class Game4Controller extends GameController {
 
     @FXML
     void updateGamestateTextFieldLost() {
-        // Wenn die Schlange bereits größer als die des Gegngers ist, kann man nicht mehr verlieren
+        // Wenn die Schlange bereits größer als die des Gegners ist, kann man nicht mehr verlieren
         if (snake.getSnakeLength() < bestComputerPlayer.getReachedLength()) {
-            gamestate.setText("Verloren!");
+            gamestate.setText("Bowser war besser!");
             showAlert("Spielende", "Verloren!", "Du hast das Spiel verloren.");
         }
         snake.stopSnakeMovement();
-        // die Schlange soll stehen bleiben wenn man "verloren" hat
+        // Die Schlange soll stehen bleiben, wenn man "verloren" hat
     }
-
     @FXML
     private void updateGamestateTextFieldWon() {
-        gamestate.setText("Gewonnen!");
+        gamestate.setText("Bowser wurde besiegt!");
         showAlert("Spielende", "Gewonnen!", "Herzlichen Glückwunsch! Du hast das Spiel gewonnen.");
         snake.stopSnakeMovement();
         // auch wenn man gewonnen hat soll sie stehen bleiben, die Option auf weiter spielen besteht jedoch
