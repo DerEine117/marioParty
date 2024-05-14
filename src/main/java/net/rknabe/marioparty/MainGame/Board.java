@@ -20,6 +20,7 @@ public class Board {
     private Map<String, String> fieldStates = new HashMap<>();
     private Map<String, Field> fields = new HashMap<>();
 
+
     private Set<String> whiteFields = new HashSet<>();
     private Random random = new Random();
 
@@ -185,5 +186,13 @@ public class Board {
     public Map<String, Field> getFields() {
         return fields;
     }
+    public Rectangle getRectangleByCoordinates(int x, int y) {
+        String key = x + "," + y;
+        System.out.println("Key: " + key);
+        return rectangles.get(key);
+
+    }
+
+
 
 }

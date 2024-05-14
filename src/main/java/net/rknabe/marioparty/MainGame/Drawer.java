@@ -7,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 public class Drawer {
     // class for drawing the player_picture on the designed field
@@ -63,8 +64,40 @@ public class Drawer {
                 circle.toFront();
 
                 System.out.println("X: " + field.getX() + ", Y: " + field.getY());
+                markRectangle(field.getX(), field.getY(), board);
+
+                changeRectangleColor(field.getX(), field.getY(), Color.YELLOW, board);
 
                 break;
+            }
+        }
+    }
+    public void markRectangle(int x, int y,Board board) {
+        Rectangle rectangle = board.getRectangleByCoordinates(x, y);
+        if (rectangle != null) {
+            System.out.println("Rectangle: " + y + "," + x);
+        }
+    }
+    public void changeRectangleColor(int x, int y, Color color,Board board) {
+        Rectangle rectangle = board.getRectangleByCoordinates(x, y);
+        if (rectangle != null) {
+            rectangle.setFill(color);
+        }
+    }
+    public void resetRectangleColor(int x, int y, Board board,  int fieldNumber) {
+        Rectangle rectangle = board.getRectangleByCoordinates(x, y);
+        Field field = board.getFieldByNumber(fieldNumber);
+        if (rectangle != null && field != null) {
+            switch (field.getState()) {
+                case 0:
+                    rectangle.setFill(Color.GRAY);
+                    break;
+                case 1:
+                    rectangle.setFill(Color.GREEN);
+                    break;
+                case 2:
+                    rectangle.setFill(Color.RED);
+                    break;
             }
         }
     }
