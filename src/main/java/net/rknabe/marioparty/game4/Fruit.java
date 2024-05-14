@@ -47,16 +47,6 @@ public class Fruit {
 
         setXPos(x);
         setYPos(y);
-        transFruit();
-        colorFruit();
-    }
-
-    public void transFruit() {
-        fruitImageView.setVisible(false);
-    }
-
-    public void colorFruit() {
-        fruitImageView.setVisible(true);
     }
 
     public double getXPos() {
