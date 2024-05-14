@@ -53,14 +53,6 @@ public class Snake {
 
     }
 
-    private ImageView createImageView(String imagePath) {
-        Image image = new Image(getClass().getResource(imagePath).toExternalForm());
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(rectangleSize);
-        imageView.setFitHeight(rectangleSize);
-        return imageView;
-    }
-
     public void draw(Pane pane) {
         // zuerst die "alte" Schlange löschen
         pane.getChildren().clear();
