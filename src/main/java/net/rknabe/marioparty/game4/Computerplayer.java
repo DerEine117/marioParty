@@ -6,7 +6,7 @@ public class Computerplayer {
 
     public Computerplayer() {
         Random randomLength = new Random();
-        this.reachedLength = randomLength.nextInt(12) + 10;
+        this.reachedLength = randomLength.nextInt(1) + 4;
         // Mindestens 10 -> wäre sonst zu einfach
     }
 

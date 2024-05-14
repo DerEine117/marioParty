@@ -1,12 +1,15 @@
 package net.rknabe.marioparty.game4;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rknabe.marioparty.GameController;
+import net.rknabe.marioparty.StageChanger;
 
 public class Game4Controller extends GameController {
     @FXML
@@ -60,7 +63,9 @@ public class Game4Controller extends GameController {
             snake.draw(snakepane);
             checkFruitCollision();
             if (snake.isGameOver()) {
-                updateGamestateTextFieldLost();
+                if (!gamestate.getText().equals("Verloren!")) {
+                    updateGamestateTextFieldLost();
+                }
             }
             updateLengthTextField();
         }
@@ -138,6 +143,7 @@ public class Game4Controller extends GameController {
         // Wenn die Schlange bereits größer als die des Gegngers ist, kann man nicht mehr verlieren
         if (snake.getSnakeLength() < bestComputerPlayer.getReachedLength()) {
             gamestate.setText("Verloren!");
+            showAlert("Spielende", "Verloren!", "Du hast das Spiel verloren.");
         }
         snake.stopSnakeMovement();
         // die Schlange soll stehen bleiben wenn man "verloren" hat
@@ -146,7 +152,19 @@ public class Game4Controller extends GameController {
     @FXML
     private void updateGamestateTextFieldWon() {
         gamestate.setText("Gewonnen!");
+        showAlert("Spielende", "Gewonnen!", "Herzlichen Glückwunsch! Du hast das Spiel gewonnen.");
         snake.stopSnakeMovement();
         // auch wenn man gewonnen hat soll sie stehen bleiben, die Option auf weiter spielen besteht jedoch
+    }
+
+    private void showAlert(String title, String headerText, String contentText) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(headerText);
+            alert.setContentText(contentText);
+            alert.showAndWait();
+            StageChanger.setScene(0);
+        });
     }
 }
