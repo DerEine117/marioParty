@@ -12,4 +12,6 @@ public class Game2Controller {
     protected void backToMenuClick() {
         StageChanger.setScene(0);
     }
+
+
 }

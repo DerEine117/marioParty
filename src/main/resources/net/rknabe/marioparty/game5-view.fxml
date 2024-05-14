@@ -3,12 +3,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game5.Game5Controller">
+<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game5.Game5Controller">
     <children>
-        <VBox layoutX="1.0" layoutY="1.0" prefHeight="400.0" prefWidth="600.0">
-            <children>
-                <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="back to menu" />
-            </children>
+        <VBox fx:id="gameLayout" alignment="CENTER" prefHeight="600.0" prefWidth="800.0">
+            <HBox alignment="CENTER" maxWidth="Infinity" prefHeight="25.0" prefWidth="800.0" spacing="100" translateY="-60">
+                <Label fx:id="playerShipCountLabel" alignment="TOP_LEFT" prefHeight="17.0" prefWidth="201.0" HBox.hgrow="ALWAYS" />
+                <Label fx:id="computerShipCountLabel" alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="232.0" HBox.hgrow="ALWAYS" />
+            </HBox>
+            <HBox alignment="CENTER" layoutX="75.0" layoutY="67.0" maxWidth="Infinity" prefWidth="800.0" spacing="150" translateY="50">
+                <GridPane fx:id="gridPlayer1" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" />
+                <GridPane fx:id="gridPlayer2" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" />
+            </HBox>
+            <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="back to menu" />
         </VBox>
     </children>
 </AnchorPane>
