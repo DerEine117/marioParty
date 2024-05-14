@@ -165,6 +165,19 @@ public class Game4Controller extends GameController {
             alert.setContentText(contentText);
             alert.showAndWait();
             StageChanger.setScene(0);
+            reset();
         });
+    }
+
+    public void reset() {
+        // Schlange auf werkseinstellungen
+        snake.reset();
+        snake.draw(snakepane);
+
+        // Spielstatutus auf Werkseinstellungen
+        gamestate.setText("");
+
+        // Neue Leistung des Computers
+        bestComputerPlayer.newLength();
     }
 }

@@ -168,6 +168,28 @@ public class Snake {
         return false;
     }
 
+    public void reset() {
+        // Die SChlange wird wieder auf 3 zurückgesetzt
+        if (bodyParts.size() > 3) {
+            bodyParts.subList(3, bodyParts.size()).clear();
+        }
+
+        // Auf initialfelder zurück
+        for (int i = 0; i < 3 && i < bodyParts.size(); i++) {
+            ImageView bodyPart = bodyParts.get(i);
+            bodyPart.setX(250 - i * rectangleSize);
+            bodyPart.setY(300);
+        }
+
+        lastDirection = "d";
+
+        setUpPressed(false);
+        setDownPressed(false);
+        setLeftPressed(false);
+        setRightPressed(false);
+    }
+
+
     public double getHeadX() {
         return this.bodyParts.getFirst().getX();
     }
