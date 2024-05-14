@@ -6,8 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -103,20 +105,25 @@ public class MainGame extends Application {
 
     @FXML
     public void initialize() {
-        GridPane gridPane = new GridPane();
+
+        drawer.drawBackground(gameField);
+
+        gridPane = new GridPane();
         miniGames = new ArrayList<>(Arrays.asList(1,2,3,4,5,6));
         System.out.println(miniGames);
+
         board.setupBoard(gridPane);
         board.numberFieldsDFS(gridPane, 0, 0);
         drawer.drawPicture(playerPicture);
+        drawer.drawGoalImage(gridPane, 36, board);
 
 
         board.setFieldStateBasedOnColor();
         gameField.getChildren().add(gridPane);
         //board.printFields();
         gameField.setBorder(Border.stroke(Color.BLACK));
-        player1 = new Player("Player 1",false);
-        player2= new Player("Computer",true);
+        player1 = new Player("Player 1", false, "/net/rknabe/marioparty/assets/MainGame/player1.png");
+        player2 = new Player("Computer", true, "/net/rknabe/marioparty/assets/MainGame/browser.png");
         drawer.drawPlayer(gridPane, player1.getPosition(), 0,board);
         drawer.drawPlayer(gridPane, player2.getPosition(), 1,board);
 
@@ -143,8 +150,8 @@ public class MainGame extends Application {
                 drawer.drawDicePicture(diceNumber, currentDiceImageView);
 
                 updateGameState(currentPlayer, diceNumber);
-            });
 
+            });
         }).start();
     }
 
@@ -174,8 +181,13 @@ public class MainGame extends Application {
 
     private void updateGameState(Player currentPlayer, int diceNumber) {
         int oldPosition = currentPlayer.getPosition();
-        currentPlayer.move(diceNumber);
+        System.out.println("Old Position: " + oldPosition);
+        drawer.removePlayerImage(gridPane, oldPosition, board); // Remove the player image from the old position
 
+        currentPlayer.move(diceNumber);
+        if (currentPlayer.getPosition() >= 36) {
+            setGameEnd(currentPlayer);
+        }
         Field oldField = board.getFieldByNumber(oldPosition);
         if (oldField != null) {
             oldField.setHasPlayer(false); // Der Spieler hat das alte Feld verlassen
@@ -188,6 +200,7 @@ public class MainGame extends Application {
 
 
             // Überprüfen Sie, ob das Feld bereits von einem anderen Spieler besucht wurde
+
             Player otherPlayer = currentPlayer.equals(player1) ? player2 : player1;
             if (newField.getFieldNumber() == otherPlayer.getPosition()) {
                 // Setzen Sie den Zustand des Feldes auf "neutral" und ändern Sie die Farbe des Rechtecks auf Grau
@@ -219,6 +232,8 @@ public class MainGame extends Application {
             }
             int playerIndex = currentPlayer.equals(player1) ? 0 : 1;
             drawer.drawPlayer(gridPane, currentPlayer.getPosition(), playerIndex, board);
+            drawer.drawPlayerImage(gridPane, currentPlayer.getPosition(), currentPlayer, board);
+
 
             // Überprüfen Sie, ob der andere Spieler auf der alten Position des aktuellen Spielers ist
             if (otherPlayer.getPosition() == oldPosition) {
@@ -228,18 +243,46 @@ public class MainGame extends Application {
 
             checkPlayersOnSameField();
         }
+        updateLabels();
         System.out.println("Player: " + currentPlayer.getName() + " Position: " + currentPlayer.getPosition() + " Coins: " + currentPlayer.getCoins());
     }
-
     private void checkPlayersOnSameField() {
-    if (player1.getPosition() == player2.getPosition()) {
-        Field field = board.getFieldByNumber(player1.getPosition());
-        if (field != null) {
-            Rectangle rectangle = board.getRectangleByCoordinates(field.getX(), field.getY());
-            if (rectangle != null) {
-                rectangle.setFill(Color.BLUE);
+        if (player1.getPosition() == player2.getPosition()) {
+            Field field = board.getFieldByNumber(player1.getPosition());
+            if (field != null) {
+                // Erstellen Sie ein ImageView mit dem gewünschten Bild
+                URL resourceUrl = getClass().getResource("/net/rknabe/marioparty/assets/MainGame/players_board.jpg");
+                Image image = new Image(resourceUrl.toExternalForm());
+                ImageView imageView = new ImageView(image);
+                imageView.setFitWidth(43); // Setzen Sie die Breite auf die Breite des Rechtecks
+                imageView.setFitHeight(43); // Setzen Sie die Höhe auf die Höhe des Rechtecks
+
+                // Fügen Sie das ImageView zum GridPane hinzu
+
+                gridPane.add(imageView, field.getY(), field.getX());
+
             }
         }
     }
-}
+    private void setGameEnd(Player player) {
+        // Code to end the game goes here
+        System.out.println(player.getName() + " has reached the goal!");
+        showEndGameAlert(player.getName() + " hat das Ziel erreicht und das Spiel gewonnen!");
+    }
+    private void showEndGameAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Spielende");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        alert.showAndWait();
+    }
+
+    private void updateLabels() {
+        marioCoins.setText("Coins: " + player1.getCoins());
+        bowserCoins.setText("Coins: " + player2.getCoins());
+        marioPosition.setText("Position: " + player1.getPosition());
+        bowserPosition.setText("Position: " + player2.getPosition());
+    }
+
 }

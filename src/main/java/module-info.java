@@ -2,6 +2,7 @@ module net.rknabe.marioparty {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires jdk.compiler;
 
 
     opens net.rknabe.marioparty to javafx.fxml;

@@ -25,8 +25,16 @@ public class Board {
     private Map<String, ImageView> imageViews = new HashMap<>();
     private Map<String, ImageView> fieldImages = new HashMap<>();
     private Set<String> whiteFields = new HashSet<>();
+    private Map<String, ImageView> playerImageViews = new HashMap<>();  // Add this line
     private Random random = new Random();
 
+    public ImageView getPlayerImageViewByCoordinates(String key) {
+        return playerImageViews.get(key);
+    }
+
+    public void setPlayerImageViewByCoordinates(String key, ImageView imageView) {
+        playerImageViews.put(key, imageView);
+    }
     public Board() {
         // Füllen Sie das whiteFields Set mit den Koordinaten, die weiß sein sollen
         for (int j = 1; j < 8; j++) {
@@ -112,6 +120,7 @@ public class Board {
                         imageView.setFitHeight(43);
                         imageView.setFitWidth(43);
                         gridPane.add(imageView, j, i);
+
                         fieldImages.put(key, imageView);
 
                         imageViews.put(key, imageView); // Speichern Sie das ImageView in der Map
@@ -208,20 +217,5 @@ public class Board {
         String key = x + "," + y;
         System.out.println("Key: " + key);
         return rectangles.get(key);
-
-    }
-    public ImageView getImageViewByCoordinates(String key) {
-        return imageViews.get(key);
-    }
-
-    public Map<String, String> getSpecialFields() {
-        return specialFields;
-    }
-
-    public Map<String, ImageView> getImageViews() {
-        return imageViews;
-    }
-    public Map<String, ImageView> getFieldImages() {
-    return fieldImages;
 }
 }
