@@ -43,4 +43,9 @@ package net.rknabe.marioparty.MainGame;public class Player {
         this.coins -= coins;
     }
 
+    public void move(int diceNumber) {
+        this.position += diceNumber;
+    }
+
+
 }

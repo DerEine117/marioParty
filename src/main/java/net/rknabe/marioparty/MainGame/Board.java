@@ -174,4 +174,16 @@ public class Board {
             System.out.println("-------------------");
         }
     }
+    public Field getFieldByNumber(int fieldNumber) {
+        for (Field field : fields.values()) {
+            if (field.getFieldNumber() == fieldNumber) {
+                return field;
+            }
+        }
+        return null;
+    }
+    public Map<String, Field> getFields() {
+        return fields;
+    }
+
 }

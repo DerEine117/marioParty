@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 public class Drawer {
     // class for drawing the player_picture on the designed field
@@ -49,5 +51,21 @@ public class Drawer {
 
     protected void drawBoard(GridPane gridpane){
         // draw the board
+    }
+    protected void drawPlayer(GridPane gridPane, int position, int playerIndex,Board board) {
+        for (Field field : board.getFields().values()) {
+            if (field.getFieldNumber() == position) {
+                Circle circle = new Circle(20, playerIndex == 0 ? Color.PINK : Color.BLACK);
+                gridPane.getChildren().removeAll(gridPane.lookupAll(".player" + playerIndex));
+                System.out.println("DrawPlayer Position: "+ position);
+                circle.setId("player" + playerIndex);
+                gridPane.add(circle, field.getY(), field.getX()); // Vertauschen Sie die x- und y-Koordinaten
+                circle.toFront();
+
+                System.out.println("X: " + field.getX() + ", Y: " + field.getY());
+
+                break;
+            }
+        }
     }
 }

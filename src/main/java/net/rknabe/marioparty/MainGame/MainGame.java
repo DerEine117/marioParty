@@ -1,10 +1,13 @@
 package net.rknabe.marioparty.MainGame;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Border;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import javafx.fxml.FXML;
@@ -24,6 +27,9 @@ public class MainGame extends Application {
     private final Drawer drawer = new Drawer();
     private Dice player1dice = new Dice(); // for each player
     private Dice player2dice = new Dice(); // for each player
+    private Player player1;
+    private Player player2;
+    private final Board board = new Board();
 
     @FXML
     private AnchorPane gameField;
@@ -64,45 +70,66 @@ public class MainGame extends Application {
     @FXML
     public void initialize() {
         drawer.drawPicture(playerPicture);
-        Board board = new Board();
         GridPane gridPane = new GridPane();
 
         board.setupBoard(gridPane);
         board.numberFieldsDFS(gridPane, 0, 0);
 
+
         board.setFieldStateBasedOnColor();
         gameField.getChildren().add(gridPane);
         board.printFields();
-
+        gameField.setBorder(Border.stroke(Color.BLACK));
+        player1 = new Player("Player 1",false);
+        player2= new Player("Player 2",true);
+        drawer.drawPlayer(gridPane, player1.getPosition(), 0,board);
+        drawer.drawPlayer(gridPane, player2.getPosition(), 1,board);
 
 
     }
     public static void main(String[] args) {
         launch(args);
     }
+private void würfeln(boolean computer) {
+    if (computer) {
+        drawer.drawDiceAnimation(dice2);
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Platform.runLater(() -> {
+                int diceNumber = player2dice.roll();
+                drawer.drawDicePicture(diceNumber, dice2);
+                player2.move(diceNumber);
+                Field field = board.getFieldByNumber(player2.getPosition());
+                if (field != null) {
+                    System.out.println("Computer Field number: " + field.getFieldNumber() + "x: " +field.getX() + " y: " +field.getY());
 
-    private void würfeln(boolean computer) {
-        if (computer) {
-            drawer.drawDiceAnimation(dice2);
-            new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    drawer.drawPlayer(gridPane, player2.getPosition(), 1, board);
                 }
-                javafx.application.Platform.runLater(() -> drawer.drawDicePicture(player2dice.roll(), dice2));
-            }).start();
-        } else {
-            drawer.drawDiceAnimation(dice1);
-            new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            });
+        }).start();
+    } else {
+        drawer.drawDiceAnimation(dice1);
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            javafx.application.Platform.runLater(() -> {
+                int diceNumber = player1dice.roll();
+                drawer.drawDicePicture(diceNumber, dice1);
+                player1.move(diceNumber);
+                Field field = board.getFieldByNumber(player1.getPosition());
+                if (field != null) {
+                    System.out.println("Player 1 Field number: " + field.getFieldNumber());
+                    drawer.drawPlayer(gridPane, player1.getPosition(), 0, board);
                 }
-                javafx.application.Platform.runLater(() -> drawer.drawDicePicture(player1dice.roll(), dice1));
-            }).start();
-        }
+            });
+        }).start();
     }
 }
-
+}
