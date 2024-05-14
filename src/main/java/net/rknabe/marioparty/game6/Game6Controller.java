@@ -6,13 +6,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 import net.rknabe.marioparty.GameController;
+
+import java.util.Optional;
 
 
 public class Game6Controller extends GameController {
@@ -55,9 +56,25 @@ public class Game6Controller extends GameController {
             gameStatusLabel.setText(message);
             gameStatusLabel.setVisible(true);
         });
-        if (gameOver) {
-            gameTimer.interrupt();
+        gameTimer.interrupt();
+        // todo: variabel je nach gewonnen oder verloren
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Spielende");
+        alert.setHeaderText(null);
+
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == okButton) {
+            resetGame();
+            initializeGame_after_newGame();
+            gameStatusLabel.setVisible(false);
+            bombsLabel.setVisible(false);
+            timerLabel.setVisible(false);
+            backToMenuClick();
         }
+
     }
 
     public GameTimer getGameTimer() {
@@ -86,6 +103,9 @@ public class Game6Controller extends GameController {
     public void newGame() {
         resetGame();
         initializeGame_after_newGame();
+        bombsLabel.setVisible(true);
+        timerLabel.setVisible(true);
+        gameStatusLabel.setVisible(true);
         startGame();
     }
 
