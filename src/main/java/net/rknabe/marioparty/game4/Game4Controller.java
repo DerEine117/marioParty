@@ -169,6 +169,7 @@ public class Game4Controller extends GameController {
         });
     }
 
+    //Falls Snake Game nochmals gespielt wird
     public void reset() {
         // Schlange auf werkseinstellungen
         snake.reset();
