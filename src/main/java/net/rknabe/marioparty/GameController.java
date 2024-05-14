@@ -11,4 +11,7 @@ public class GameController {
     protected void backToMenuClick() {
         StageChanger.setScene(0);
     }
+
+    // todo: Spielanleitung anzeigen
+
 }
