@@ -13,12 +13,8 @@ public class Fruit {
     Random random = new Random();
 
     public Fruit() {
-        int x = random.nextInt(12) * 50;
-        int y = random.nextInt(12) * 50;
-        // 12 = Anzahl der Reihen und Spalten, 50 = Kantenlänge eines Quadrats auf dem Board
-        // 50 muss zur random Zahl multipliziert werden, da nur Vielfache von 50 und keine Zwischenwerte angenommen werden dürfen
-        this.x = x;
-        this.y = y;
+        this.x = 400;
+        this.y = 300;
 
         // Lediglich ein Image, deswegen initialisiere ich es direkt mit im Konstruktor
         Image fruitImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game4/Fruit.png").toExternalForm());

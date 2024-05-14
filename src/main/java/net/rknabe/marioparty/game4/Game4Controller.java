@@ -180,6 +180,9 @@ public class Game4Controller extends GameController {
 
         // Neue Leistung des Computers
         bestComputerPlayer.newLength();
+
+        fruit.setXPos(400);
+        fruit.setYPos(300);
     }
 
     // onSpielInfoClick Methode aus Superklasse wird überschrieben und passender Text eingefügt
