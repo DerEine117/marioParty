@@ -7,10 +7,10 @@
     <children>
         <VBox fx:id="gameLayout" alignment="CENTER" prefHeight="600.0" prefWidth="800.0">
             <HBox alignment="CENTER" maxWidth="Infinity" prefHeight="25.0" prefWidth="800.0" spacing="100" translateY="-60">
-                <Label fx:id="playerShipCountLabel" alignment="TOP_LEFT" prefHeight="17.0" prefWidth="220.0" HBox.hgrow="ALWAYS" />
-                <Label fx:id="computerShipCountLabel" alignment="TOP_RIGHT" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                <Label fx:id="playerShipCountLabel" alignment="TOP_LEFT" prefHeight="17.0" prefWidth="201.0" HBox.hgrow="ALWAYS" />
+                <Label fx:id="computerShipCountLabel" alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="232.0" HBox.hgrow="ALWAYS" />
             </HBox>
-            <HBox alignment="CENTER" layoutX="75.0" layoutY="67.0" maxWidth="Infinity" spacing="150" translateY="50">
+            <HBox alignment="CENTER" layoutX="75.0" layoutY="67.0" maxWidth="Infinity" prefWidth="800.0" spacing="150" translateY="50">
                 <GridPane fx:id="gridPlayer1" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" />
                 <GridPane fx:id="gridPlayer2" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" />
             </HBox>

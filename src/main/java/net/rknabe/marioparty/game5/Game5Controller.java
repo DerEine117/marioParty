@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -54,7 +55,7 @@ public class Game5Controller extends GameController implements Initializable {
         initializeGrid(gridPlayer2, boardPlayer2, true, computerShips);
 
         // Load the image from the specified path
-        String imagePath = "file:src/main/resources/net/rknabe/marioparty/assets/game5/Hintergrund.jpg";
+        String imagePath = "file:src/main/resources/net/rknabe/marioparty/assets/game5/H.jpg";
         Image image = new Image(imagePath);
 
         // Create a BackgroundImage object with the loaded image
@@ -211,9 +212,9 @@ public class Game5Controller extends GameController implements Initializable {
     // This method checks if the game is over and shows a game over message if it is
     private void checkGameOver() {
         if (allShipsSunk(playerShips)) {
-            showGameOverMessage("Player has won!");
+            showGameOverMessage("Mario-team has won!");
         } else if (allShipsSunk(computerShips)) {
-            showGameOverMessage("Computer has won!");
+            showGameOverMessage("Bowser-team has won!");
         }
     }
 
@@ -232,6 +233,21 @@ public class Game5Controller extends GameController implements Initializable {
         alert.setTitle("Game Over");
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        // Load the image based on the winner
+        Image image;
+        if (message.contains("Mario-team")) {
+            image = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/mario-dance.gif");
+        } else {
+            image = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/bowser-dance.gif");
+        }
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(100);  // Set the width of the ImageView to 100
+        imageView.setFitHeight(100); // Set the height of the ImageView to 100
+
+        // Set the ImageView as the graphic for the alert
+        alert.setGraphic(imageView);
+
         alert.showAndWait();
     }
 
