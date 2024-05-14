@@ -5,8 +5,11 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -19,20 +22,28 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import net.rknabe.marioparty.MainApplication;
+import net.rknabe.marioparty.StageChanger;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 
 public class MainGame extends Application {
+    Stage window;
+    Scene mainMenuScene;
+    Scene game1Scene, game2Scene, game3Scene, game4Scene, game5Scene, game6Scene;
     private final Drawer drawer = new Drawer();
     private Dice player1dice = new Dice(); // for each player
     private Dice player2dice = new Dice(); // for each player
     private Player player1;
     private Player player2;
     private final Board board = new Board();
-
+    private List<Integer> miniGames;
+    private static final List<String> miniGameNames = new ArrayList<>(Arrays.asList("Tic Tac Toe", "Balloon Platzen", "Hangman", "Snake", "Schiffe versenken", "Minenfeld"));
     @FXML
     private AnchorPane gameField;
     @FXML
@@ -61,18 +72,40 @@ public class MainGame extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/net/rknabe/marioparty/mainGame.fxml"));
-        primaryStage.setTitle("Main Game");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
+    public void start(Stage stage) throws Exception {
 
+        window = stage;
+
+        // Hauptmenü erstellen
+        FXMLLoader fxmlLoaderMenu = new FXMLLoader(MainApplication.class.getResource("mainGame.fxml"));
+        mainMenuScene = new Scene(fxmlLoaderMenu.load(), 750, 400);
+        // Initializing the game Scenes from fxml
+        FXMLLoader fxmlLoaderGame1 = new FXMLLoader(MainApplication.class.getResource("game1-view.fxml"));
+        game1Scene = new Scene(fxmlLoaderGame1.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame2 = new FXMLLoader(MainApplication.class.getResource("game2-view.fxml"));
+        game2Scene = new Scene(fxmlLoaderGame2.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame3 = new FXMLLoader(MainApplication.class.getResource("game3-view.fxml"));
+        game3Scene = new Scene(fxmlLoaderGame3.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame4 = new FXMLLoader(MainApplication.class.getResource("game4-view.fxml"));
+        game4Scene = new Scene(fxmlLoaderGame4.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame5 = new FXMLLoader(MainApplication.class.getResource("game5-view.fxml"));
+        game5Scene = new Scene(fxmlLoaderGame5.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame6 = new FXMLLoader(MainApplication.class.getResource("game6-view.fxml"));
+        game6Scene = new Scene(fxmlLoaderGame6.load(), 600, 400);
+
+        StageChanger.createStageController(window,mainMenuScene, game1Scene,game2Scene,game3Scene,game4Scene,game5Scene,game6Scene);
+
+        window.setScene(mainMenuScene);
+
+        window.setTitle("Mario Party Spiel");
+        window.show();
     }
 
     @FXML
     public void initialize() {
         GridPane gridPane = new GridPane();
-
+        miniGames = new ArrayList<>(Arrays.asList(1,2,3,4,5,6));
+        System.out.println(miniGames);
         board.setupBoard(gridPane);
         board.numberFieldsDFS(gridPane, 0, 0);
         drawer.drawPicture(playerPicture);
@@ -101,7 +134,7 @@ public class MainGame extends Application {
 
         new Thread(() -> {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -111,7 +144,32 @@ public class MainGame extends Application {
 
                 updateGameState(currentPlayer, diceNumber);
             });
+
         }).start();
+    }
+
+    private void startMiniGame(List miniGames){
+        System.out.println("starttttttttt");
+        Random rand = new Random();
+        int randomSpiel = rand.nextInt(miniGames.size());
+        System.out.println("random Number"+randomSpiel);
+        int miniGameNumber = (int) miniGames.get(randomSpiel);
+        System.out.println("miniGameNumber"+miniGameNumber);
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Sind Sie sicher?", ButtonType.OK);
+        alert.setContentText("Mini Game " + miniGameNames.get(miniGameNumber-1) + miniGameNumber+ " wird gestartet! "+ miniGames);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                StageChanger.setScene(miniGameNumber);
+            }
+        });
+        removeMiniGame(miniGameNumber);
+    }
+    private void removeMiniGame(int gameNumber){
+        miniGames.remove(Integer.valueOf(gameNumber));
+    }
+    private boolean noMiniGamesLeft(){
+        return miniGames.isEmpty();
     }
 
     private void updateGameState(Player currentPlayer, int diceNumber) {
@@ -172,6 +230,7 @@ public class MainGame extends Application {
         }
         System.out.println("Player: " + currentPlayer.getName() + " Position: " + currentPlayer.getPosition() + " Coins: " + currentPlayer.getCoins());
     }
+
     private void checkPlayersOnSameField() {
     if (player1.getPosition() == player2.getPosition()) {
         Field field = board.getFieldByNumber(player1.getPosition());
