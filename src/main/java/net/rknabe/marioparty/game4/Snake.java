@@ -22,14 +22,13 @@ public class Snake {
 
 
     public Snake() {
-        // Schlange wird standardmäßig auf den drei hier angegeben Koordinaten initialisiert
         this.bodyParts = new LinkedList<>();
 
+        // Schlange wird standardmäßig auf den drei hier angegeben Koordinaten initialisiert
         Image headImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game4/HeadFin.png").toExternalForm());
         head = new ImageView(headImage);
         head.setFitWidth(50);
         head.setFitHeight(50);
-
         head.setX(250);
         head.setY(300);
         bodyParts.add(head);
@@ -38,7 +37,6 @@ public class Snake {
         tail_1 = new ImageView(tail_1Image);
         tail_1.setFitWidth(50);
         tail_1.setFitHeight(50);
-
         tail_1.setX(200);
         tail_1.setY(300);
         bodyParts.add(tail_1);
@@ -101,6 +99,7 @@ public class Snake {
         }
     }
 
+    // Die move Methoden ändern die Position des Kopfes in entsprechende richtung
     public void moveUp() {
         double headX = this.bodyParts.getFirst().getX();
         double headY = this.bodyParts.getFirst().getY() - rectangleSize; // Differenz, weil Board oben mit (0/0) startet und nach unten grö0er wird
@@ -129,7 +128,7 @@ public class Snake {
         lastDirection = "d";
     }
 
-    // Methode zum Aktualisieren der Schlangenbewegung
+    // Methode die die Richtung checkt und entsprechende Move Methode aufruft
     public void updateSnakeMovement() {
         if (upPressed) {
             moveUp();
@@ -142,6 +141,7 @@ public class Snake {
         }
     }
 
+    // Falls Game Verloren ist, soll die Schlange anhalten
     void stopSnakeMovement() {
         setUpPressed(false);
         setDownPressed(false);
@@ -169,7 +169,7 @@ public class Snake {
     }
 
     public void reset() {
-        // Die SChlange wird wieder auf 3 zurückgesetzt
+        // Die SChlange wird wieder auf Länge 3 zurückgesetzt
         if (bodyParts.size() > 3) {
             bodyParts.subList(3, bodyParts.size()).clear();
         }

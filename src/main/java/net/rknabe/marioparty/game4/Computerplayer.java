@@ -6,7 +6,7 @@ public class Computerplayer {
 
     public Computerplayer() {
         Random randomLength = new Random();
-        this.reachedLength = randomLength.nextInt(5) + 5;
+        this.reachedLength = randomLength.nextInt(5) + 12;
         // Mindestens 10 -> wäre sonst zu einfach
     }
 
@@ -14,6 +14,7 @@ public class Computerplayer {
         return this.reachedLength;
     }
 
+    // für den Resetfall, soll nicht nochmal die alte Länge als Maßstab dienen
     public int newLength() {
         Random roleNewLength = new Random();
         int newLength = roleNewLength.nextInt(5) + 5;

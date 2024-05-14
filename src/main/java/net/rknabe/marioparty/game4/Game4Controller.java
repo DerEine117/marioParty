@@ -4,6 +4,8 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -54,7 +56,7 @@ public class Game4Controller extends GameController {
     }
 
     public void update() {
-        // Mithilfe von currentTimeMillis wird alle 75 Millisekunden ein gameTick ausgeführt
+        // Mithilfe von currentTimeMillis wird alle 125 Millisekunden ein gameTick ausgeführt (Maß für die Schwierigkeit -> niedrigere Zahl -> schnellere/mehr Aktualisierung -> schnellere Schlange)
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastUpdateTime >= 125) {
             lastUpdateTime = currentTime;
@@ -73,8 +75,7 @@ public class Game4Controller extends GameController {
 
     @FXML
     public void onKeyPressedMove(KeyEvent event) {
-        // Der Eventhandler soll nur eine Tastatureingabe akzeptieren, wenn man noch nicht verloren hat. Sont könnte man nach Niederlage einfach weiter spielen
-        // Eventhandler funktioniert, jedoch auch wenn die angegebene Länge erreicht wurde -> Highscore möglich (Freeplay)
+        // Der Eventhandler soll nur eine Tastatureingabe akzeptieren, wenn man noch nicht verloren hat. Sonst könnte man nach Niederlage einfach weiter spielen
         if (!snake.isGameOver()) {
             String keyPressed = event.getText();
             switch (keyPressed) {
@@ -140,23 +141,23 @@ public class Game4Controller extends GameController {
 
     @FXML
     void updateGamestateTextFieldLost() {
-        // Wenn die Schlange bereits größer als die des Gegners ist, kann man nicht mehr verlieren
-        if (snake.getSnakeLength() < bestComputerPlayer.getReachedLength()) {
-            gamestate.setText("Bowser war besser!");
-            showAlert("Spielende", "Verloren!", "Du hast das Spiel verloren.");
-        }
+        gamestate.setText("Bowser war besser!");
+        showAlert("Spielende", "Du hast Verloren!", "Wiggler ist sauer auf dich! Bowser hat ihm besser geholfen.\n \n" +
+                "Du erhältst keine Münzen und machst dich schnell aus dem Staub.");
         snake.stopSnakeMovement();
         // Die Schlange soll stehen bleiben, wenn man "verloren" hat
     }
     @FXML
     private void updateGamestateTextFieldWon() {
         gamestate.setText("Bowser wurde besiegt!");
-        showAlert("Spielende", "Gewonnen!", "Herzlichen Glückwunsch! Du hast das Spiel gewonnen.");
+        showAlert("Spielende", "Du hast Gewonnen!", "Wiggler bedankt sich bei dir und ist glücklich, dass du ihm besser helfen konntes als Bowser es tat! \n \n" +
+                "Als Belohnung gibt er dir x Münzen");
         snake.stopSnakeMovement();
-        // auch wenn man gewonnen hat soll sie stehen bleiben, die Option auf weiter spielen besteht jedoch
     }
 
+    //Methode die Dialogfeld für Game Ende erstellt
     private void showAlert(String title, String headerText, String contentText) {
+        // Thread, da Dialogfeld nicht mit aktivem Animationtimer funktioniert. Durch Thread behindern sich die beiden Aktionen nicht mehr
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(title);
@@ -179,5 +180,23 @@ public class Game4Controller extends GameController {
 
         // Neue Leistung des Computers
         bestComputerPlayer.newLength();
+    }
+
+    // onSpielInfoClick Methode aus Superklasse wird überschrieben und passender Text eingefügt
+    protected void onSpielInfoClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("SpielInfo");
+        alert.setHeaderText(null);
+        alert.setContentText("Wiggler hat großen Hunger. Hilf ihm satt zu werden und führe ihn zu den Pilzen (Steuerung WASD).\n" +
+                "Für jeden Pilz wird Wiggler um ein Feld länger. Ziel ist es, Wiggler auf eine größere Länge wachsen zu lassen, als es Bowser vor dir geschafft hat.\n" +
+                "Oben rechts siehst du, was Bowser erreicht hat.");
+
+
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+
+        // Um nach Rückkehr des Infotextes wieder spielen zu können, muss der Fokus neu aufs snakepane gerichtet werden
+        alert.setOnHidden(event -> snakepane.requestFocus());
+        alert.showAndWait();
     }
 }
