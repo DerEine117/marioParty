@@ -15,26 +15,46 @@ public class Snake {
     private boolean downPressed = false;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
+    private final ImageView head;
+    private final ImageView tail_1;
+    private final ImageView tail_2;
+    private ImageView tails;
+
 
     public Snake() {
         // Schlange wird standardmäßig auf den drei hier angegeben Koordinaten initialisiert
         this.bodyParts = new LinkedList<>();
-        ImageView head = createImageView("file:C:/Users/knoll/IdeaProjects/marioParty/src/main/java/net/rknabe/marioparty/game4/Images/HeadFin.png");
+
+        Image headImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game4/HeadFin.png").toExternalForm());
+        head = new ImageView(headImage);
+        head.setFitWidth(50);
+        head.setFitHeight(50);
+
         head.setX(250);
         head.setY(300);
         bodyParts.add(head);
-        ImageView tail_1 = createImageView("file:C:/Users/knoll/IdeaProjects/marioParty/src/main/java/net/rknabe/marioparty/game4/Images/Body1Fin.png");
+
+        Image tail_1Image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game4/Body1Fin.png").toExternalForm());
+        tail_1 = new ImageView(tail_1Image);
+        tail_1.setFitWidth(50);
+        tail_1.setFitHeight(50);
+
         tail_1.setX(200);
         tail_1.setY(300);
         bodyParts.add(tail_1);
-        ImageView tail_2 = createImageView("file:C:/Users/knoll/IdeaProjects/marioParty/src/main/java/net/rknabe/marioparty/game4/Images/Body2Fin.png");
+
+        Image tail_2Image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game4/Body2Fin.png").toExternalForm());
+        tail_2 = new ImageView(tail_2Image);
+        tail_2.setFitWidth(50);
+        tail_2.setFitHeight(50);
         tail_2.setX(150);
         tail_2.setY(300);
         bodyParts.add(tail_2);
+
     }
 
     private ImageView createImageView(String imagePath) {
-        Image image = new Image(imagePath);
+        Image image = new Image(getClass().getResource(imagePath).toExternalForm());
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(rectangleSize);
         imageView.setFitHeight(rectangleSize);
@@ -52,8 +72,11 @@ public class Snake {
         Random random = new Random();
         int randomBodypart = random.nextInt(4) + 1;
         // Eins der vier Images für den Snakebody wird zufällig gewählt
-        ImageView tail = createImageView("file:C:/Users/knoll/IdeaProjects/marioParty/src/main/java/net/rknabe/marioparty/game4/Images/Body" + randomBodypart + "Fin.png");
-        bodyParts.add(tail);
+        Image tails_Image = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game4/Body" + randomBodypart + "Fin.png").toExternalForm());
+        tails = new ImageView(tails_Image);
+        tails.setFitWidth(50);
+        tails.setFitHeight(50);
+        bodyParts.add(tails);
     }
 
     private void updateBodyPartsPosition(double headX, double headY) {

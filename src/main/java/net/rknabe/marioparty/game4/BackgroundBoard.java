@@ -10,7 +10,7 @@ public class BackgroundBoard {
 
     public BackgroundBoard(AnchorPane anchorPane) {
         this.anchorPane = anchorPane;
-        this.backgroundImage = new Image("file:C:/Users/knoll/IdeaProjects/marioParty/src/main/java/net/rknabe/marioparty/game4/Images/Background.jpg");
+        this.backgroundImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game4/Background.jpg").toExternalForm());
         this.backgroundImageView = new ImageView(backgroundImage);
     }
 

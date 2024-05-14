@@ -21,7 +21,7 @@ public class Fruit {
         this.y = y;
 
         // Lediglich ein Image, deswegen initialisiere ich es direkt mit im Konstruktor
-        Image fruitImage = new Image("file:C:/Users/knoll/IdeaProjects/marioParty/src/main/java/net/rknabe/marioparty/game4/Images/Fruit.png");
+        Image fruitImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game4/Fruit.png").toExternalForm());
         fruitImageView = new ImageView(fruitImage);
         fruitImageView.setFitWidth(50);
         fruitImageView.setFitHeight(50);
