@@ -14,7 +14,7 @@
                 <GridPane fx:id="gridPlayer1" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" />
                 <GridPane fx:id="gridPlayer2" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" />
             </HBox>
-            <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="back to menu" />
+            <Button fx:id="spielinfo" mnemonicParsing="false" onAction="#onSpielInfoClick" prefHeight="26.0" prefWidth="103.0" text="Spielanleitung" />
         </VBox>
     </children>
 </AnchorPane>

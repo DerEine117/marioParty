@@ -35,6 +35,20 @@ public class Game1Controller extends GameController implements Initializable {
     @FXML
     private Label turnLabel;
 
+    @FXML
+    @Override
+    protected void onSpielInfoClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("SpielInfo");
+        alert.setHeaderText(null);
+        alert.setContentText("Spieler A beginnt das Spiel. " +
+                "Klicke auf ein freies Feld, um deinen Zug zu machen. " +
+                "Das Ziel ist es, drei Felder in einer Reihe zu haben. " +
+                "Viel Spaß!");
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+        alert.showAndWait();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import net.rknabe.marioparty.GameController;
-import net.rknabe.marioparty.StageChanger;
 
 import java.net.URL;
 import java.util.Optional;
@@ -46,9 +45,17 @@ public class BalloonGame extends GameController implements Initializable {
 
     @Override
     @FXML
-    protected void backToMenuClick() {
-        endGame(false, true);
-        StageChanger.setScene(0);
+    protected void onSpielInfoClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("SpielInfo");
+        alert.setHeaderText(null);
+        alert.setContentText("Klicke auf die Ballons, um sie zum Platzen zu bringen. /n " +
+                "Du gewinnst, wenn du alle Ballons zum Platzen bringst. " +
+                "bevor sie den oberen Bildschirmrand erreichen. " +
+                "Viel Spaß!");
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+        alert.showAndWait();
     }
 
     @FXML
@@ -195,7 +202,7 @@ public class BalloonGame extends GameController implements Initializable {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == okButton) {
-                    StageChanger.setScene(0);
+                    backToMenuClick();
                 }
             });
         }

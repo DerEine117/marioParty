@@ -7,7 +7,7 @@
    <children>
       <VBox layoutX="1.0" layoutY="1.0" prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="103.0" text="back to menu" />
+            <Button fx:id="spielinfo" mnemonicParsing="false" onAction="#onSpielInfoClick" prefHeight="26.0" prefWidth="103.0" text="Spielanleitung" />
          </children>
       </VBox>
    </children>

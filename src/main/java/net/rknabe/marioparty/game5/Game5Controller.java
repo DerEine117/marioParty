@@ -3,6 +3,8 @@ package net.rknabe.marioparty.game5;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -35,7 +37,22 @@ public class Game5Controller extends GameController implements Initializable {
     private Canvas[][] canvasesPlayer1 = new Canvas[10][10];
     private Canvas[][] canvasesPlayer2 = new Canvas[10][10];
 
-
+    @FXML
+    @Override
+    protected void onSpielInfoClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("SpielInfo");
+        alert.setHeaderText(null);
+        alert.setContentText("Willkommen zu dem Minispiel \"Sternenschlacht\" – einem düsteren Abenteuer,"+
+                " das \"Schiffe versenken\" neu interpretiert. Kämpfe gegen einen finsteren Dunkelheitskrieger," +
+                " den Bowser, der seine Sternengruppen hinter undurchdringlichen Wolken verbirgt. Dein Ziel ist es,"+
+                " diese versteckten Sternengruppen, die aus 1 bis 5 Sternen bestehen, zu finden, indem du auf die"+
+                " Wolken klickst und sie entfernst. Aber sei vorsichtig: Der Dunkelheitskrieger sucht ebenfalls nach"+
+                " Sternen und wird versuchen, deine vorgegebenen Sternengruppen zu entdecken. ");
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+        alert.showAndWait();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -248,7 +265,13 @@ public class Game5Controller extends GameController implements Initializable {
         // Set the ImageView as the graphic for the alert
         alert.setGraphic(imageView);
 
-        alert.showAndWait();
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == okButton) {
+            backToMenuClick();
+        }
     }
 
     // This method updates the count of remaining ships for both players

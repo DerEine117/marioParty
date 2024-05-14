@@ -15,7 +15,7 @@
                      <font>
                         <Font size="23.0" />
                      </font></Label>
-                  <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#backToMenuClick" prefHeight="26.0" prefWidth="163.0" text="back to mainMenu" />
+                  <Button fx:id="spielinfo" mnemonicParsing="false" onAction="#onSpielInfoClick" prefHeight="26.0" prefWidth="163.0" text="Spielanleitung" />
                </children>
             </HBox>
             <Canvas fx:id="gameCanvas" height="330.0" onMouseClicked="#gameCanvasClick" onMouseDragReleased="#gameCanvasClick" width="330.0" />
