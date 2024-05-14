@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -93,10 +94,14 @@ public class Board {
                     field.setState(Integer.parseInt(fieldStates.get(key)));
                     fields.put(key, field);
 
-                    if ("-coins".equals(event)) {
-                        final Image systemSecureImage = new Image((getClass().getResource("net/rknabe/marioparty/assets/MainGame/players.png")).toExternalForm());
-                        ImageView imageView = new ImageView(systemSecureImage);
+                    if ("+coins".equals(event)) {
+                        URL resourceURL = getClass().getResource("/net/rknabe/marioparty/assets/MainGame/coin.gif");
+                        Image image = new Image(resourceURL.toExternalForm());
+                        ImageView imageView = new ImageView(image);
+                        imageView.setFitHeight(43);
+                        imageView.setFitWidth(43);
                         gridPane.add(imageView, j, i);
+
                     }
                 }
             }
