@@ -30,6 +30,25 @@ public class Game6Controller extends GameController {
     @FXML
     private ComboBox<String> cmb_auswahl;
 
+
+    @Override
+    protected void onSpielInfoClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("SpielInfo");
+        alert.setHeaderText(null);
+        alert.setContentText("Das Ziel des Spiels ist es, alle Felder aufzudecken, ohne auf eine Mine zu klicken. Der Spieler interagiert mit einem Rasterfeld, das aus verdeckten Feldern besteht, die zufällig mit Minen belegt sind.\n\n"
+                + "Rechtsklick wird verwendet, um ein Feld als möglichen Standort einer Mine zu markieren. Wenn ein Spieler vermutet, dass sich an einem bestimmten Ort eine Mine befindet, kann er dieses Feld markieren, um es zu kennzeichnen.\n\n"
+                + "Linksklick wird verwendet, um ein Feld aufzudecken. Wenn das Feld eine Mine enthält, verliert der Spieler das Spiel. Wenn das Feld keine Mine enthält, wird angezeigt, wie viele Minen in den angrenzenden Feldern vorhanden sind.\n\n "
+                + "Das Spiel endet, wenn alle Felder außer den Minenfeldern aufgedeckt sind,  der Spieler auf eine Mine klickt oder zu viele Markierungen setzt.\n\n"
+                + "Viel Spaß und Vorsicht!.");
+
+
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+
+        alert.showAndWait();
+    }
+
     public Game6Controller() {
         instance = this;
     }
