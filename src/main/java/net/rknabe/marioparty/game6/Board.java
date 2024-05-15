@@ -1,9 +1,7 @@
 package net.rknabe.marioparty.game6;
-
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,16 +9,14 @@ import java.util.Random;
 public class Board extends Pane {
 
     private int totalBombs;
-
     static final int TILE_SIZE = 60;
     private static final int W = 500;
     private static final int H = 500;
+    private static final Random RANDOM = new Random();
     public static final int X_TILES = W / TILE_SIZE;
     public static final int Y_TILES = H / TILE_SIZE;
     private Tile[][] grid = new Tile[X_TILES][Y_TILES];
-
     public String difficulty = "easy";
-    private static final Random RANDOM = new Random();
 
     public Board() {
         setPrefSize(W, H);
@@ -34,7 +30,6 @@ public class Board extends Pane {
 
         // Create a list to hold all tiles
         List<Tile> allTiles = new ArrayList<>();
-
         for (int y = 2; y < Y_TILES; y++) {
             for (int x = 2; x < X_TILES; x++) {
                 Tile tile = new Tile(x, y, false);
@@ -43,14 +38,13 @@ public class Board extends Pane {
                 allTiles.add(tile);
             }
         }
-
         // Randomly assign bombs to tiles
         for (int i = 0; i < totalBombs; i++) {
             int index = RANDOM.nextInt(allTiles.size());
             Tile randomTile = allTiles.remove(index);
             randomTile.setBomb(true);
         }
-
+        // Set the number of adjacent bombs for each tile
         for (int y = 2; y < Y_TILES; y++) {
             for (int x = 2; x < X_TILES; x++) {
                 Tile tile = grid[x][y];
@@ -61,14 +55,12 @@ public class Board extends Pane {
                     tile.setAdjacentBombs((int) bombs);
             }
         }
-
         checkWin();
     }
 
-    //here we get the neighbors of a tile
+    // get the neighbors of a tile
     public List<Tile> getNeighbors(Tile tile) {
         List<Tile> neighbors = new ArrayList<>();
-
         // 8 directions
         int[] points = {
                 -1, -1,
@@ -80,23 +72,19 @@ public class Board extends Pane {
                 1, 0,
                 1, 1
         };
-
         for (int i = 2; i < points.length; i++) {
             int dx = points[i];
             int dy = points[++i];
-
             int newX = tile.getX() + dx;
             int newY = tile.getY() + dy;
-
             if (newX >= 2 && newX < X_TILES && newY >= 2 && newY < Y_TILES) {
                 neighbors.add(grid[newX][newY]);
             }
         }
-
         return neighbors;
     }
 
-    //here we set the difficulty of the game
+    //set the difficulty of the game
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
         setTotalBombs();
@@ -113,7 +101,6 @@ public class Board extends Pane {
     public int getTotalBombs() {
         return totalBombs;
     }
-
     //here we check if the player has marked too many fields
     public void checkTooManyMarks() {
         int markedCount = 0;
@@ -125,12 +112,11 @@ public class Board extends Pane {
                 }
             }
         }
-
         if (markedCount > totalBombs) {
+            Game6Controller.getInstance().showGameOverMessage("You lose! Too many fields are marked.");
             Game6Controller.getInstance().setGameOver(true, "You lose! Too many fields are marked.");
         }
     }
-
     //here we check if the player has won the game
     public void checkWin() {
         Platform.runLater(() -> {
@@ -141,31 +127,30 @@ public class Board extends Pane {
         for (int y = 2; y < Y_TILES; y++) {
             for (int x = 2; x < X_TILES; x++) {
                 Tile tile = grid[x][y];
-
                 // Check if a bomb is not marked
                 if (tile.hasBomb() && !tile.isMarked()) {
                     bombNotMarked = true;
                 }
-
                 // Check if a safe field is not revealed
                 if (!tile.hasBomb() && !tile.isRevealed()) {
                     safeFieldNotRevealed = true;
                 }
-
                 // Count marked tiles
                 if (tile.isMarked()) {
                     markedCount++;
                     if (!tile.hasBomb()) {
+                        Game6Controller.getInstance().showGameOverMessage("You lose! There was no bomb!");
+
                         Game6Controller.getInstance().setGameOver(true, "You lose! There was no bomb!");
                         return;
                     }
                 }
             }
         }
-
         // Check if all bombs are marked and all safe fields are revealed
         if (!bombNotMarked && !safeFieldNotRevealed) {
             if (markedCount == totalBombs) {
+                Game6Controller.getInstance().showGameOverMessage("You Win!");
                 Game6Controller.getInstance().setGameOver(false, "You win!");
                 Game6Controller.getInstance().getGameTimer().interrupt(); // Stop the timer when the game is won
                 ImageView winImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/win.gif").toString());
@@ -176,7 +161,6 @@ public class Board extends Pane {
                 getChildren().add(winImage);
             }
         } else {
-            // If not all bombs are marked or not all safe fields are revealed, the game continues
             return;
         }
         });

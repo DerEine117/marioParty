@@ -12,7 +12,7 @@ public class GameTimer extends Thread {
         this.board = board;
         this.label = label;
     }
-    // start the timer
+    // start the thread for the timer
     @Override
     public void run() {
         startTime = System.currentTimeMillis();
@@ -22,11 +22,9 @@ public class GameTimer extends Thread {
             } catch (InterruptedException e) {
                 break;
             }
-
             long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
             updateLabel(elapsedTime);
             board.checkWin();
-            board.checkTooManyMarks();
         }
     }
 

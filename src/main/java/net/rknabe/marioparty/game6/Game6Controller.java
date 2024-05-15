@@ -1,18 +1,13 @@
 package net.rknabe.marioparty.game6;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import net.rknabe.marioparty.GameController;
-
 import java.util.Optional;
 
 
@@ -21,6 +16,7 @@ public class Game6Controller extends GameController {
     private GameTimer gameTimer;
     private boolean gameOver = false;
     private static Game6Controller instance;
+    private String showGameOverMessage;
 
 
     @FXML
@@ -50,6 +46,7 @@ public class Game6Controller extends GameController {
         return gameOver;
     }
 
+    // Set the game over status and show a message (Alert) to the user
     public void setGameOver(boolean gameOver, String message) {
         this.gameOver = gameOver;
         Platform.runLater(() -> {
@@ -57,24 +54,31 @@ public class Game6Controller extends GameController {
             gameStatusLabel.setVisible(true);
         });
         gameTimer.interrupt();
-        // todo: variabel je nach gewonnen oder verloren
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Spielende");
-        alert.setHeaderText(null);
 
-        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        alert.getButtonTypes().setAll(okButton);
+        PauseTransition pauseBeforeAlert = new PauseTransition(Duration.seconds(1)); // 2 seconds delay
+        pauseBeforeAlert.setOnFinished(event -> {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Spielende");
+                alert.setHeaderText(showGameOverMessage);
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == okButton) {
-            resetGame();
-            initializeGame_after_newGame();
-            gameStatusLabel.setVisible(false);
-            bombsLabel.setVisible(false);
-            timerLabel.setVisible(false);
-            backToMenuClick();
-        }
+                ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+                alert.getButtonTypes().setAll(okButton);
 
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == okButton) {
+
+                        resetGame();
+                        initializeGame_after_newGame();
+                        gameStatusLabel.setVisible(false);
+                        bombsLabel.setVisible(false);
+                        timerLabel.setVisible(false);
+                        backToMenuClick();
+
+                }
+            });
+        });
+        pauseBeforeAlert.play();
     }
 
     public GameTimer getGameTimer() {
@@ -120,7 +124,7 @@ public class Game6Controller extends GameController {
 
     private void initializeGame_after_newGame() {
         game = new MinesWeeperApp();
-        setDifficultyFromSelection();
+        setDifficultyFromSelection(); // this is important so you dont have to select the difficulty every time you start a new game
         game6Pane.getChildren().add(game);
     }
 
@@ -130,5 +134,10 @@ public class Game6Controller extends GameController {
         gameTimer.start();
         gameStatusLabel.setText("Game started. Good luck!");
         bombsLabel.setText(String.valueOf(game.getBoard().getTotalBombs()));
+    }
+
+    public String showGameOverMessage(String message) {
+        this.showGameOverMessage = message;
+        return message;
     }
 }

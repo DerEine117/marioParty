@@ -1,13 +1,12 @@
 package net.rknabe.marioparty.game6;
 
-import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.image.*;
 
 
 public class MinesWeeperApp extends Pane {
     private Board board;
-
+    // create a new board and add it to the pane
     public MinesWeeperApp() {
         board = new Board();
         getChildren().add(board);
@@ -17,12 +16,9 @@ public class MinesWeeperApp extends Pane {
         setBackground(new Background(background));
         board.setDifficulty("easy");
     }
-
-
     public void startGame() {
         board.startGame();
     }
-
     public Board getBoard() { // Add this method
         return board;
     }

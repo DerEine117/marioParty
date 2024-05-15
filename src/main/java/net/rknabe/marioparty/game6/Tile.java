@@ -6,17 +6,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.image.ImageView;
-
 import static net.rknabe.marioparty.game6.Board.TILE_SIZE;
 
 public class Tile extends StackPane {
     private int x, y;
     private int adjacentBombs;
-
     private boolean hasBomb;
     private boolean revealed;
     private boolean marked;
-
     private ImageView bombImage;
     private ImageView flagImage;
 
@@ -24,7 +21,7 @@ public class Tile extends StackPane {
         this.x = x;
         this.y = y;
         this.hasBomb = hasBomb;
-
+        // insert the bomb image if the tile has a bomb
         if (hasBomb) {
             bombImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/bomb.gif").toString());
             bombImage.setFitWidth(TILE_SIZE);
@@ -32,12 +29,12 @@ public class Tile extends StackPane {
             bombImage.setVisible(false);
             getChildren().add(bombImage);
         }
+        // insert the flag image if the tile is marked
         flagImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/flag2_game6.gif").toString());
         flagImage.setVisible(false);
         flagImage.setFitWidth(TILE_SIZE);
         flagImage.setFitHeight(TILE_SIZE);
         getChildren().add(flagImage);
-
         setPrefSize(TILE_SIZE, TILE_SIZE);
         setTranslateX(x * TILE_SIZE);
         setTranslateY(y * TILE_SIZE);
@@ -60,6 +57,7 @@ public class Tile extends StackPane {
         return y;
     }
 
+    // set the bomb status of the tile
     public void setBomb(boolean hasBomb) {
         this.hasBomb = hasBomb;
         if (hasBomb && bombImage == null) {
@@ -70,8 +68,7 @@ public class Tile extends StackPane {
             getChildren().add(bombImage);
         }
     }
-
-    // the number of adjacent bombs
+    // set the number of adjacent bombs
     public void setAdjacentBombs(int adjacentBombs) {
         this.adjacentBombs = adjacentBombs;
     }
@@ -98,12 +95,11 @@ public class Tile extends StackPane {
         // check if the game is over or the tile is already marked or revealed
         if (Game6Controller.getInstance().isGameOver() || marked || revealed)
             return;
-
         revealed = true;
-
         if (hasBomb) {
-            Game6Controller.getInstance().getGameTimer().interrupt();
+            Game6Controller.getInstance().showGameOverMessage("Game Over");
             Game6Controller.getInstance().setGameOver(true, "Game Over");
+
         } else {
             if (adjacentBombs == 0) {
                 Board board = (Board) getParent();
@@ -116,7 +112,6 @@ public class Tile extends StackPane {
     public boolean isRevealed() {
         return revealed;
     }
-
     //change the appearance of the tile
     public void update() {
         // Create a border around the tile
@@ -136,6 +131,7 @@ public class Tile extends StackPane {
             getChildren().add(bombImage);
 
         }
+        // If the tile is marked, display the flag image
         if (marked) {
             getChildren().add(flagImage);
             border.setFill(Color.PINK);
