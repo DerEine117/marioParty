@@ -153,7 +153,7 @@ public class Game4Controller extends GameController {
     private void updateGamestateTextFieldWon() {
         gamestate.setText("Bowser wurde besiegt!");
         showAlert("Spielende", "Du hast Gewonnen!", "Wiggler bedankt sich bei dir und ist glücklich, dass du ihm besser helfen konntes als Bowser es tat! \n \n" +
-                "Als Belohnung gibt er dir x Münzen", "WigglerHappy.gif");
+                "Als Belohnung gibt er dir 20 Münzen.", "WigglerHappy.gif");
         snake.stopSnakeMovement();
     }
 

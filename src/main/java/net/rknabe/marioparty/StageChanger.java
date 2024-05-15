@@ -65,8 +65,8 @@ public class StageChanger {
                 case 4:
                     window.setScene(game4);
                     window.setTitle("Minigame 4");
-                    window.setWidth(600);
-                    window.setHeight(400);
+                    window.setWidth(616);
+                    window.setHeight(700);
                     break;
 
                 case 5:
