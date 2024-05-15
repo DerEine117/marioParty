@@ -75,7 +75,7 @@ public class MainGame extends GameController {
         drawer.drawBackground(gameField);
 
         gridPane = new GridPane();
-        miniGames = new ArrayList<>(Arrays.asList(3,4,3));
+        miniGames = new ArrayList<>(Arrays.asList(2,4,3));
         System.out.println(miniGames);
 
         board.setupBoard(gridPane);
@@ -92,8 +92,6 @@ public class MainGame extends GameController {
         player2 = getPlayer2();
         drawer.drawPlayer(gridPane, player1.getPosition(), 0, board);
         drawer.drawPlayer(gridPane, player2.getPosition(), 1, board);
-
-        // todo
     }
 
 

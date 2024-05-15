@@ -16,7 +16,7 @@
       <HBox layoutX="1.0" layoutY="-1.0" prefHeight="401.0" prefWidth="424.0" />
       <ImageView fx:id="playerPicture" fitHeight="194.0" fitWidth="331.0" layoutX="459.0" layoutY="142.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="dice1" fitHeight="130.0" fitWidth="130.0" layoutX="453.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="rollButton" layoutX="540.0" layoutY="125.0" mnemonicParsing="false" onAction="#onWürfelnClick" text="Würfeln" />
+      <Button fx:id="rollButton" layoutX="556.0" layoutY="115.0" mnemonicParsing="false" onAction="#onWürfelnClick" text="Würfeln" />
        <GridPane fx:id="gridPane" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="401.0" prefWidth="424.0"> </GridPane>
        <HBox layoutX="430.0" layoutY="336.0" prefHeight="60.0" prefWidth="263.0">
          <children>
@@ -41,15 +41,15 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </Text>
-                   <Label fx:id="bowserCoins" text="Label" GridPane.columnIndex="2" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-                   <Label fx:id="bowserPosition" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-                   <Label fx:id="marioCoins"  text="Label" GridPane.columnIndex="1" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-                   <Label fx:id="marioPosition" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                   <Label fx:id="bowserCoins" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Label" GridPane.columnIndex="2" />
+                   <Label fx:id="bowserPosition" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                   <Label fx:id="marioCoins" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Label" GridPane.columnIndex="1" />
+                   <Label fx:id="marioPosition" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children></HBox>
       <ImageView fx:id="dice2" fitHeight="130.0" fitWidth="130.0" layoutX="593.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" />
-      <Label layoutX="488.0" layoutY="321.0" prefHeight="18.0" prefWidth="241.0" text="Mario (Du)              Bowser(Computer)">
+      <Label layoutX="487.0" layoutY="321.0" prefHeight="18.0" prefWidth="241.0" text="Mario (Du)               Bowser(Computer)">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
