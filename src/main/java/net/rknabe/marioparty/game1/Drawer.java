@@ -25,8 +25,6 @@ public class Drawer {
     }
 
     private void drawBackground() {
-        //Image backgroundImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/gameField1.jpg"), WIDTH, HEIGHT, false, false);
-        //graphicsContext.drawImage(backgroundImage, 0, 0);
 
         // fill game Field
         graphicsContext.setFill(Color.rgb(153, 255, 153, 0.5));
@@ -79,10 +77,10 @@ public class Drawer {
         //read image and set field to not free
         Image playerFieldImage;
         if (playerAB == 'A') {
-            playerFieldImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerA.png"), 45, 45, true, false);
+            playerFieldImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/game1/PlayerA.png"), 45, 45, true, false);
             field.setState(FieldState.A);
         } else {
-            playerFieldImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerB.png"), 45, 45, true, false);
+            playerFieldImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/game1/PlayerB.png"), 45, 45, true, false);
             field.setState(FieldState.B);
         }
         graphicsContext.drawImage(playerFieldImage, x-15, y-15);

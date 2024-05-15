@@ -53,7 +53,7 @@ public class Game1Controller extends GameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // set scene background
-        Image backgroundImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/entireBackground.jpg"));
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/game1/entireBackground.jpg"));
         BackgroundImage background = new BackgroundImage(
                 backgroundImage,
                 BackgroundRepeat.NO_REPEAT,
@@ -89,7 +89,7 @@ public class Game1Controller extends GameController implements Initializable {
         if (board.getClickedField(x,y).isFree() && board.getClickedField(x,y) != null) {
             drawer.drawMove(board.getClickedField(x,y), 'A');
             board.drawField(board.getClickedField(x,y), FieldState.A);
-            board.draw();
+            //board.draw(); print board in log
 
             if (GameEvaluator.checkForGameEnd(board.toArray()) != FieldState.EMPTY) {
                 gameEnd(GameEvaluator.checkForGameEnd(board.toArray()));
@@ -139,13 +139,13 @@ public class Game1Controller extends GameController implements Initializable {
         Image endAlertImage;
         if (state == FieldState.A) {
             alert.setContentText("DU hast gewonnen!! Glückwunsch!.");
-            endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerA.png"), 45, 45, true, false);
+            endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/game1/PlayerA.png"), 45, 45, true, false);
         } else if (state == FieldState.B) {
             alert.setContentText("Der Computergegner hat gewonnen!!.");
-            endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerB.png"), 45, 45, true, false);
+            endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/game1/PlayerB.png"), 45, 45, true, false);
         } else {
             alert.setContentText("Unentschieden!!");
-            endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/cloudMario.png"), 45, 45, true, false);
+            endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/game1/cloudMario.png"), 45, 45, true, false);
         }
 
         ImageView imageView = new ImageView(endAlertImage);
