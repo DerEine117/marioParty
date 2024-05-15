@@ -28,6 +28,21 @@ public class Game3Controller extends GameController {
     private int maxAttempts = 6;
     private int attemptsLeft;
 
+    @Override
+    @FXML
+    protected void onSpielInfoClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("SpielInfo");
+        alert.setHeaderText(null);
+        alert.setContentText("Errate das Wort! Du hast 6 Versuche. Viel Erfolg!");
+
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+
+        alert.showAndWait();
+    }
+
+
     public Game3Controller() throws IOException {
         initializeGame();
     }
@@ -46,7 +61,7 @@ public class Game3Controller extends GameController {
 
     @FXML
     private void initialize() {
-        String imagePath = getClass().getResource("/net/rknabe/marioparty/assets/mario-question-block.jpg").toExternalForm();
+        String imagePath = getClass().getResource("/net/rknabe/marioparty/assets/game3/mario-question-block.jpg").toExternalForm();
         rootPane.setStyle("-fx-background-image: url('" + imagePath + "');" +
                 "-fx-background-size: cover;" +
                 "-fx-background-position: center center;");
