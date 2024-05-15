@@ -1,5 +1,6 @@
 package net.rknabe.marioparty.game3;
 import javafx.event.ActionEvent;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import net.rknabe.marioparty.GameController;
 import java.io.BufferedReader;
@@ -8,13 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 
 public class Game3Controller extends GameController {
@@ -55,7 +52,24 @@ public class Game3Controller extends GameController {
         updateDisplay();
     }
 
+    private void EndGame(boolean won){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Spielende");
+        alert.setHeaderText(null);
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
 
+        if (won) {
+            alert.setContentText("Herzlichen Glückwunsch! Du hast gewonnen!");
+        } else {
+            alert.setContentText("Game over! Das richtige Wort war: " + secretWord);
+        }
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == okButton) {
+            backToMenuClick();
+        }
+    }
 
     @FXML
     private void handleGuess(ActionEvent event) {
@@ -72,12 +86,15 @@ public class Game3Controller extends GameController {
         if (guess(guessedLetter)) {
             if (isGameOver()) {
                 feedbackLabel.setText("Congratulations! You won!");
+                EndGame(true);
             } else {
                 feedbackLabel.setText("Correct guess!");
             }
+
         } else {
             if (isGameOver()) {
                 feedbackLabel.setText("Game over! Correct word was: " + secretWord);
+                EndGame(false);
             } else {
                 feedbackLabel.setText("Wrong guess. Try again.");
             }
