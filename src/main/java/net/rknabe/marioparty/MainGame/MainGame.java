@@ -1,17 +1,12 @@
 package net.rknabe.marioparty.MainGame;
 
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Border;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -23,9 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import net.rknabe.marioparty.GameController;
-import net.rknabe.marioparty.MainApplication;
 import net.rknabe.marioparty.StageChanger;
 
 import java.net.URL;
@@ -42,8 +35,6 @@ public class MainGame extends GameController {
     private final Drawer drawer = new Drawer();
     private Dice player1dice = new Dice(); // for each player
     private Dice player2dice = new Dice(); // for each player
-    private Player player1;
-    private Player player2;
     private boolean player1HasRolled = false;
     private boolean player2HasRolled = false;
     private final Board board = new Board();
@@ -99,8 +90,6 @@ public class MainGame extends GameController {
         gameField.setBorder(Border.stroke(Color.BLACK));
         player1 = getPlayer1();
         player2 = getPlayer2();
-        //player1 = new Player("Player 1", false, "/net/rknabe/marioparty/assets/MainGame/player1.png");
-        //player2 = new Player("Bowser", true, "/net/rknabe/marioparty/assets/MainGame/browser.png");
         drawer.drawPlayer(gridPane, player1.getPosition(), 0, board);
         drawer.drawPlayer(gridPane, player2.getPosition(), 1, board);
 
@@ -156,10 +145,9 @@ public class MainGame extends GameController {
     }
 
     private void startMiniGame(List miniGames) {
-        System.out.println("starttttttttt");
+        System.out.println("start");
         Random rand = new Random();
         int randomSpiel = rand.nextInt(miniGames.size());
-        System.out.println("random Number" + randomSpiel);
         int miniGameNumber = (int) miniGames.get(randomSpiel);
         System.out.println("miniGameNumber" + miniGameNumber);
 
@@ -183,7 +171,6 @@ public class MainGame extends GameController {
 
     private void updateGameState(Player currentPlayer, int diceNumber) {
         int oldPosition = currentPlayer.getPosition();
-        System.out.println("Old Position: " + oldPosition);
         drawer.removePlayerImage(gridPane, oldPosition, board); // Remove the player image from the old position;
         currentPlayer.move(diceNumber);
         if (currentPlayer.getPosition() >= 36) {
@@ -213,14 +200,22 @@ public class MainGame extends GameController {
             } else {
                 switch (newField.getState()) {
                     case 1: // Grünes Feld
-                        currentPlayer.addCoins(5);
+                        if (currentPlayer.equals(getInstance().getPlayer1())) {
+                            getInstance().addCoinsToPlayer1(20);
+                        } else if (currentPlayer.equals(getInstance().getPlayer2())) {
+                            getInstance().addCoinsToPlayer2(20);
+                        }
                         Rectangle rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
                         if (rectangle != null) {
                             rectangle.toFront();
                         }
                         break;
                     case 2: // Rotes Feld
-                        currentPlayer.removeCoins(5);
+                        if (currentPlayer.equals(getInstance().getPlayer1())) {
+                            getInstance().addCoinsToPlayer1(-20);
+                        } else if (currentPlayer.equals(getInstance().getPlayer2())) {
+                            getInstance().addCoinsToPlayer2(-20);
+                        }
                         rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
                         if (rectangle != null) {
                             rectangle.toFront();
@@ -245,7 +240,7 @@ public class MainGame extends GameController {
             checkPlayersOnSameField();
         }
         updateLabels();
-        System.out.println("Player: " + currentPlayer.getName() + " Position: " + currentPlayer.getPosition() + " Coins: " + currentPlayer.getCoins());
+        System.out.println("Player: " + currentPlayer.getName() + " Position: " + currentPlayer.getPosition() + " Coins: " + getInstance().getPlayer1Coins());
     }
 
     private void checkPlayersOnSameField() {
@@ -270,9 +265,9 @@ public class MainGame extends GameController {
     private void setGameEnd() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Das Spiel ist vorbei!", ButtonType.OK);
         alert.setTitle("Spielende");
-        if (player2.getCoins() > player1.getCoins()) {
+        if (getPlayer2Coins() > getPlayer1Coins()) {
             alert.setHeaderText(player2.getName() + " hat gewonnen!");
-        } else if (player1.getCoins() > player2.getCoins()) {
+        } else if (getPlayer1Coins() > getPlayer2Coins()) {
             alert.setHeaderText(player1.getName() + " hat gewonnen!");
         }
         alert.showAndWait().ifPresent(response -> {
@@ -283,8 +278,8 @@ public class MainGame extends GameController {
     }
 
     private void updateLabels() {
-        marioCoins.setText( String.valueOf(player1.getCoins()));
-        bowserCoins.setText(String.valueOf(player2.getCoins()));
+        marioCoins.setText( String.valueOf(getInstance().getPlayer1Coins()));
+        bowserCoins.setText(String.valueOf(getInstance().getPlayer2Coins()));
         marioPosition.setText(String.valueOf(player1.getPosition()));
         bowserPosition.setText(String.valueOf(player2.getPosition()));
     }

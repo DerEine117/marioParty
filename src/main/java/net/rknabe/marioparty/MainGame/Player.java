@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 public class Player {
     private final String name;
     private int position;
-    private int coins = 100;
     private final boolean computer;
     private final Image image;
 
@@ -29,10 +28,6 @@ public class Player {
         return position;
     }
 
-    public int getCoins() {
-        return coins;
-    }
-
     public boolean isComputer() {
         return computer;
     }
@@ -41,18 +36,6 @@ public class Player {
         this.position = position;
     }
 
-    public void setCoins(int coins) {
-        this.coins = coins;
-    }
-
-    public void addCoins(int coins) {
-        this.coins += coins;
-        System.out.println("Player " + name + " has " + this.coins + " coins");
-    }
-
-    public void removeCoins(int coins) {
-        this.coins -= coins;
-    }
 
     public void move(int diceNumber) {
         this.position += diceNumber;

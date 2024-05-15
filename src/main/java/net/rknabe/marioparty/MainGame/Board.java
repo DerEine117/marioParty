@@ -215,7 +215,6 @@ public class Board {
     }
     public Rectangle getRectangleByCoordinates(int x, int y) {
         String key = x + "," + y;
-        System.out.println("Key: " + key);
         return rectangles.get(key);
 }
 }

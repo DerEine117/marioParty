@@ -14,7 +14,7 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
+        GameController.initializePlayers();
         window = stage;
 
         // Hauptmenü erstellen
