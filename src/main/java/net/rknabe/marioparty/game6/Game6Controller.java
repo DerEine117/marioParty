@@ -135,7 +135,7 @@ public class Game6Controller extends GameController {
         gameStatusLabel.setText("Game started. Good luck!");
         bombsLabel.setText(String.valueOf(game.getBoard().getTotalBombs()));
     }
-
+  
     public String showGameOverMessage(String message) {
         this.showGameOverMessage = message;
         return message;
