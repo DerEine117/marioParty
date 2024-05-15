@@ -145,16 +145,18 @@ public class Game4Controller extends GameController {
     void updateGamestateTextFieldLost() {
         gamestate.setText("Bowser war besser!");
         showAlert("Spielende", "Du hast Verloren!", "Wiggler ist sauer auf dich! Bowser hat ihm besser geholfen.\n \n" +
-                "Du erhältst keine Münzen und machst dich schnell aus dem Staub.", "WigglerAngry.gif");
+                "Bowser erhält 50 Münzen und du machst dich schnell aus dem Staub.", "WigglerAngry.gif");
         snake.stopSnakeMovement();
+        getInstance().addCoinsToPlayer2(50);
         // Die Schlange soll stehen bleiben, wenn man "verloren" hat
     }
     @FXML
     private void updateGamestateTextFieldWon() {
         gamestate.setText("Bowser wurde besiegt!");
         showAlert("Spielende", "Du hast Gewonnen!", "Wiggler bedankt sich bei dir und ist glücklich, dass du ihm besser helfen konntes als Bowser es tat! \n \n" +
-                "Als Belohnung gibt er dir 20 Münzen.", "WigglerHappy.gif");
+                "Als Belohnung gibt er dir 50 Münzen.", "WigglerHappy.gif");
         snake.stopSnakeMovement();
+        getInstance().addCoinsToPlayer1(50);
     }
 
     //Methode die Dialogfeld für Game Ende erstellt

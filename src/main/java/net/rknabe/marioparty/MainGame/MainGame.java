@@ -75,7 +75,7 @@ public class MainGame extends GameController {
         drawer.drawBackground(gameField);
 
         gridPane = new GridPane();
-        miniGames = new ArrayList<>(Arrays.asList(4));
+        miniGames = new ArrayList<>(Arrays.asList(2,6));
         System.out.println(miniGames);
 
         board.setupBoard(gridPane);

@@ -140,8 +140,10 @@ public class Game1Controller extends GameController implements Initializable {
         if (state == FieldState.A) {
             alert.setContentText("DU hast gewonnen!! Glückwunsch!.");
             endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/game1/PlayerA.png"), 45, 45, true, false);
+            getInstance().addCoinsToPlayer1(50);
         } else if (state == FieldState.B) {
             alert.setContentText("Der Computergegner hat gewonnen!!.");
+            getInstance().addCoinsToPlayer2(50);
             endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/game1/PlayerB.png"), 45, 45, true, false);
         } else {
             alert.setContentText("Unentschieden!!");

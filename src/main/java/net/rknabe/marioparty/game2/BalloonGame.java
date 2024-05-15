@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 
 public class BalloonGame extends GameController implements Initializable {
 
-    private static final int NUM_BALLOONS = 40;
+    private static final int NUM_BALLOONS = 30;
     private int numBalloonsInflated;
     private int numBalloonsLeft;
     private final InitializeBalloons initializer = new InitializeBalloons();
@@ -187,11 +187,11 @@ public class BalloonGame extends GameController implements Initializable {
                 alert.setTitle("Spielende");
                 alert.setHeaderText(null);
                 if (playerWon) {
-                    // todo addCoinstoPlayer1();
+                    getInstance().addCoinsToPlayer1(50);
                     drawer.drawText(true, alert);
 
                 } else {
-                    // todo addCoinstoPlayer2();
+                    getInstance().addCoinsToPlayer2(50);
                     drawer.drawText(false, alert);
                 }
 

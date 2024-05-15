@@ -78,8 +78,10 @@ public class Game3Controller extends GameController {
 
         if (won) {
             alert.setContentText("Herzlichen Glückwunsch! Du hast gewonnen!");
+            getInstance().addCoinsToPlayer1(50);
         } else {
             alert.setContentText("Game over! Das richtige Wort war: " + secretWord);
+            getInstance().addCoinsToPlayer2(50);
         }
 
         Optional<ButtonType> result = alert.showAndWait();

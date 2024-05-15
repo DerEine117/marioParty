@@ -255,8 +255,10 @@ public class Game5Controller extends GameController implements Initializable {
         Image image;
         if (message.contains("Du hast gewonnen!")) {
             image = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/mario-dance.gif");
+            getInstance().addCoinsToPlayer1(50);
         } else {
             image = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/bowser-dance.gif");
+            getInstance().addCoinsToPlayer2(50);
         }
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(100);  // Set the width of the ImageView to 100
