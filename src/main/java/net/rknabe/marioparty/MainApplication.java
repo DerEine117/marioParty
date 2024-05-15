@@ -37,7 +37,8 @@ public class MainApplication extends Application {
         game5Scene = new Scene(fxmlLoaderGame5.load(), 800, 600);
       
         FXMLLoader fxmlLoaderGame6 = new FXMLLoader(MainApplication.class.getResource("game6-view.fxml"));
-        game6Scene = new Scene(fxmlLoaderGame6.load(), 600, 400);
+        game6Scene = new Scene(fxmlLoaderGame6.load(), 600, 750);
+
 
         StageChanger.createStageController(window, mainMenuScene, game1Scene, game2Scene, game3Scene, game4Scene, game5Scene, game6Scene);
 

@@ -18,6 +18,7 @@ module net.rknabe.marioparty {
     opens net.rknabe.marioparty.game4 to javafx.fxml;
     opens net.rknabe.marioparty.game5 to javafx.fxml;
     opens net.rknabe.marioparty.game6 to javafx.fxml;
+    exports net.rknabe.marioparty.game6 to javafx.graphics;
     opens net.rknabe.marioparty.MainGame to javafx.fxml;
 
 }
