@@ -47,9 +47,9 @@ public class BalloonGame extends GameController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("SpielInfo");
         alert.setHeaderText(null);
-        alert.setContentText("Klicke auf die Ballons, um sie zum Platzen zu bringen. /n " +
-                "Du gewinnst, wenn du alle Ballons zum Platzen bringst. " +
-                "bevor sie den oberen Bildschirmrand erreichen. " +
+        alert.setContentText("Klicke auf die Ballons, um sie zum Platzen zu bringen.\n" +
+                "Du gewinnst, wenn du alle Ballons zum Platzen bringst,\n" +
+                "bevor sie den oberen Bildschirmrand erreichen.\n" +
                 "Viel Spaß!");
         ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         alert.getButtonTypes().setAll(okButton);

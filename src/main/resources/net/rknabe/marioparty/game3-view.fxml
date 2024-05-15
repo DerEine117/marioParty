@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
 <AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game3.Game3Controller">
    <children>
@@ -13,13 +12,13 @@
          <children>
             <Label fx:id="wordLabel" text="_____" style="-fx-font-size: 30px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 5, 0, 0, 0);" />
             <HBox alignment="CENTER" spacing="10">
-               <TextField fx:id="guessField" promptText="Enter your guess" maxWidth="50.0" style="-fx-background-color: white; -fx-text-fill: black;"/>
-               <Button fx:id="submitGuess" text="Guess" onAction="#handleGuess"
+               <TextField fx:id="guessField" promptText="Eingabe deines Rates" maxWidth="50.0" style="-fx-background-color: white; -fx-text-fill: black;"/>
+               <Button fx:id="submitGuess" text="Rate" onAction="#handleGuess"
                        style="-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-radius: 5; -fx-background-radius: 5;"/>
             </HBox>
-            <Label fx:id="usedLettersLabel" text="Used Letters: " style="-fx-font-size: 20px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 5, 0, 0, 0);" />
-            <Label fx:id="attemptsLeftLabel" text="Attempts Left: " style="-fx-font-size: 20px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 5, 0, 0, 0);" />
-            <Label fx:id="feedbackLabel" text="Welcome to Hangman!" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 5, 0, 0, 0);" />
+            <Label fx:id="usedLettersLabel" text="Verwendete Buchstaben: " style="-fx-font-size: 20px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 5, 0, 0, 0);" />
+            <Label fx:id="attemptsLeftLabel" text="Verbleibende Versuche: " style="-fx-font-size: 20px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 5, 0, 0, 0);" />
+            <Label fx:id="feedbackLabel" text="Willkommen zu Hangman!" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 5, 0, 0, 0);" />
          </children>
       </VBox>
    </children>

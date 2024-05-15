@@ -28,21 +28,6 @@ public class Game3Controller extends GameController {
     private int maxAttempts = 6;
     private int attemptsLeft;
 
-    @Override
-    @FXML
-    protected void onSpielInfoClick() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("SpielInfo");
-        alert.setHeaderText(null);
-        alert.setContentText("Errate das Wort! Du hast 6 Versuche. Viel Erfolg!");
-
-        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        alert.getButtonTypes().setAll(okButton);
-
-        alert.showAndWait();
-    }
-
-
     public Game3Controller() throws IOException {
         initializeGame();
     }
@@ -90,7 +75,7 @@ public class Game3Controller extends GameController {
                 initializeGame();
                 updateDisplay();
             } catch (IOException e) {
-                feedbackLabel.setText("Error restarting game: " + e.getMessage());
+                feedbackLabel.setText("Fehler beim Neustart des Spiels: " + e.getMessage());
             }
             backToMenuClick();
         }
@@ -100,27 +85,27 @@ public class Game3Controller extends GameController {
     private void handleGuess(ActionEvent event) {
         String guess = guessField.getText().trim().toLowerCase();
         if (guess.isEmpty() || guess.length() > 1) {
-            feedbackLabel.setText("Please enter a single letter.");
+            feedbackLabel.setText("Bitte gib einen einzelnen Buchstaben ein.");
             return;
         }
         char guessedLetter = guess.charAt(0);
         if (!Character.isLetter(guessedLetter)) {
-            feedbackLabel.setText("Invalid input. Please enter a letter.");
+            feedbackLabel.setText("Ungültige Eingabe. Bitte gib einen Buchstaben ein.");
             return;
         }
         if (guess(guessedLetter)) {
             if (isGameOver()) {
-                feedbackLabel.setText("Congratulations! You won!");
+                feedbackLabel.setText("Herzlichen Glückwunsch! Du hast gewonnen!");
                 endGame(true);
             } else {
-                feedbackLabel.setText("Correct guess!");
+                feedbackLabel.setText("Richtiger Buchstabe!");
             }
         } else {
             if (isGameOver()) {
-                feedbackLabel.setText("Game over! Correct word was: " + secretWord);
+                feedbackLabel.setText("Game over! Das richtige Wort war: " + secretWord);
                 endGame(false);
             } else {
-                feedbackLabel.setText("Wrong guess. Try again.");
+                feedbackLabel.setText("Falscher Buchstabe. Versuche es erneut.");
             }
         }
         guessField.clear();
@@ -129,7 +114,7 @@ public class Game3Controller extends GameController {
 
     private boolean guess(char letter) {
         if (previousGuesses.contains(letter)) {
-            feedbackLabel.setText("You've already guessed that letter.");
+            feedbackLabel.setText("Du hast diesen Buchstaben bereits geraten.");
             return false;
         }
         previousGuesses.add(letter);
@@ -152,8 +137,8 @@ public class Game3Controller extends GameController {
 
     private void updateDisplay() {
         wordLabel.setText(currentGuess.toString());
-        usedLettersLabel.setText("Used Letters: " + previousGuesses);
-        attemptsLeftLabel.setText("Attempts Left: " + attemptsLeft);
+        usedLettersLabel.setText("Benutzte Buchstaben: " + previousGuesses);
+        attemptsLeftLabel.setText("Verbleibende Versuche: " + attemptsLeft);
     }
 
     public String getSecretWord() throws IOException {
