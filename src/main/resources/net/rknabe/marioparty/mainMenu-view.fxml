@@ -18,7 +18,7 @@
       </VBox>
       <ImageView fitHeight="215.0" fitWidth="174.0" layoutX="27.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@assets/mario.png" />
+            <Image url="@assets/menue/mario.png" />
          </image>
       </ImageView>
    </children>
