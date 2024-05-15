@@ -37,36 +37,51 @@ public class StageChanger {
             switch (scene) {
                 case 0:
                     window.setScene(menu);
+                    window.setWidth(750);
+                    window.setHeight(400);
                     window.setTitle("Main Menu");
+                    window.sizeToScene();
                     break;
 
                 case 1:
                     window.setScene(game1);
                     window.setTitle("Minigame 1");
+                    window.setWidth(600);
+                    window.setHeight(400);
                     break;
 
                 case 2:
                     window.setScene(game2);
                     window.setTitle("Minigame 2");
+                    window.setWidth(600);
+                    window.setHeight(400);
                     break;
 
                 case 3:
                     window.setScene(game3);
                     window.setTitle("Minigame 3");
+                    window.setWidth(600);
+                    window.setHeight(400);
                     break;
 
                 case 4:
                     window.setScene(game4);
                     window.setTitle("Minigame 4");
+                    window.setWidth(600);
+                    window.setHeight(400);
                     break;
 
                 case 5:
                     window.setScene(game5);
                     window.setTitle("Minigame 5");
+                    window.setWidth(600);
+                    window.setHeight(400);
                     break;
 
                 case 6:
                     window.setScene(game6);
+                    window.setWidth(600);
+                    window.setHeight(1100);
                     window.setTitle("Minigame 6");
                     break;
             }
