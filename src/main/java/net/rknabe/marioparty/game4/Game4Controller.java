@@ -202,7 +202,7 @@ public class Game4Controller extends GameController {
         alert.setHeaderText(null);
         alert.setContentText("Wiggler hat großen Hunger. Hilf ihm satt zu werden und führe ihn zu den Pilzen (Steuerung WASD).\n" +
                 "Für jeden Pilz wird Wiggler um ein Feld länger. Ziel ist es, Wiggler auf eine größere Länge wachsen zu lassen, als es Bowser vor dir geschafft hat.\n" +
-                "Oben rechts siehst du, was Bowser erreicht hat.");
+                "Unten rechts siehst du, was Bowser erreicht hat.");
 
 
         ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
