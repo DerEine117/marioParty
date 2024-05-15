@@ -229,9 +229,9 @@ public class Game5Controller extends GameController implements Initializable {
     // This method checks if the game is over and shows a game over message if it is
     private void checkGameOver() {
         if (allShipsSunk(playerShips)) {
-            showGameOverMessage("Mario-team has won!");
+            showGameOverMessage("Du hast gewonnen!");
         } else if (allShipsSunk(computerShips)) {
-            showGameOverMessage("Bowser-team has won!");
+            showGameOverMessage("Du hast verloren!");
         }
     }
 
@@ -253,7 +253,7 @@ public class Game5Controller extends GameController implements Initializable {
 
         // Load the image based on the winner
         Image image;
-        if (message.contains("Mario-team")) {
+        if (message.contains("Du hast gewonnen!")) {
             image = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/mario-dance.gif");
         } else {
             image = new Image("file:src/main/resources/net/rknabe/marioparty/assets/game5/bowser-dance.gif");
