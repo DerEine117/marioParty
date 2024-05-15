@@ -54,5 +54,6 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
+      <Button fx:id="spielinfo" layoutX="425.0" layoutY="141.0" mnemonicParsing="false" onAction="#onSpielInfoClick" text="Spielanleitung" />
    </children>
 </AnchorPane>

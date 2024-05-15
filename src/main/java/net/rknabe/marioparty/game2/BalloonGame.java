@@ -201,6 +201,7 @@ public class BalloonGame extends GameController implements Initializable {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == okButton) {
                     backToMenuClick();
+                    getInstance();
                 }
             });
         }

@@ -1,10 +1,10 @@
 package net.rknabe.marioparty.MainGame;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
@@ -14,10 +14,10 @@ import javafx.stage.Stage;
 import javafx.fxml.FXML;
 
 
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 import net.rknabe.marioparty.GameController;
 import net.rknabe.marioparty.StageChanger;
 
@@ -61,6 +61,23 @@ public class MainGame extends GameController {
     @FXML
     private GridPane gridPane;
 
+    @Override
+    @FXML
+    protected void onSpielInfoClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("SpielInfo");
+        alert.setHeaderText(null);
+        alert.setContentText("Klicke auf den Würfeln-Button, um zu würfeln und das Spiel zu starten.\n" +
+                "Das Spiel besteht aus 6 Runden, in denen du abwechselnd würfelst und Minispiele spielst.\n" +
+                "Wenn du auf ein gelbem Feld landest, erhältst du 20 Münzen, wenn du auf ein rotes Feld landest, verlierst du 20 Münzen.\n" +
+                "Die Minispiele werden zufällig ausgewählt und du kannst sie gewinnen, indem du die Anweisungen befolgst.\n" +
+                "Der Spieler mit den meisten Münzen am Ende des Spiels gewinnt.\n" +
+                "Viel Spaß!");
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+        alert.showAndWait();
+    }
+
     @FXML
     private void onWürfelnClick() {
         würfeln(false);
@@ -71,11 +88,12 @@ public class MainGame extends GameController {
 
     @FXML
     public void initialize() {
+        startUpdatingLabels();
 
         drawer.drawBackground(gameField);
 
         gridPane = new GridPane();
-        miniGames = new ArrayList<>(Arrays.asList(2,4,3));
+        miniGames = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
         System.out.println(miniGames);
 
         board.setupBoard(gridPane);
@@ -200,8 +218,10 @@ public class MainGame extends GameController {
                     case 1: // Grünes Feld
                         if (currentPlayer.equals(getInstance().getPlayer1())) {
                             getInstance().addCoinsToPlayer1(20);
+                            showCoinAlert(currentPlayer.getName(), 20);
                         } else if (currentPlayer.equals(getInstance().getPlayer2())) {
                             getInstance().addCoinsToPlayer2(20);
+                            showCoinAlert(currentPlayer.getName(), 20);
                         }
                         Rectangle rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
                         if (rectangle != null) {
@@ -211,8 +231,10 @@ public class MainGame extends GameController {
                     case 2: // Rotes Feld
                         if (currentPlayer.equals(getInstance().getPlayer1())) {
                             getInstance().addCoinsToPlayer1(-20);
+                            showCoinAlert(currentPlayer.getName(), -20);
                         } else if (currentPlayer.equals(getInstance().getPlayer2())) {
                             getInstance().addCoinsToPlayer2(-20);
+                            showCoinAlert(currentPlayer.getName(), -20);
                         }
                         rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
                         if (rectangle != null) {
@@ -237,9 +259,21 @@ public class MainGame extends GameController {
 
             checkPlayersOnSameField();
         }
-        updateLabels();
         System.out.println("Player: " + currentPlayer.getName() + " Position: " + currentPlayer.getPosition() + " Coins: " + getInstance().getPlayer1Coins());
     }
+
+    public void showCoinAlert(String playerName, int coinChange) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        if (coinChange > 0) {
+            alert.setContentText(playerName + " hat " + coinChange + " Coins bekommen!");
+        } else {
+            alert.setContentText(playerName + " hat " + Math.abs(coinChange) + " Coins verloren!");
+        }
+        alert.showAndWait();
+    }
+
 
     private void checkPlayersOnSameField() {
         if (player1.getPosition() == player2.getPosition()) {
@@ -261,12 +295,12 @@ public class MainGame extends GameController {
     }
 
     private void setGameEnd() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Das Spiel ist vorbei!", ButtonType.OK);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Das Spiel zu Ende, Runde 6 ist vorbei und es sind keine MiniSpiele mehr übrig!!", ButtonType.OK);
         alert.setTitle("Spielende");
-        if (getPlayer2Coins() > getPlayer1Coins()) {
-            alert.setHeaderText(player2.getName() + " hat gewonnen!");
-        } else if (getPlayer1Coins() > getPlayer2Coins()) {
-            alert.setHeaderText(player1.getName() + " hat gewonnen!");
+        if (getInstance().getPlayer2Coins() > getInstance().getPlayer1Coins()) {
+            alert.setHeaderText(player2.getName() + " hat mit "+getInstance().getPlayer2Coins()+" zu "+getInstance().getPlayer1Coins()+ " Punkten gewonnen!");
+        } else if (getInstance().getPlayer1Coins() > getInstance().getPlayer2Coins()) {
+            alert.setHeaderText(player1.getName() + " hat mit "+getInstance().getPlayer1Coins()+" zu "+getInstance().getPlayer2Coins()+ " Punkten gewonnen!");
         }
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
@@ -281,5 +315,16 @@ public class MainGame extends GameController {
         marioPosition.setText(String.valueOf(player1.getPosition()));
         bowserPosition.setText(String.valueOf(player2.getPosition()));
     }
+    private Timeline updateLabelsTimeline;
+
+    public void startUpdatingLabels() {
+        if (updateLabelsTimeline != null) {
+            updateLabelsTimeline.stop();
+        }
+        updateLabelsTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateLabels()));
+        updateLabelsTimeline.setCycleCount(Timeline.INDEFINITE);
+        updateLabelsTimeline.play();
+    }
+
 
 }
