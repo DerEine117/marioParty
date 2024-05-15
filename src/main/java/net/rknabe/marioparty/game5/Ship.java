@@ -2,11 +2,11 @@ package net.rknabe.marioparty.game5;
 
 public class Ship {
 
-    int length;
-    int[] position = new int[2];
-    String orientation;
-    Board board;
-    int hits = 0;
+    public int length;
+    public int[] position = new int[2];
+    public String orientation;
+    public Board board;
+    public int hits = 0;
     private boolean hit;
 
     private Game5Controller gameController;
