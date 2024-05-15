@@ -41,10 +41,10 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </Text>
-                  <Label fx:id="bowserCoins" text="Label" GridPane.columnIndex="2" />
-                  <Label fx:id="bowserPosition" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Label fx:id="marioCoins" prefHeight="17.0" prefWidth="35.0" text="Label" GridPane.columnIndex="1" />
-                  <Label fx:id="marioPosition" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                   <Label fx:id="bowserCoins" text="Label" GridPane.columnIndex="2" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                   <Label fx:id="bowserPosition" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                   <Label fx:id="marioCoins"  text="Label" GridPane.columnIndex="1" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                   <Label fx:id="marioPosition" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
                </children>
             </GridPane>
          </children></HBox>

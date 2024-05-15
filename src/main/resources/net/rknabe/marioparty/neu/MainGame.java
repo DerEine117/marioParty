@@ -3,15 +3,12 @@ package net.rknabe.marioparty.MainGame;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Border;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -23,8 +20,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import net.rknabe.marioparty.GameController;
 import net.rknabe.marioparty.MainApplication;
 import net.rknabe.marioparty.StageChanger;
 
@@ -35,7 +30,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class MainGame extends GameController {
+public class MainGame extends Application {
     Stage window;
     Scene mainMenuScene;
     Scene game1Scene, game2Scene, game3Scene, game4Scene, game5Scene, game6Scene;
@@ -44,8 +39,6 @@ public class MainGame extends GameController {
     private Dice player2dice = new Dice(); // for each player
     private Player player1;
     private Player player2;
-    private boolean player1HasRolled = false;
-    private boolean player2HasRolled = false;
     private final Board board = new Board();
     private List<Integer> miniGames;
     private static final List<String> miniGameNames = new ArrayList<>(Arrays.asList("Tic Tac Toe", "Balloon Platzen", "Hangman", "Snake", "Schiffe versenken", "Minenfeld"));
@@ -76,7 +69,35 @@ public class MainGame extends GameController {
         würfeln(true);
     }
 
+    @Override
+    public void start(Stage stage) throws Exception {
 
+        window = stage;
+
+        // Hauptmenü erstellen
+        FXMLLoader fxmlLoaderMenu = new FXMLLoader(MainApplication.class.getResource("mainGame.fxml"));
+        mainMenuScene = new Scene(fxmlLoaderMenu.load(), 750, 400);
+        // Initializing the game Scenes from fxml
+        FXMLLoader fxmlLoaderGame1 = new FXMLLoader(MainApplication.class.getResource("game1-view.fxml"));
+        game1Scene = new Scene(fxmlLoaderGame1.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame2 = new FXMLLoader(MainApplication.class.getResource("game2-view.fxml"));
+        game2Scene = new Scene(fxmlLoaderGame2.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame3 = new FXMLLoader(MainApplication.class.getResource("game3-view.fxml"));
+        game3Scene = new Scene(fxmlLoaderGame3.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame4 = new FXMLLoader(MainApplication.class.getResource("game4-view.fxml"));
+        game4Scene = new Scene(fxmlLoaderGame4.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame5 = new FXMLLoader(MainApplication.class.getResource("game5-view.fxml"));
+        game5Scene = new Scene(fxmlLoaderGame5.load(), 600, 400);
+        FXMLLoader fxmlLoaderGame6 = new FXMLLoader(MainApplication.class.getResource("../game6-view.fxml"));
+        game6Scene = new Scene(fxmlLoaderGame6.load(), 600, 400);
+
+        StageChanger.createStageController(window,mainMenuScene, game1Scene,game2Scene,game3Scene,game4Scene,game5Scene,game6Scene);
+
+        window.setScene(mainMenuScene);
+
+        window.setTitle("Mario Party Spiel");
+        window.show();
+    }
 
     @FXML
     public void initialize() {
@@ -84,7 +105,7 @@ public class MainGame extends GameController {
         drawer.drawBackground(gameField);
 
         gridPane = new GridPane();
-        miniGames = new ArrayList<>(Arrays.asList(1, 6));
+        miniGames = new ArrayList<>(Arrays.asList(1,2,3,4,5,6));
         System.out.println(miniGames);
 
         board.setupBoard(gridPane);
@@ -97,17 +118,16 @@ public class MainGame extends GameController {
         gameField.getChildren().add(gridPane);
         //board.printFields();
         gameField.setBorder(Border.stroke(Color.BLACK));
-        player1 = getPlayer1();
-        player2 = getPlayer2();
-        //player1 = new Player("Player 1", false, "/net/rknabe/marioparty/assets/MainGame/player1.png");
-        //player2 = new Player("Bowser", true, "/net/rknabe/marioparty/assets/MainGame/browser.png");
-        drawer.drawPlayer(gridPane, player1.getPosition(), 0, board);
-        drawer.drawPlayer(gridPane, player2.getPosition(), 1, board);
+        player1 = new Player("Player 1", false, "/net/rknabe/marioparty/assets/MainGame/player1.png");
+        player2 = new Player("Computer", true, "/net/rknabe/marioparty/assets/MainGame/browser.png");
+        drawer.drawPlayer(gridPane, player1.getPosition(), 0,board);
+        drawer.drawPlayer(gridPane, player2.getPosition(), 1,board);
 
-        // todo
+
     }
-
-
+    public static void main(String[] args) {
+        launch(args);
+    }
     private void würfeln(boolean computer) {
         Player currentPlayer = computer ? player2 : player1;
         Dice currentDice = computer ? player2dice : player1dice;
@@ -124,47 +144,23 @@ public class MainGame extends GameController {
             Platform.runLater(() -> {
                 int diceNumber = currentDice.roll();
                 drawer.drawDicePicture(diceNumber, currentDiceImageView);
+
                 updateGameState(currentPlayer, diceNumber);
-                if (computer) {
-                    player2HasRolled = true;
-                } else {
-                    player1HasRolled = true;
-                }
-                // If both players have rolled, start the mini game
-                if (player1HasRolled && player2HasRolled) {
-                    if (miniGames.isEmpty()) {
-                        new Thread(() -> {
-                            try {
-                                Thread.sleep(1000); // Wartezeit in Millisekunden
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            Platform.runLater(() -> {
-                                setGameEnd();
-                            });
-                        }).start();
-                    } else {
-                        startMiniGame(miniGames);
-                    }
-                    // Reset the flags for the next round
-                    player1HasRolled = false;
-                    player2HasRolled = false;
-                }
 
             });
         }).start();
     }
 
-    private void startMiniGame(List miniGames) {
+    private void startMiniGame(List miniGames){
         System.out.println("starttttttttt");
         Random rand = new Random();
         int randomSpiel = rand.nextInt(miniGames.size());
-        System.out.println("random Number" + randomSpiel);
+        System.out.println("random Number"+randomSpiel);
         int miniGameNumber = (int) miniGames.get(randomSpiel);
-        System.out.println("miniGameNumber" + miniGameNumber);
+        System.out.println("miniGameNumber"+miniGameNumber);
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Sind Sie sicher?", ButtonType.OK);
-        alert.setContentText("Mini Game " + miniGameNames.get(miniGameNumber - 1) + miniGameNumber + " wird gestartet! " + miniGames);
+        alert.setContentText("Mini Game " + miniGameNames.get(miniGameNumber-1) + miniGameNumber+ " wird gestartet! "+ miniGames);
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 StageChanger.setScene(miniGameNumber);
@@ -172,22 +168,21 @@ public class MainGame extends GameController {
         });
         removeMiniGame(miniGameNumber);
     }
-
-    private void removeMiniGame(int gameNumber) {
+    private void removeMiniGame(int gameNumber){
         miniGames.remove(Integer.valueOf(gameNumber));
     }
-
-    private boolean noMiniGamesLeft() {
+    private boolean noMiniGamesLeft(){
         return miniGames.isEmpty();
     }
 
     private void updateGameState(Player currentPlayer, int diceNumber) {
         int oldPosition = currentPlayer.getPosition();
         System.out.println("Old Position: " + oldPosition);
-        drawer.removePlayerImage(gridPane, oldPosition, board); // Remove the player image from the old position;
+        drawer.removePlayerImage(gridPane, oldPosition, board); // Remove the player image from the old position
+
         currentPlayer.move(diceNumber);
         if (currentPlayer.getPosition() >= 36) {
-            setGameEnd();
+            setGameEnd(currentPlayer);
         }
         Field oldField = board.getFieldByNumber(oldPosition);
         if (oldField != null) {
@@ -213,14 +208,14 @@ public class MainGame extends GameController {
             } else {
                 switch (newField.getState()) {
                     case 1: // Grünes Feld
-                        currentPlayer.addCoins(5);
+                        currentPlayer.setCoins(+5);
                         Rectangle rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
                         if (rectangle != null) {
                             rectangle.toFront();
                         }
                         break;
                     case 2: // Rotes Feld
-                        currentPlayer.removeCoins(5);
+                        currentPlayer.setCoins(-5);
                         rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
                         if (rectangle != null) {
                             rectangle.toFront();
@@ -246,8 +241,8 @@ public class MainGame extends GameController {
         }
         updateLabels();
         System.out.println("Player: " + currentPlayer.getName() + " Position: " + currentPlayer.getPosition() + " Coins: " + currentPlayer.getCoins());
+        startMiniGame(miniGames);
     }
-
     private void checkPlayersOnSameField() {
         if (player1.getPosition() == player2.getPosition()) {
             Field field = board.getFieldByNumber(player1.getPosition());
@@ -266,27 +261,25 @@ public class MainGame extends GameController {
             }
         }
     }
-
-    private void setGameEnd() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Das Spiel ist vorbei!", ButtonType.OK);
+    private void setGameEnd(Player player) {
+        // Code to end the game goes here
+        System.out.println(player.getName() + " has reached the goal!");
+        showEndGameAlert(player.getName() + " hat das Ziel erreicht und das Spiel gewonnen!");
+    }
+    private void showEndGameAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Spielende");
-        if (player2.getCoins() > player1.getCoins()) {
-            alert.setHeaderText(player2.getName() + " hat gewonnen!");
-        } else if (player1.getCoins() > player2.getCoins()) {
-            alert.setHeaderText(player1.getName() + " hat gewonnen!");
-        }
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                Platform.exit();
-            }
-        });
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        alert.showAndWait();
     }
 
     private void updateLabels() {
-        marioCoins.setText( String.valueOf(player1.getCoins()));
-        bowserCoins.setText(String.valueOf(player2.getCoins()));
-        marioPosition.setText(String.valueOf(player1.getPosition()));
-        bowserPosition.setText(String.valueOf(player2.getPosition()));
+        marioCoins.setText("Coins: " + player1.getCoins());
+        bowserCoins.setText("Coins: " + player2.getCoins());
+        marioPosition.setText("Position: " + player1.getPosition());
+        bowserPosition.setText("Position: " + player2.getPosition());
     }
 
 }
