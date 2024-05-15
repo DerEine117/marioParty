@@ -11,7 +11,6 @@ public class InitializeBalloons {
 
     protected void createBalloons(int amount, Canvas gameCanvas) {
         // creates all the Balloons
-
         for (int i = 0; i < amount; i++) {
             Balloon balloon = new Balloon(gameCanvas);
             balloons.add(balloon);
@@ -31,13 +30,13 @@ public class InitializeBalloons {
     }
 
     protected void sortBalloonsByDeploySpeed() {
-        // sorts the balloons by deploy speed, so it gets faster over time
+        // sorts the balloons by deploy speed, -> so it gets faster over time
         List<Balloon> balloonList = new ArrayList<>(balloons);
         int n = balloonList.size();
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
                 if (balloonList.get(j).getDeploySpeed() < balloonList.get(j + 1).getDeploySpeed()) {
-                    // Swap balloons[j+1] and balloons[i]
+                    // Swap balloons[j+1] and balloons[i] -> so the balloon with the lower deploy speed is at the beginning
                     Balloon temp = balloonList.get(j);
                     balloonList.set(j, balloonList.get(j + 1));
                     balloonList.set(j + 1, temp);
