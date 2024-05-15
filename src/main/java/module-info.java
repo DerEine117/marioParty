@@ -4,7 +4,7 @@ module net.rknabe.marioparty {
     requires java.desktop;
     requires jdk.compiler;
     requires javafx.graphics;
-    requires java.desktop;
+
 
 
     opens net.rknabe.marioparty to javafx.fxml;
