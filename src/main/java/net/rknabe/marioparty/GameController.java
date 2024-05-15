@@ -1,17 +1,22 @@
 package net.rknabe.marioparty;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import net.rknabe.marioparty.MainGame.Player;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 
 
 public class GameController {
+    @FXML
+    protected Button spielinfo;
+  
     private static GameController instance;
 
     protected int player1Coins = 100;
     protected int player2Coins = 100;
-    @FXML
-    protected Button SpielanleitungButton;
+    
 
     protected static Player player1;
     protected static Player player2;
@@ -37,6 +42,7 @@ public class GameController {
     protected void backToMenuClick() {
         StageChanger.setScene(0);
     }
+
     public Player getPlayer1() {
         return player1;
     }
@@ -55,5 +61,18 @@ public class GameController {
     }
     public int getPlayer2Coins(){
         return  player2Coins;
+    }
+
+    @FXML
+    protected void onSpielInfoClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("SpielInfo");
+        alert.setHeaderText(null);
+        alert.setContentText("Hier ist der Text der Spielinfo.");
+
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+
+        alert.showAndWait();
     }
 }
