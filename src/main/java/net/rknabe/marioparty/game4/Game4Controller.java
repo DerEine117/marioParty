@@ -12,6 +12,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rknabe.marioparty.GameController;
 import net.rknabe.marioparty.StageChanger;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Game4Controller extends GameController {
     @FXML
@@ -143,7 +145,7 @@ public class Game4Controller extends GameController {
     void updateGamestateTextFieldLost() {
         gamestate.setText("Bowser war besser!");
         showAlert("Spielende", "Du hast Verloren!", "Wiggler ist sauer auf dich! Bowser hat ihm besser geholfen.\n \n" +
-                "Du erhältst keine Münzen und machst dich schnell aus dem Staub.");
+                "Du erhältst keine Münzen und machst dich schnell aus dem Staub.", "WigglerAngry.gif");
         snake.stopSnakeMovement();
         // Die Schlange soll stehen bleiben, wenn man "verloren" hat
     }
@@ -151,18 +153,24 @@ public class Game4Controller extends GameController {
     private void updateGamestateTextFieldWon() {
         gamestate.setText("Bowser wurde besiegt!");
         showAlert("Spielende", "Du hast Gewonnen!", "Wiggler bedankt sich bei dir und ist glücklich, dass du ihm besser helfen konntes als Bowser es tat! \n \n" +
-                "Als Belohnung gibt er dir x Münzen");
+                "Als Belohnung gibt er dir x Münzen", "WigglerHappy.gif");
         snake.stopSnakeMovement();
     }
 
     //Methode die Dialogfeld für Game Ende erstellt
-    private void showAlert(String title, String headerText, String contentText) {
+    private void showAlert(String title, String headerText, String contentText, String imageName) {
         // Thread, da Dialogfeld nicht mit aktivem Animationtimer funktioniert. Durch Thread behindern sich die beiden Aktionen nicht mehr
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(title);
             alert.setHeaderText(headerText);
             alert.setContentText(contentText);
+
+            // Wiggler Image abhängig von Ausgabe setzen
+            Image wigglerImage = new Image(getClass().getResource("/net/rknabe/marioparty/assets/game4/" + imageName).toExternalForm());
+            ImageView wigglerImageView = new ImageView(wigglerImage);
+            alert.setGraphic(wigglerImageView);
+
             alert.showAndWait();
             StageChanger.setScene(0);
             reset();
