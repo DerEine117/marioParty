@@ -5,7 +5,7 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rknabe.marioparty.game3.Game3Controller">
    <children>
-      <Button fx:id="backToMenu" text="Back to Menu" onAction="#backToMenuClick"
+      <Button fx:id="spielinfo" text="Spielanleitung" onAction="#onSpielInfoClick"
               style="-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-radius: 5; -fx-background-radius: 5;"
               AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0"/>
       <VBox alignment="CENTER" spacing="20.0" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0"
