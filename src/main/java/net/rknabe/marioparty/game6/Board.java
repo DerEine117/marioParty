@@ -150,6 +150,7 @@ public class Board extends Pane {
         // Check if all bombs are marked and all safe fields are revealed
         if (!bombNotMarked && !safeFieldNotRevealed) {
             if (markedCount == totalBombs) {
+                Game6Controller.getInstance().setWin();
                 Game6Controller.getInstance().showGameOverMessage("You Win!");
                 Game6Controller.getInstance().setGameOver(false, "You win!");
                 Game6Controller.getInstance().getGameTimer().interrupt(); // Stop the timer when the game is won

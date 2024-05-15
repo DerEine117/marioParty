@@ -17,6 +17,7 @@ public class Game6Controller extends GameController {
     private boolean gameOver = false;
     private static Game6Controller instance;
     private String showGameOverMessage;
+    private boolean win;
 
 
     @FXML
@@ -67,6 +68,12 @@ public class Game6Controller extends GameController {
 
     // Set the game over status and show a message (Alert) to the user
     public void setGameOver(boolean gameOver, String message) {
+        if (win){
+            getInstance().addCoinsToPlayer1(50);
+        }
+        else {
+            getInstance().addCoinsToPlayer2(50);
+        }
         this.gameOver = gameOver;
         Platform.runLater(() -> {
             gameStatusLabel.setText(message);
@@ -158,5 +165,8 @@ public class Game6Controller extends GameController {
     public String showGameOverMessage(String message) {
         this.showGameOverMessage = message;
         return message;
+    }
+    public void setWin(){
+        this.win = true;
     }
 }
