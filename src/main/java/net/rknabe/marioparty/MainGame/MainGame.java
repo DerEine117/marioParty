@@ -33,8 +33,8 @@ public class MainGame extends GameController {
     Scene mainMenuScene;
     Scene game1Scene, game2Scene, game3Scene, game4Scene, game5Scene, game6Scene;
     private final Drawer drawer = new Drawer();
-    private Dice player1dice = new Dice(); // for each player
-    private Dice player2dice = new Dice(); // for each player
+    private Dice player1dice = new Dice();
+    private Dice player2dice = new Dice();
     private boolean player1HasRolled = false;
     private boolean player2HasRolled = false;
     private final Board board = new Board();
@@ -140,7 +140,7 @@ public class MainGame extends GameController {
                     if (miniGames.isEmpty()) {
                         new Thread(() -> {
                             try {
-                                Thread.sleep(1000); // Wartezeit in Millisekunden
+                                Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -202,12 +202,8 @@ public class MainGame extends GameController {
             newField.setHasPlayer(true); // Der Spieler hat das neue Feld betreten
             drawer.resetRectangleColor(gridPane, oldPosition, board);
 
-
-            // Überprüfen Sie, ob das Feld bereits von einem anderen Spieler besucht wurde
-
             Player otherPlayer = currentPlayer.equals(player1) ? player2 : player1;
             if (newField.getFieldNumber() == otherPlayer.getPosition()) {
-                // Setzen Sie den Zustand des Feldes auf "neutral" und ändern Sie die Farbe des Rechtecks auf Grau
                 newField.setState(0);
                 Rectangle rectangle = board.getRectangleByCoordinates(newField.getX(), newField.getY());
                 if (rectangle != null) {
@@ -215,7 +211,7 @@ public class MainGame extends GameController {
                 }
             } else {
                 switch (newField.getState()) {
-                    case 1: // Grünes Feld
+                    case 1: // gelbes Feld
                         if (currentPlayer.equals(getInstance().getPlayer1())) {
                             getInstance().addCoinsToPlayer1(20);
                             showCoinAlert(currentPlayer.getName(), 20);
@@ -251,7 +247,6 @@ public class MainGame extends GameController {
             drawer.drawPlayerImage(gridPane, currentPlayer.getPosition(), currentPlayer, board);
 
 
-            // Überprüfen Sie, ob der andere Spieler auf der alten Position des aktuellen Spielers ist
             if (otherPlayer.getPosition() == oldPosition) {
                 int otherPlayerIndex = otherPlayer.equals(player1) ? 0 : 1;
                 drawer.drawPlayer(gridPane, oldPosition, otherPlayerIndex, board);
@@ -279,14 +274,12 @@ public class MainGame extends GameController {
         if (player1.getPosition() == player2.getPosition()) {
             Field field = board.getFieldByNumber(player1.getPosition());
             if (field != null) {
-                // Erstellen Sie ein ImageView mit dem gewünschten Bild
                 URL resourceUrl = getClass().getResource("/net/rknabe/marioparty/assets/MainGame/players_board.jpg");
                 Image image = new Image(resourceUrl.toExternalForm());
                 ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(43); // Setzen Sie die Breite auf die Breite des Rechtecks
-                imageView.setFitHeight(43); // Setzen Sie die Höhe auf die Höhe des Rechtecks
+                imageView.setFitWidth(43);
+                imageView.setFitHeight(43);
 
-                // Fügen Sie das ImageView zum GridPane hinzu
 
                 gridPane.add(imageView, field.getY(), field.getX());
 

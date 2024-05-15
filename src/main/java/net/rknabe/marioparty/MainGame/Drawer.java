@@ -13,11 +13,7 @@ import javafx.scene.shape.Rectangle;
 import java.net.URL;
 
 public class Drawer {
-    // class for drawing the player_picture on the designed field
-    // drawing the dices
-    // drawing the field
-    // drawing the ....
-
+    // class for drawing everything
 
     public Drawer() {
     }
@@ -59,8 +55,8 @@ public class Drawer {
             URL resourceUrl = getClass().getResource("/net/rknabe/marioparty/assets/MainGame/goal.png");
             Image image = new Image(resourceUrl.toExternalForm());
             ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(43); // Setzen Sie die Breite auf die Breite des Rechtecks
-            imageView.setFitHeight(43); // Setzen Sie die Höhe auf die Höhe des Rechtecks
+            imageView.setFitWidth(43);
+            imageView.setFitHeight(43);
             gridPane.add(imageView, field.getY(), field.getX());
         }
     }
@@ -78,12 +74,12 @@ public class Drawer {
         Field field = board.getFieldByNumber(position);
         if (field != null) {
             ImageView imageView = new ImageView(player.getImage());
-            imageView.setFitWidth(43); // Setzen Sie die Breite auf die Breite des Rechtecks
-            imageView.setFitHeight(43); // Setzen Sie die Höhe auf die Höhe des Rechtecks
+            imageView.setFitWidth(43);
+            imageView.setFitHeight(43);
             gridPane.add(imageView, field.getY(), field.getX());
 
             String key = field.getX() + "," + field.getY();
-            board.setPlayerImageViewByCoordinates(key, imageView);  // Add this line
+            board.setPlayerImageViewByCoordinates(key, imageView);
             imageView.toFront();
         }
         System.out.println("Ich wurde ausgewführt");
@@ -92,10 +88,10 @@ public class Drawer {
         Field field = board.getFieldByNumber(position);
         if (field != null) {
             String key = field.getX() + "," + field.getY();
-            ImageView imageView = board.getPlayerImageViewByCoordinates(key);  // Change this line
+            ImageView imageView = board.getPlayerImageViewByCoordinates(key);
             if (imageView != null) {
                 gridPane.getChildren().remove(imageView);
-                board.setPlayerImageViewByCoordinates(key, null);  // Add this line
+                board.setPlayerImageViewByCoordinates(key, null);
             }
         }
     }
