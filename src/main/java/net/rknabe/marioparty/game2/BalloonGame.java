@@ -18,8 +18,6 @@ public class BalloonGame extends GameController implements Initializable {
     private static final int NUM_BALLOONS = 40;
     private int numBalloonsInflated;
     private int numBalloonsLeft;
-    private int playerScore = 0;
-    private int computerScore = 0;
     private final InitializeBalloons initializer = new InitializeBalloons();
     private final Drawer drawer = new Drawer(initializer);
     private final GameState gameState = new GameState();
@@ -189,11 +187,11 @@ public class BalloonGame extends GameController implements Initializable {
                 alert.setTitle("Spielende");
                 alert.setHeaderText(null);
                 if (playerWon) {
-                    playerScore += 50;
+                    // todo addCoinstoPlayer1();
                     drawer.drawText(true, alert);
 
                 } else {
-                    computerScore += 50;
+                    // todo addCoinstoPlayer2();
                     drawer.drawText(false, alert);
                 }
 
