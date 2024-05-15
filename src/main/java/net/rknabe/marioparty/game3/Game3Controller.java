@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.Random;
 import javafx.fxml.FXML;
 
-
 public class Game3Controller extends GameController {
 
     @FXML private Label wordLabel;
@@ -22,17 +21,21 @@ public class Game3Controller extends GameController {
     @FXML private Label attemptsLeftLabel;
     @FXML private Label feedbackLabel;
     @FXML private Button submitGuess;
-
     @FXML private AnchorPane rootPane;
     private String secretWord;
     private StringBuilder currentGuess;
-    private ArrayList<Character> previousGuesses = new ArrayList<>();
+    private ArrayList<Character> previousGuesses;
     private int maxAttempts = 6;
     private int attemptsLeft;
 
     public Game3Controller() throws IOException {
+        initializeGame();
+    }
+
+    private void initializeGame() throws IOException {
         secretWord = getSecretWord();
         currentGuess = new StringBuilder("_".repeat(secretWord.length()));
+        previousGuesses = new ArrayList<>();
         attemptsLeft = maxAttempts;
 
         if (secretWord.length() > 1) {
@@ -43,7 +46,6 @@ public class Game3Controller extends GameController {
 
     @FXML
     private void initialize() {
-        // Set the background image on the rootPane using CSS
         String imagePath = getClass().getResource("/net/rknabe/marioparty/assets/mario-question-block.jpg").toExternalForm();
         rootPane.setStyle("-fx-background-image: url('" + imagePath + "');" +
                 "-fx-background-size: cover;" +
@@ -52,7 +54,7 @@ public class Game3Controller extends GameController {
         updateDisplay();
     }
 
-    private void EndGame(boolean won){
+    private void endGame(boolean won) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Spielende");
         alert.setHeaderText(null);
@@ -67,6 +69,12 @@ public class Game3Controller extends GameController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == okButton) {
+            try {
+                initializeGame();
+                updateDisplay();
+            } catch (IOException e) {
+                feedbackLabel.setText("Error restarting game: " + e.getMessage());
+            }
             backToMenuClick();
         }
     }
@@ -86,15 +94,14 @@ public class Game3Controller extends GameController {
         if (guess(guessedLetter)) {
             if (isGameOver()) {
                 feedbackLabel.setText("Congratulations! You won!");
-                EndGame(true);
+                endGame(true);
             } else {
                 feedbackLabel.setText("Correct guess!");
             }
-
         } else {
             if (isGameOver()) {
                 feedbackLabel.setText("Game over! Correct word was: " + secretWord);
-                EndGame(false);
+                endGame(false);
             } else {
                 feedbackLabel.setText("Wrong guess. Try again.");
             }
@@ -108,7 +115,6 @@ public class Game3Controller extends GameController {
             feedbackLabel.setText("You've already guessed that letter.");
             return false;
         }
-
         previousGuesses.add(letter);
         boolean correct = false;
         for (int i = 0; i < secretWord.length(); i++) {
