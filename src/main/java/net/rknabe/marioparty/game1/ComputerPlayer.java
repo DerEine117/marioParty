@@ -35,7 +35,6 @@ public class ComputerPlayer {
                 }
             }
         }
-        System.out.println(bestMove.getState() + " " + bestMove.getRow() + bestMove.getCol());
         return bestMove;
     }
 

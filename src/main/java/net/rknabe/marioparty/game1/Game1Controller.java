@@ -95,7 +95,6 @@ public class Game1Controller extends GameController implements Initializable {
                 gameEnd(GameEvaluator.checkForGameEnd(board.toArray()));
             } else {
                 Field computerField = computerPlayer.findBestMove(board);
-                System.out.println("Computetrfeld: " + computerField.drawField());
                 drawer.drawMove(computerField, 'B');
                 board.drawField(computerField, FieldState.B);
             }
@@ -110,7 +109,7 @@ public class Game1Controller extends GameController implements Initializable {
                         @Override
                         public void run() {
                             turnLabel.setTextFill(Color.RED);
-                            turnLabel.setText("Field is not free!");
+                            turnLabel.setText("Feld nicht frei!!");
                         }
                     });
                     Thread.sleep(1000);
@@ -118,7 +117,7 @@ public class Game1Controller extends GameController implements Initializable {
                         @Override
                         public void run() {
                             turnLabel.setTextFill(Color.BLACK);
-                            turnLabel.setText("Your turn");
+                            turnLabel.setText("Du bist dran!");
                         }
                     });
 
@@ -133,19 +132,19 @@ public class Game1Controller extends GameController implements Initializable {
 
     private void gameEnd(FieldState state) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("game end");
+        alert.setTitle("Spielende.");
         alert.setHeaderText(null); // Keine Header-Text
 
         // Setzen des Nachrichtentexts
         Image endAlertImage;
         if (state == FieldState.A) {
-            alert.setContentText("Player A has won!!! Congratulations!.");
+            alert.setContentText("DU hast gewonnen!! Glückwunsch!.");
             endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerA.png"), 45, 45, true, false);
         } else if (state == FieldState.B) {
-            alert.setContentText("Computer Player has won!!.");
+            alert.setContentText("Der Computergegner hat gewonnen!!.");
             endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/PlayerB.png"), 45, 45, true, false);
         } else {
-            alert.setContentText("Tie! Sounds like a new game!");
+            alert.setContentText("Unentschieden!!");
             endAlertImage = new Image(getClass().getResourceAsStream("/net/rknabe/marioparty/assets/cloudMario.png"), 45, 45, true, false);
         }
 
@@ -163,7 +162,6 @@ public class Game1Controller extends GameController implements Initializable {
         // Handhabung der Benutzeraktion
         result.ifPresent(buttonType -> {
             if (buttonType == ButtonType.OK) {
-                System.out.println("game end. back to main menu.");
                 board.clear();
                 drawer.resetCanvas();
                 drawer.drawField();
