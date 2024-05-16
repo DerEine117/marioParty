@@ -23,9 +23,6 @@ public class Tile extends StackPane {
         this.hasBomb = hasBomb;
         // insert the bomb image if the tile has a bomb
         if (hasBomb) {
-            bombImage = new ImageView(getClass().getResource("/net/rknabe/marioparty/assets/bomb.gif").toString());
-            bombImage.setFitWidth(TILE_SIZE);
-            bombImage.setFitHeight(TILE_SIZE);
             bombImage.setVisible(false);
             getChildren().add(bombImage);
         }
